@@ -25,6 +25,8 @@ public final class BuddingLanguageProvider extends LanguageProvider
         translate(BCContent.FLUIX, "Fluix");
         translate(BCContent.SALT, "Salt");
         translate(BCContent.FLUORITE, "Fluorite");
+
+        add(BCContent.CRYSTAL_CATALYST.get(), "Crystal Catalyst");
     }
 
     private void translate(CrystalSet set, String name)

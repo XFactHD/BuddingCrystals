@@ -28,3 +28,10 @@ license="LGPL v3"
     versionRange="[1.18.2,1.19)"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.buddingcrystals]]
+    modId="dynamic_asset_generator"
+    mandatory=true
+    versionRange="[0.6.0,)"
+    ordering="AFTER"
+    side="CLIENT"
