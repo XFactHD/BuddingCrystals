@@ -1,0 +1,21 @@
+{
+  "output_location": "buddingcrystals:block/budding/lapis_lazuli",
+  "input": {
+    "source_type": "dynamic_asset_generator:combined_paletted_image",
+    "overlay": {
+      "source_type": "dynamic_asset_generator:color",
+      "color": []
+    },
+    "background": {
+      "source_type": "dynamic_asset_generator:texture",
+      "path": "minecraft:item/lapis_lazuli"
+    },
+    "paletted": {
+      "source_type": "dynamic_asset_generator:texture",
+      "path": "minecraft:block/budding_amethyst"
+    },
+    "include_background": false,
+    "stretch_paletted": true,
+    "extend_palette_size": 0
+  }
+}

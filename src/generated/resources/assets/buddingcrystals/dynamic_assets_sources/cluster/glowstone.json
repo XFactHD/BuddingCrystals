@@ -1,0 +1,21 @@
+{
+  "output_location": "buddingcrystals:block/cluster/glowstone",
+  "input": {
+    "source_type": "dynamic_asset_generator:combined_paletted_image",
+    "overlay": {
+      "source_type": "dynamic_asset_generator:color",
+      "color": []
+    },
+    "background": {
+      "source_type": "dynamic_asset_generator:texture",
+      "path": "minecraft:item/glowstone_dust"
+    },
+    "paletted": {
+      "source_type": "dynamic_asset_generator:texture",
+      "path": "minecraft:block/amethyst_cluster"
+    },
+    "include_background": false,
+    "stretch_paletted": true,
+    "extend_palette_size": 0
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "buddingcrystals:block/cube_all",
+  "textures": {
+    "all": "buddingcrystals:block/budding/fluix"
+  }
+}

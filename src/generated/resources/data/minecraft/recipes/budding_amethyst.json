@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "C": {
+      "item": "buddingcrystals:crystal_catalyst"
+    }
+  },
+  "result": {
+    "item": "minecraft:budding_amethyst"
+  }
+}

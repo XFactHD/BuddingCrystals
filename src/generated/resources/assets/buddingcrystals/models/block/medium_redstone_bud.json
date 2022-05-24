@@ -1,0 +1,6 @@
+{
+  "parent": "buddingcrystals:block/cross",
+  "textures": {
+    "cross": "buddingcrystals:block/medium_bud/redstone"
+  }
+}

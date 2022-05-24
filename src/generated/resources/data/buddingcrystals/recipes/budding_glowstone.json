@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "C": {
+      "item": "buddingcrystals:crystal_catalyst"
+    }
+  },
+  "result": {
+    "item": "buddingcrystals:budding_glowstone"
+  }
+}

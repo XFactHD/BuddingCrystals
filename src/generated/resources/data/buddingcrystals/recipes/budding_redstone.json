@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:redstone"
+    },
+    "C": {
+      "item": "buddingcrystals:crystal_catalyst"
+    }
+  },
+  "result": {
+    "item": "buddingcrystals:budding_redstone"
+  }
+}
