@@ -7,7 +7,7 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.*;
 import xfacthd.buddingcrystals.BuddingCrystals;
-import xfacthd.buddingcrystals.common.datagen.builders.OptionalLootItem;
+import xfacthd.buddingcrystals.common.data.OptionalLootItem;
 import xfacthd.buddingcrystals.common.util.BudSet;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
 

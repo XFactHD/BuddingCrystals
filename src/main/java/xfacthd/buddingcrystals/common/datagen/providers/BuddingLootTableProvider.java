@@ -18,7 +18,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import xfacthd.buddingcrystals.common.BCContent;
-import xfacthd.buddingcrystals.common.datagen.builders.OptionalLootItem;
+import xfacthd.buddingcrystals.common.data.OptionalLootItem;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
 
 import java.util.*;

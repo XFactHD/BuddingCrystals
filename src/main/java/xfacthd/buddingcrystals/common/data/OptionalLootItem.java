@@ -1,4 +1,4 @@
-package xfacthd.buddingcrystals.common.datagen.builders;
+package xfacthd.buddingcrystals.common.data;
 
 import com.google.gson.*;
 import net.minecraft.resources.ResourceLocation;
