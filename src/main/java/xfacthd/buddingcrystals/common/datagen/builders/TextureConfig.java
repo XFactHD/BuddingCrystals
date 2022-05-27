@@ -3,15 +3,13 @@ package xfacthd.buddingcrystals.common.datagen.builders;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.data.ExistingFileHelper;
 
 public final class TextureConfig
 {
-    private final ExistingFileHelper fileHelper;
     private ImageSource input;
     private ResourceLocation output;
 
-    public TextureConfig(ExistingFileHelper fileHelper) { this.fileHelper = fileHelper; }
+    public TextureConfig() { }
 
     public TextureConfig input(ImageSource input)
     {
@@ -21,11 +19,7 @@ public final class TextureConfig
 
     public TextureConfig output(ResourceLocation output)
     {
-        Preconditions.checkArgument(
-                fileHelper.exists(output, TextureConfigProvider.TEXTURE),
-                "Texture at %s does not exist",
-                output
-        );
+        Preconditions.checkNotNull(output, "Output texture must not be null");
 
         this.output = output;
         return this;

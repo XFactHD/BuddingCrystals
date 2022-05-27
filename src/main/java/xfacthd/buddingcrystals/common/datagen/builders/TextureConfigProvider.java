@@ -36,7 +36,7 @@ public abstract class TextureConfigProvider implements DataProvider
     {
         return generatedConfigs.computeIfAbsent(
                 new ResourceLocation(modid, path),
-                loc -> new TextureConfig(fileHelper)
+                loc -> new TextureConfig()
         );
     }
 
