@@ -53,6 +53,11 @@ public final class BCContent //TODO: balance growth chance and drop counts
             .sourceTexture("item/quartz")
             .drop("minecraft:quartz")
             .build();
+    public static final CrystalSet PRISMARINE = CrystalSet.builder("prismarine")
+            .translation("Prismarine")
+            .sourceTexture("item/prismarine_shard")
+            .drop("minecraft:prismarine")
+            .build();
     public static final CrystalSet CERTUS_QUARTZ = CrystalSet.builder("certus_quartz")
             .translation("Certus Quartz")
             .sourceTexture("item/certus_quartz_crystal")

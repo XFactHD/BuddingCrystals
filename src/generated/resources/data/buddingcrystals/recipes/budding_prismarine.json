@@ -1,0 +1,32 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "config": "enable_crafting_budding_prismarine",
+          "type": "buddingcrystals:config"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "MMM",
+          "MCM",
+          "MMM"
+        ],
+        "key": {
+          "M": {
+            "item": "minecraft:prismarine"
+          },
+          "C": {
+            "item": "buddingcrystals:crystal_catalyst"
+          }
+        },
+        "result": {
+          "item": "buddingcrystals:budding_prismarine"
+        }
+      }
+    }
+  ]
+}
