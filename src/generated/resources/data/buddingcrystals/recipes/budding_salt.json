@@ -6,6 +6,10 @@
         {
           "modid": "mekanism",
           "type": "forge:mod_loaded"
+        },
+        {
+          "config": "enable_crafting_budding_salt",
+          "type": "buddingcrystals:config"
         }
       ],
       "recipe": {

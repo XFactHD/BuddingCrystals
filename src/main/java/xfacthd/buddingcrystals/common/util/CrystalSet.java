@@ -1,5 +1,6 @@
 package xfacthd.buddingcrystals.common.util;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
@@ -7,6 +8,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.*;
+import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.block.BuddingCrystalBlock;
 import xfacthd.buddingcrystals.common.item.CrystalBlockItem;
@@ -18,16 +20,18 @@ public final class CrystalSet
 {
     private final String compatMod;
     private final String name;
+    private final String translation;
     private final RegistryObject<Block> buddingBlock;
     private final BudSet budSet;
     private final RegistryObject<Item> drop;
     private final float normalDrop;
     private final float maxDrop;
 
-    private CrystalSet(String compatMod, String name, RegistryObject<Block> buddingBlock, BudSet budSet, RegistryObject<Item> drop, float normalDrop, float maxDrop)
+    private CrystalSet(String compatMod, String name, String translation, RegistryObject<Block> buddingBlock, BudSet budSet, RegistryObject<Item> drop, float normalDrop, float maxDrop)
     {
         this.compatMod = compatMod;
         this.name = name;
+        this.translation = translation;
         this.buddingBlock = buddingBlock;
         this.budSet = budSet;
         this.drop = drop;
@@ -36,6 +40,8 @@ public final class CrystalSet
     }
 
     public String getName() { return name; }
+
+    public String getTranslation() { return translation; }
 
     public Block getBuddingBlock() { return buddingBlock.get(); }
 
@@ -70,55 +76,100 @@ public final class CrystalSet
 
     public boolean isActive() { return ModList.get().isLoaded(compatMod); }
 
+    public String getConfigString() { return "enable_crafting_budding_" + getName(); }
+
+    public String getConfigTranslation() { return "config." + BuddingCrystals.MOD_ID + "." + getConfigString(); }
+
 
 
     public static CrystalSet.Builder builder(String name) { return new Builder(name); }
+
+    public static CrystalSet builtinAmethyst()
+    {
+        BudSet budSet = new BudSet(
+                RegistryObject.create(new ResourceLocation("small_amethyst_bud"), ForgeRegistries.BLOCKS),
+                RegistryObject.create(new ResourceLocation("medium_amethyst_bud"), ForgeRegistries.BLOCKS),
+                RegistryObject.create(new ResourceLocation("large_amethyst_bud"), ForgeRegistries.BLOCKS),
+                RegistryObject.create(new ResourceLocation("amethyst_cluster"), ForgeRegistries.BLOCKS)
+        );
+
+        return new CrystalSet(
+                "minecraft",
+                "amethyst",
+                "Amethyst",
+                RegistryObject.create(new ResourceLocation("budding_amethyst"), ForgeRegistries.BLOCKS),
+                budSet,
+                RegistryObject.create(new ResourceLocation("amethyst_shard"), ForgeRegistries.ITEMS),
+                2,
+                4
+        );
+    }
 
 
 
     public static final class Builder
     {
         private final String name;
+        private String translation;
         private String compatMod = "minecraft";
         private int growthChance = 5;
         private RegistryObject<Item> drop;
         private float normalDrop = 2;
         private float maxDrop = 4;
 
-        private Builder(String name) { this.name = name; }
+        private Builder(String name)
+        {
+            Preconditions.checkArgument(name != null && !name.isEmpty(), "Name must not be empty");
+            this.name = name;
+        }
+
+        public Builder translation(String translation)
+        {
+            Preconditions.checkArgument(translation != null && !translation.isEmpty(), "Translation must not be empty");
+            this.translation = translation;
+            return this;
+        }
 
         public Builder compatMod(String compatMod)
         {
+            Preconditions.checkArgument(compatMod != null && !compatMod.isEmpty(), "Compat mod must not be empty");
             this.compatMod = compatMod;
             return this;
         }
 
         public Builder growthChance(int chance)
         {
+            Preconditions.checkArgument(chance > 0, "Growth chance must be higher than 0");
             this.growthChance = chance;
             return this;
         }
 
         public Builder drop(String drop)
         {
+            Preconditions.checkArgument(drop != null && !drop.isEmpty(), "Dropped item must not be empty");
             this.drop = RegistryObject.create(new ResourceLocation(drop), ForgeRegistries.ITEMS);
             return this;
         }
 
         public Builder normalDrop(float count)
         {
+            Preconditions.checkArgument(count > 0F, "Normal drop count must be higher than 0");
             this.normalDrop = count;
             return this;
         }
 
         public Builder maxDrop(float count)
         {
+            Preconditions.checkArgument(count > 0F, "Max drop count must be higher than 0");
             this.maxDrop = count;
             return this;
         }
 
         public CrystalSet build()
         {
+            Preconditions.checkState(translation != null, "No translation set");
+            Preconditions.checkState(maxDrop >= normalDrop, "Max drop must be higher or equal to normal drop");
+
             RegistryObject<Block> smallBud = register("small_" + name + "_bud", Builder::smallBud, compatMod);
             RegistryObject<Block> mediumBud = register("medium_" + name + "_bud", Builder::mediumBud, compatMod);
             RegistryObject<Block> largeBud = register("large_" + name + "_bud", Builder::largeBud, compatMod);
@@ -142,6 +193,7 @@ public final class CrystalSet
             CrystalSet set = new CrystalSet(
                     compatMod,
                     name,
+                    translation,
                     buddingBlock,
                     budSet,
                     drop,

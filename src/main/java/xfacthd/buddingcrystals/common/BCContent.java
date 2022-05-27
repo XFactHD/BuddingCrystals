@@ -21,37 +21,48 @@ public final class BCContent //TODO: balance growth chance and drop counts
     private static final DeferredRegister<LootPoolEntryType> POOL_ENTRY_TYPES = DeferredRegister.create(Registry.LOOT_ENTRY_REGISTRY, BuddingCrystals.MOD_ID);
 
     public static final List<CrystalSet> ALL_SETS = new ArrayList<>();
+    public static final CrystalSet AMETHYST = CrystalSet.builtinAmethyst();
     public static final CrystalSet REDSTONE = CrystalSet.builder("redstone")
+            .translation("Redstone")
             .drop("minecraft:redstone")
             .build();
     public static final CrystalSet DIAMOND = CrystalSet.builder("diamond")
+            .translation("Diamond")
             .drop("minecraft:diamond")
             .build();
     public static final CrystalSet EMERALD = CrystalSet.builder("emerald")
+            .translation("Emerald")
             .drop("minecraft:emerald")
             .build();
     public static final CrystalSet LAPIS_LAZULI = CrystalSet.builder("lapis_lazuli")
+            .translation("Lapis Lazuli")
             .drop("minecraft:lapis_lazuli")
             .build();
     public static final CrystalSet GLOWSTONE = CrystalSet.builder("glowstone")
+            .translation("Glowstone")
             .drop("minecraft:glowstone_dust")
             .build();
     public static final CrystalSet NETHER_QUARTZ = CrystalSet.builder("nether_quartz")
+            .translation("Nether Quartz")
             .drop("minecraft:quartz")
             .build();
     public static final CrystalSet CERTUS_QUARTZ = CrystalSet.builder("certus_quartz")
+            .translation("Certus Quartz")
             .drop("ae2:certus_quartz_crystal")
             .compatMod("ae2")
             .build();
     public static final CrystalSet FLUIX = CrystalSet.builder("fluix")
+            .translation("Fluix")
             .drop("ae2:fluix_crystal")
             .compatMod("ae2")
             .build();
     public static final CrystalSet SALT = CrystalSet.builder("salt")
+            .translation("Salt")
             .drop("mekanism:salt")
             .compatMod("mekanism")
             .build();
     public static final CrystalSet FLUORITE = CrystalSet.builder("fluorite")
+            .translation("Fluorite")
             .drop("mekanism:fluorite_gem")
             .compatMod("mekanism")
             .build();

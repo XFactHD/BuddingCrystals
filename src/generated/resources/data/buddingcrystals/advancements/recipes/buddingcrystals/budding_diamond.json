@@ -1,34 +1,46 @@
 {
-  "parent": "minecraft:recipes/root",
-  "rewards": {
-    "recipes": [
-      "buddingcrystals:budding_diamond"
-    ]
-  },
-  "criteria": {
-    "has_diamond": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "minecraft:diamond"
-            ]
+  "advancements": [
+    {
+      "conditions": [
+        {
+          "config": "enable_crafting_budding_diamond",
+          "type": "buddingcrystals:config"
+        }
+      ],
+      "advancement": {
+        "parent": "minecraft:recipes/root",
+        "rewards": {
+          "recipes": [
+            "buddingcrystals:budding_diamond"
+          ]
+        },
+        "criteria": {
+          "has_diamond": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+              "items": [
+                {
+                  "items": [
+                    "minecraft:diamond"
+                  ]
+                }
+              ]
+            }
+          },
+          "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {
+              "recipe": "buddingcrystals:budding_diamond"
+            }
           }
+        },
+        "requirements": [
+          [
+            "has_diamond",
+            "has_the_recipe"
+          ]
         ]
       }
-    },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "buddingcrystals:budding_diamond"
-      }
     }
-  },
-  "requirements": [
-    [
-      "has_diamond",
-      "has_the_recipe"
-    ]
   ]
 }

@@ -15,16 +15,12 @@ public final class BuddingLanguageProvider extends LanguageProvider
     {
         add(BuddingCrystals.CREATIVE_TAB.getDisplayName().getString(), "BuddingCrystals");
 
-        translate(BCContent.REDSTONE, "Redstone");
-        translate(BCContent.DIAMOND, "Diamond");
-        translate(BCContent.EMERALD, "Emerald");
-        translate(BCContent.LAPIS_LAZULI, "Lapis Lazuli");
-        translate(BCContent.GLOWSTONE, "Glowstone");
-        translate(BCContent.NETHER_QUARTZ, "Nether Quartz");
-        translate(BCContent.CERTUS_QUARTZ, "Certus Quartz");
-        translate(BCContent.FLUIX, "Fluix");
-        translate(BCContent.SALT, "Salt");
-        translate(BCContent.FLUORITE, "Fluorite");
+        add(BCContent.AMETHYST.getConfigTranslation(), "Allow crafting of budding Amethyst block");
+        BCContent.ALL_SETS.forEach(set ->
+        {
+            translate(set, set.getTranslation());
+            add(set.getConfigTranslation(), "Allow crafting of budding " + set.getTranslation() + " block");
+        });
 
         add(BCContent.CRYSTAL_CATALYST.get(), "Crystal Catalyst");
     }

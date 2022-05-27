@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 public final class CrystalTab extends CreativeModeTab
 {
-    private static final int SWITCH_INTERVAL = 2000;
+    private static final int SWITCH_INTERVAL = 1500;
     private static final Supplier<List<ItemStack>> ICON_ITEMS = Suppliers.memoize(() ->
             BCContent.ALL_SETS.stream()
                     .filter(CrystalSet::isActive)

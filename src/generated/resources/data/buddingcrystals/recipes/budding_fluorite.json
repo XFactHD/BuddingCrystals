@@ -6,6 +6,10 @@
         {
           "modid": "mekanism",
           "type": "forge:mod_loaded"
+        },
+        {
+          "config": "enable_crafting_budding_fluorite",
+          "type": "buddingcrystals:config"
         }
       ],
       "recipe": {

@@ -1,34 +1,46 @@
 {
-  "parent": "minecraft:recipes/root",
-  "rewards": {
-    "recipes": [
-      "buddingcrystals:budding_emerald"
-    ]
-  },
-  "criteria": {
-    "has_emerald": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "minecraft:emerald"
-            ]
+  "advancements": [
+    {
+      "conditions": [
+        {
+          "config": "enable_crafting_budding_emerald",
+          "type": "buddingcrystals:config"
+        }
+      ],
+      "advancement": {
+        "parent": "minecraft:recipes/root",
+        "rewards": {
+          "recipes": [
+            "buddingcrystals:budding_emerald"
+          ]
+        },
+        "criteria": {
+          "has_emerald": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+              "items": [
+                {
+                  "items": [
+                    "minecraft:emerald"
+                  ]
+                }
+              ]
+            }
+          },
+          "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {
+              "recipe": "buddingcrystals:budding_emerald"
+            }
           }
+        },
+        "requirements": [
+          [
+            "has_emerald",
+            "has_the_recipe"
+          ]
         ]
       }
-    },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "buddingcrystals:budding_emerald"
-      }
     }
-  },
-  "requirements": [
-    [
-      "has_emerald",
-      "has_the_recipe"
-    ]
   ]
 }

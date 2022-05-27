@@ -3,7 +3,11 @@
     {
       "conditions": [
         {
-          "config": "enable_crafting_budding_nether_quartz",
+          "modid": "mekanism",
+          "type": "forge:mod_loaded"
+        },
+        {
+          "config": "enable_crafting_budding_fluorite",
           "type": "buddingcrystals:config"
         }
       ],
@@ -11,17 +15,17 @@
         "parent": "minecraft:recipes/root",
         "rewards": {
           "recipes": [
-            "buddingcrystals:budding_nether_quartz"
+            "buddingcrystals:budding_fluorite"
           ]
         },
         "criteria": {
-          "has_nether_quartz": {
+          "has_fluorite": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
               "items": [
                 {
                   "items": [
-                    "minecraft:quartz"
+                    "mekanism:fluorite_gem"
                   ]
                 }
               ]
@@ -30,13 +34,13 @@
           "has_the_recipe": {
             "trigger": "minecraft:recipe_unlocked",
             "conditions": {
-              "recipe": "buddingcrystals:budding_nether_quartz"
+              "recipe": "buddingcrystals:budding_fluorite"
             }
           }
         },
         "requirements": [
           [
-            "has_nether_quartz",
+            "has_fluorite",
             "has_the_recipe"
           ]
         ]
