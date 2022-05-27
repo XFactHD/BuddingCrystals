@@ -35,25 +35,16 @@ public final class BuddingTextureConfigProvider extends TextureConfigProvider
     private void defaultConfigs(CrystalSet set)
     {
         String name = set.getName();
-        ResourceLocation material = set.getSourceTexture();
-
-        ImageSource materialSource;
-        if (material.getNamespace().equals("minecraft"))
-        {
-            materialSource = fileSource(material);
-        }
-        else
-        {
-            materialSource = fallbackFileSource().texture(material).fallback(FALLBACK_TEXTURE);
-        }
 
         config("budding/" + name).output(bcRl("block/budding/" + name)).input(
                 combinedPalettedImageSource()
                         .overlay(colorSource())
                         .paletted(fileSource(mcRl("block/budding_amethyst")))
-                        .background(materialSource)
+                        .background(materialSource(set.getBuddingSourceTexture()))
                         .stretchPaletted(true)
         );
+
+        ImageSource materialSource = materialSource(set.getCrystalSourceTexture());
 
         config("small_bud/" + name).output(bcRl("block/small_bud/" + name)).input(
                 combinedPalettedImageSource()
@@ -86,6 +77,18 @@ public final class BuddingTextureConfigProvider extends TextureConfigProvider
                         .background(materialSource)
                         .stretchPaletted(true)
         );
+    }
+
+    private ImageSource materialSource(ResourceLocation material)
+    {
+        if (material.getNamespace().equals("minecraft"))
+        {
+            return fileSource(material);
+        }
+        else
+        {
+            return fallbackFileSource().texture(material).fallback(FALLBACK_TEXTURE);
+        }
     }
 
     private static ResourceLocation bcRl(String path) { return rl(BuddingCrystals.MOD_ID, path); }

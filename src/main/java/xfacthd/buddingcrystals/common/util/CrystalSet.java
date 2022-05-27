@@ -21,19 +21,21 @@ public final class CrystalSet
     private final String compatMod;
     private final String name;
     private final String translation;
-    private final ResourceLocation texture;
+    private final ResourceLocation crystalTexture;
+    private final ResourceLocation buddingTexture;
     private final RegistryObject<Block> buddingBlock;
     private final BudSet budSet;
     private final RegistryObject<Item> drop;
     private final float normalDrop;
     private final float maxDrop;
 
-    private CrystalSet(String compatMod, String name, String translation, ResourceLocation texture, RegistryObject<Block> buddingBlock, BudSet budSet, RegistryObject<Item> drop, float normalDrop, float maxDrop)
+    private CrystalSet(String compatMod, String name, String translation, ResourceLocation crystalTexture, ResourceLocation buddingTexture, RegistryObject<Block> buddingBlock, BudSet budSet, RegistryObject<Item> drop, float normalDrop, float maxDrop)
     {
         this.compatMod = compatMod;
         this.name = name;
         this.translation = translation;
-        this.texture = texture;
+        this.crystalTexture = crystalTexture;
+        this.buddingTexture = buddingTexture;
         this.buddingBlock = buddingBlock;
         this.budSet = budSet;
         this.drop = drop;
@@ -45,7 +47,9 @@ public final class CrystalSet
 
     public String getTranslation() { return translation; }
 
-    public ResourceLocation getSourceTexture() { return texture; }
+    public ResourceLocation getCrystalSourceTexture() { return crystalTexture; }
+
+    public ResourceLocation getBuddingSourceTexture() { return buddingTexture; }
 
     public Block getBuddingBlock() { return buddingBlock.get(); }
 
@@ -102,6 +106,7 @@ public final class CrystalSet
                 "amethyst",
                 "Amethyst",
                 new ResourceLocation("minecraft:item/amethyst_shard"),
+                new ResourceLocation("minecraft:item/amethyst_shard"),
                 RegistryObject.create(new ResourceLocation("budding_amethyst"), ForgeRegistries.BLOCKS),
                 budSet,
                 RegistryObject.create(new ResourceLocation("amethyst_shard"), ForgeRegistries.ITEMS),
@@ -117,7 +122,8 @@ public final class CrystalSet
         private final String name;
         private String translation;
         private String compatMod = "minecraft";
-        private String texture;
+        private String crystalTexture;
+        private String buddingTexture;
         private int growthChance = 5;
         private RegistryObject<Item> drop;
         private float normalDrop = 2;
@@ -146,7 +152,22 @@ public final class CrystalSet
         public Builder sourceTexture(String texture)
         {
             Preconditions.checkArgument(texture != null && !texture.isEmpty(), "Texture must not be empty");
-            this.texture = texture;
+            this.crystalTexture = texture;
+            this.buddingTexture = texture;
+            return this;
+        }
+
+        public Builder buddingSourceTexture(String texture)
+        {
+            Preconditions.checkArgument(texture != null && !texture.isEmpty(), "Budding texture must not be empty");
+            this.buddingTexture = texture;
+            return this;
+        }
+
+        public Builder crystalSourceTexture(String texture)
+        {
+            Preconditions.checkArgument(texture != null && !texture.isEmpty(), "Crystal texture must not be empty");
+            this.crystalTexture = texture;
             return this;
         }
 
@@ -181,7 +202,8 @@ public final class CrystalSet
         public CrystalSet build()
         {
             Preconditions.checkState(translation != null, "No translation set");
-            Preconditions.checkState(texture != null, "No texture set");
+            Preconditions.checkState(crystalTexture != null, "No crystal source texture set");
+            Preconditions.checkState(buddingTexture != null, "No budding block source texture set");
             Preconditions.checkState(maxDrop >= normalDrop, "Max drop must be higher or equal to normal drop");
 
             RegistryObject<Block> smallBud = register("small_" + name + "_bud", Builder::smallBud, compatMod);
@@ -208,7 +230,8 @@ public final class CrystalSet
                     compatMod,
                     name,
                     translation,
-                    new ResourceLocation(compatMod, texture),
+                    new ResourceLocation(compatMod, crystalTexture),
+                    new ResourceLocation(compatMod, buddingTexture),
                     buddingBlock,
                     budSet,
                     drop,

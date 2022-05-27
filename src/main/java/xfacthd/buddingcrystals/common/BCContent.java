@@ -66,7 +66,8 @@ public final class BCContent //TODO: balance growth chance and drop counts
             .build();
     public static final CrystalSet FLUIX = CrystalSet.builder("fluix")
             .translation("Fluix")
-            .sourceTexture("item/fluix_crystal")
+            .crystalSourceTexture("item/fluix_dust")
+            .buddingSourceTexture("block/fluix_block")
             .drop("ae2:fluix_crystal")
             .compatMod("ae2")
             .build();

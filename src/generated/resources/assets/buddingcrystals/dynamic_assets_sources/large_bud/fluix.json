@@ -8,7 +8,7 @@
     },
     "background": {
       "source_type": "buddingcrystals:fallback_texture",
-      "path": "ae2:item/fluix_crystal",
+      "path": "ae2:item/fluix_dust",
       "fallback": "buddingcrystals:block/fallback"
     },
     "paletted": {
