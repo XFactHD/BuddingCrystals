@@ -21,16 +21,7 @@ public final class BuddingTextureConfigProvider extends TextureConfigProvider
     @Override
     public void addConfigs()
     {
-        defaultConfigs(BCContent.REDSTONE, mcRl("item/redstone"));
-        defaultConfigs(BCContent.DIAMOND, mcRl("item/diamond"));
-        defaultConfigs(BCContent.EMERALD, mcRl("item/emerald"));
-        defaultConfigs(BCContent.LAPIS_LAZULI, mcRl("item/lapis_lazuli"));
-        defaultConfigs(BCContent.GLOWSTONE, mcRl("item/glowstone_dust"));
-        defaultConfigs(BCContent.NETHER_QUARTZ, mcRl("item/quartz"));
-        defaultConfigs(BCContent.CERTUS_QUARTZ, rl("ae2", "item/certus_quartz_crystal"));
-        defaultConfigs(BCContent.FLUIX, rl("ae2", "item/fluix_crystal"));
-        defaultConfigs(BCContent.SALT, rl("mekanism", "item/salt"));
-        defaultConfigs(BCContent.FLUORITE, rl("mekanism", "item/fluorite_gem"));
+        BCContent.ALL_SETS.forEach(this::defaultConfigs);
 
         config("crystal_catalyst").output(bcRl("item/crystal_catalyst")).input(
                 combinedPalettedImageSource()
@@ -41,9 +32,10 @@ public final class BuddingTextureConfigProvider extends TextureConfigProvider
         );
     }
 
-    private void defaultConfigs(CrystalSet set, ResourceLocation material)
+    private void defaultConfigs(CrystalSet set)
     {
         String name = set.getName();
+        ResourceLocation material = set.getSourceTexture();
 
         ImageSource materialSource;
         if (material.getNamespace().equals("minecraft"))

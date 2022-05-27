@@ -21,17 +21,19 @@ public final class CrystalSet
     private final String compatMod;
     private final String name;
     private final String translation;
+    private final ResourceLocation texture;
     private final RegistryObject<Block> buddingBlock;
     private final BudSet budSet;
     private final RegistryObject<Item> drop;
     private final float normalDrop;
     private final float maxDrop;
 
-    private CrystalSet(String compatMod, String name, String translation, RegistryObject<Block> buddingBlock, BudSet budSet, RegistryObject<Item> drop, float normalDrop, float maxDrop)
+    private CrystalSet(String compatMod, String name, String translation, ResourceLocation texture, RegistryObject<Block> buddingBlock, BudSet budSet, RegistryObject<Item> drop, float normalDrop, float maxDrop)
     {
         this.compatMod = compatMod;
         this.name = name;
         this.translation = translation;
+        this.texture = texture;
         this.buddingBlock = buddingBlock;
         this.budSet = budSet;
         this.drop = drop;
@@ -42,6 +44,8 @@ public final class CrystalSet
     public String getName() { return name; }
 
     public String getTranslation() { return translation; }
+
+    public ResourceLocation getSourceTexture() { return texture; }
 
     public Block getBuddingBlock() { return buddingBlock.get(); }
 
@@ -97,6 +101,7 @@ public final class CrystalSet
                 "minecraft",
                 "amethyst",
                 "Amethyst",
+                new ResourceLocation("minecraft:item/amethyst_shard"),
                 RegistryObject.create(new ResourceLocation("budding_amethyst"), ForgeRegistries.BLOCKS),
                 budSet,
                 RegistryObject.create(new ResourceLocation("amethyst_shard"), ForgeRegistries.ITEMS),
@@ -112,6 +117,7 @@ public final class CrystalSet
         private final String name;
         private String translation;
         private String compatMod = "minecraft";
+        private String texture;
         private int growthChance = 5;
         private RegistryObject<Item> drop;
         private float normalDrop = 2;
@@ -134,6 +140,13 @@ public final class CrystalSet
         {
             Preconditions.checkArgument(compatMod != null && !compatMod.isEmpty(), "Compat mod must not be empty");
             this.compatMod = compatMod;
+            return this;
+        }
+
+        public Builder sourceTexture(String texture)
+        {
+            Preconditions.checkArgument(texture != null && !texture.isEmpty(), "Texture must not be empty");
+            this.texture = texture;
             return this;
         }
 
@@ -168,6 +181,7 @@ public final class CrystalSet
         public CrystalSet build()
         {
             Preconditions.checkState(translation != null, "No translation set");
+            Preconditions.checkState(texture != null, "No texture set");
             Preconditions.checkState(maxDrop >= normalDrop, "Max drop must be higher or equal to normal drop");
 
             RegistryObject<Block> smallBud = register("small_" + name + "_bud", Builder::smallBud, compatMod);
@@ -194,6 +208,7 @@ public final class CrystalSet
                     compatMod,
                     name,
                     translation,
+                    new ResourceLocation(compatMod, texture),
                     buddingBlock,
                     budSet,
                     drop,
