@@ -1,6 +1,5 @@
 package xfacthd.buddingcrystals.common.datagen.providers;
 
-import net.minecraft.Util;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.AmethystClusterBlock;
@@ -9,29 +8,13 @@ import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
-import xfacthd.buddingcrystals.common.datagen.util.DummiedExistingFileHelper;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
 
 public final class BuddingStateProvider extends BlockStateProvider
 {
-    private static final Supplier<List<ResourceLocation>> DUMMY_FILES = () ->
-            Util.make(new ArrayList<>(), list -> BCContent.ALL_SETS.forEach(set ->
-            {
-                list.add(rl("textures/block/small_bud/" + set.getName() + ".png"));
-                list.add(rl("textures/block/medium_bud/" + set.getName() + ".png"));
-                list.add(rl("textures/block/large_bud/" + set.getName() + ".png"));
-                list.add(rl("textures/block/cluster/" + set.getName() + ".png"));
-                list.add(rl("textures/block/budding/" + set.getName() + ".png"));
-            })
-    );
-
     public BuddingStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper)
     {
-        super(gen, BuddingCrystals.MOD_ID, new DummiedExistingFileHelper(exFileHelper, DUMMY_FILES.get()));
+        super(gen, BuddingCrystals.MOD_ID, exFileHelper);
     }
 
     @Override

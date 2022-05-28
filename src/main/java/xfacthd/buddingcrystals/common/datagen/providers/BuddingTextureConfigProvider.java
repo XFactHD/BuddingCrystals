@@ -7,15 +7,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
+import xfacthd.buddingcrystals.common.datagen.util.TrackingTextureConfig;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
 
 public final class BuddingTextureConfigProvider extends ForgeTextureConfigProvider
 {
     private static final ResourceLocation FALLBACK_TEXTURE = bcRl("block/fallback");
 
+    private final ExistingFileHelper fileHelper;
+
     public BuddingTextureConfigProvider(DataGenerator generator, ExistingFileHelper fileHelper)
     {
         super(generator, fileHelper, BuddingCrystals.MOD_ID);
+        this.fileHelper = fileHelper;
     }
 
     @Override
@@ -23,7 +27,7 @@ public final class BuddingTextureConfigProvider extends ForgeTextureConfigProvid
     {
         BCContent.ALL_SETS.forEach(this::defaultConfigs);
 
-        config("crystal_catalyst").output(bcRl("item/crystal_catalyst")).input(
+        trackedConfig("crystal_catalyst").output(bcRl("item/crystal_catalyst")).input(
                 combinedPalettedImageSource()
                         .overlay(colorSource())
                         .paletted(fileSource(mcRl("item/blaze_powder")))
@@ -36,7 +40,7 @@ public final class BuddingTextureConfigProvider extends ForgeTextureConfigProvid
     {
         String name = set.getName();
 
-        config("budding/" + name).output(bcRl("block/budding/" + name)).input(
+        trackedConfig("budding/" + name).output(bcRl("block/budding/" + name)).input(
                 combinedPalettedImageSource()
                         .overlay(colorSource())
                         .paletted(fileSource(mcRl("block/budding_amethyst")))
@@ -46,7 +50,7 @@ public final class BuddingTextureConfigProvider extends ForgeTextureConfigProvid
 
         ImageSource materialSource = materialSource(set.getCrystalSourceTexture());
 
-        config("small_bud/" + name).output(bcRl("block/small_bud/" + name)).input(
+        trackedConfig("small_bud/" + name).output(bcRl("block/small_bud/" + name)).input(
                 combinedPalettedImageSource()
                         .overlay(colorSource())
                         .paletted(fileSource(mcRl("block/small_amethyst_bud")))
@@ -54,7 +58,7 @@ public final class BuddingTextureConfigProvider extends ForgeTextureConfigProvid
                         .stretchPaletted(true)
         );
 
-        config("medium_bud/" + name).output(bcRl("block/medium_bud/" + name)).input(
+        trackedConfig("medium_bud/" + name).output(bcRl("block/medium_bud/" + name)).input(
                 combinedPalettedImageSource()
                         .overlay(colorSource())
                         .paletted(fileSource(mcRl("block/medium_amethyst_bud")))
@@ -62,7 +66,7 @@ public final class BuddingTextureConfigProvider extends ForgeTextureConfigProvid
                         .stretchPaletted(true)
         );
 
-        config("large_bud/" + name).output(bcRl("block/large_bud/" + name)).input(
+        trackedConfig("large_bud/" + name).output(bcRl("block/large_bud/" + name)).input(
                 combinedPalettedImageSource()
                         .overlay(colorSource())
                         .paletted(fileSource(mcRl("block/large_amethyst_bud")))
@@ -70,7 +74,7 @@ public final class BuddingTextureConfigProvider extends ForgeTextureConfigProvid
                         .stretchPaletted(true)
         );
 
-        config("cluster/" + name).output(bcRl("block/cluster/" + name)).input(
+        trackedConfig("cluster/" + name).output(bcRl("block/cluster/" + name)).input(
                 combinedPalettedImageSource()
                         .overlay(colorSource())
                         .paletted(fileSource(mcRl("block/amethyst_cluster")))
@@ -92,6 +96,8 @@ public final class BuddingTextureConfigProvider extends ForgeTextureConfigProvid
                     .fallback(fileSource(FALLBACK_TEXTURE));
         }
     }
+
+    private TrackingTextureConfig trackedConfig(String path) { return new TrackingTextureConfig(config(path), fileHelper); }
 
     private static ResourceLocation bcRl(String path) { return rl(BuddingCrystals.MOD_ID, path); }
 
