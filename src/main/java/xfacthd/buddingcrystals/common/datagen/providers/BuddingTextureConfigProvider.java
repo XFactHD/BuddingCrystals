@@ -1,15 +1,15 @@
 package xfacthd.buddingcrystals.common.datagen.providers;
 
+import io.github.lukebemish.dynamic_asset_generator.datagen.ImageSource;
+import io.github.lukebemish.dynamic_asset_generator.forge.ForgeTextureConfigProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
-import xfacthd.buddingcrystals.common.datagen.builders.ImageSource;
-import xfacthd.buddingcrystals.common.datagen.builders.TextureConfigProvider;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
 
-public final class BuddingTextureConfigProvider extends TextureConfigProvider
+public final class BuddingTextureConfigProvider extends ForgeTextureConfigProvider
 {
     private static final ResourceLocation FALLBACK_TEXTURE = bcRl("block/fallback");
 
@@ -87,7 +87,9 @@ public final class BuddingTextureConfigProvider extends TextureConfigProvider
         }
         else
         {
-            return fallbackFileSource().texture(material).fallback(FALLBACK_TEXTURE);
+            return fallbackSource()
+                    .original(fileSource(material))
+                    .fallback(fileSource(FALLBACK_TEXTURE));
         }
     }
 

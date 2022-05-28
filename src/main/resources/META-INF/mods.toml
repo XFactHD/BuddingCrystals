@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[40,)"
 issueTrackerURL="https://www.github.com/xfacthd/buddingcrystals"
-license="LGPL v3"
+license="LGPL v2.1"
 
 [[mods]]
     modId="buddingcrystals"
@@ -32,6 +32,6 @@ license="LGPL v3"
 [[dependencies.buddingcrystals]]
     modId="dynamic_asset_generator"
     mandatory=true
-    versionRange="[0.6.0,)"
+    versionRange="[0.6.2,)"
     ordering="AFTER"
     side="CLIENT"

@@ -17,10 +17,10 @@ public final class GeneratorHandler
         DataGenerator gen = event.getGenerator();
         ExistingFileHelper fileHelper = event.getExistingFileHelper();
 
+        gen.addProvider(new BuddingTextureConfigProvider(gen, fileHelper));
         gen.addProvider(new BuddingStateProvider(gen, fileHelper));
         gen.addProvider(new BuddingItemModelProvider(gen, fileHelper));
         gen.addProvider(new BuddingLanguageProvider(gen));
-        gen.addProvider(new BuddingTextureConfigProvider(gen, fileHelper));
         gen.addProvider(new BuddingBlockTagsProvider(gen, fileHelper));
         gen.addProvider(new BuddingLootTableProvider(gen));
         gen.addProvider(new BuddingRecipeProvider(gen));

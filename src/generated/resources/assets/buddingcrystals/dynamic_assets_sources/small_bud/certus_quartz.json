@@ -7,9 +7,15 @@
       "color": []
     },
     "background": {
-      "source_type": "buddingcrystals:fallback_texture",
-      "path": "ae2:item/certus_quartz_crystal",
-      "fallback": "buddingcrystals:block/fallback"
+      "source_type": "dynamic_asset_generator:fallback",
+      "original": {
+        "source_type": "dynamic_asset_generator:texture",
+        "path": "ae2:item/certus_quartz_crystal"
+      },
+      "fallback": {
+        "source_type": "dynamic_asset_generator:texture",
+        "path": "buddingcrystals:block/fallback"
+      }
     },
     "paletted": {
       "source_type": "dynamic_asset_generator:texture",
