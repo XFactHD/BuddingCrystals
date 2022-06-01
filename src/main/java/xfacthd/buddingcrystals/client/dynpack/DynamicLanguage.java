@@ -14,7 +14,7 @@ import java.util.TreeMap;
 
 public class DynamicLanguage
 {
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
+    private static final Gson GSON = (new GsonBuilder()).disableHtmlEscaping().create();
 
     @SuppressWarnings("deprecation")
     public static void run(Map<ResourceLocation, String> cache)

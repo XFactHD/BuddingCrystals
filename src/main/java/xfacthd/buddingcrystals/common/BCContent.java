@@ -110,6 +110,10 @@ public final class BCContent //TODO: balance growth chance and drop counts
 
     public static Collection<CrystalSet> loadedSets() { return LOADED_SETS.values(); }
 
+    public static Collection<String> builtinNames() { return BUILTIN_SETS.keySet(); }
+
+    public static boolean isBuiltin(String name) { return BUILTIN_SETS.containsKey(name); }
+
     public static Iterable<Block> allClusters()
     {
         return ALL_SETS.values().stream()

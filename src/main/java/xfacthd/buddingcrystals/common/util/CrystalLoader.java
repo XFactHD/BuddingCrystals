@@ -1,5 +1,6 @@
 package xfacthd.buddingcrystals.common.util;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.gson.*;
 import com.mojang.logging.LogUtils;
@@ -33,9 +34,9 @@ import java.util.stream.Stream;
 public class CrystalLoader
 {
     private static final Pattern VALID_NAME = Pattern.compile("^[a-z][a-z\\d_]+$");
-    private static final Path CRYSTAL_PATH = FMLPaths.GAMEDIR.get().resolve("buddingcrystals");
+    public static final Path CRYSTAL_PATH = FMLPaths.GAMEDIR.get().resolve("buddingcrystals");
     static final Logger LOGGER = LogUtils.getLogger();
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public static void loadUserSets()
     {
@@ -142,6 +143,49 @@ public class CrystalLoader
         });
     }
 
+    public static String export(String name)
+    {
+        CrystalSet set = BCContent.BUILTIN_SETS.get(name);
+
+        JsonObject json = new JsonObject();
+
+        json.addProperty("translation", set.getTranslation());
+
+        if (!set.getCompatMod().equals("minecraft"))
+        {
+            json.addProperty("compat_mod", set.getCompatMod());
+        }
+
+        ResourceLocation crystal = set.getCrystalSourceTexture();
+        ResourceLocation budding = set.getBuddingSourceTexture();
+        if (crystal.equals(budding))
+        {
+            json.addProperty("texture", crystal.toString());
+        }
+        else
+        {
+            json.addProperty("crystal_texture", crystal.toString());
+            json.addProperty("budding_textures", budding.toString());
+        }
+
+        json.addProperty("growth_chance", set.getGrowthChance());
+
+        ResourceLocation dropped = Preconditions.checkNotNull(set.getDroppedItem().getRegistryName());
+        ResourceLocation ingredient = Preconditions.checkNotNull(set.getIngredient().getRegistryName());
+        json.addProperty("dropped_item", dropped.toString());
+        if (!dropped.equals(ingredient))
+        {
+            json.addProperty("recipe_item", ingredient.toString());
+        }
+
+        json.addProperty("normal_drop_chance", set.getNormalDrops());
+        json.addProperty("max_drop_chance", set.getMaxDrops());
+
+        return GSON.toJson(json);
+    }
+
+
+
     private static JsonObject readJsonFile(Path path)
     {
         try
@@ -194,6 +238,7 @@ public class CrystalLoader
                 def.translation,
                 def.crystalTexture,
                 def.buddingTexture,
+                def.growthChance,
                 buddingBlock,
                 budSet,
                 drop,

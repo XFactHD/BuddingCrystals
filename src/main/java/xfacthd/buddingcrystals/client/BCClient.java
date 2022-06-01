@@ -7,6 +7,8 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterClientCommandsEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,6 +16,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.client.util.BuddingPalettePlan;
 import xfacthd.buddingcrystals.client.dynpack.BuddingResourcePack;
+import xfacthd.buddingcrystals.client.util.ExportCommand;
 import xfacthd.buddingcrystals.common.BCContent;
 
 @Mod.EventBusSubscriber(modid = BuddingCrystals.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -25,6 +28,8 @@ public final class BCClient
         BCContent.allClusters().forEach(block ->
                 ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout())
         );
+
+        MinecraftForge.EVENT_BUS.addListener(BCClient::onRegisterClientCommands);
     }
 
     @SubscribeEvent
@@ -47,6 +52,11 @@ public final class BCClient
                 ));
             });
         }
+    }
+
+    public static void onRegisterClientCommands(final RegisterClientCommandsEvent event)
+    {
+        ExportCommand.register(event.getDispatcher());
     }
 
     static

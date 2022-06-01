@@ -24,6 +24,7 @@ public final class CrystalSet
     private String translation;
     private ResourceLocation crystalTexture;
     private ResourceLocation buddingTexture;
+    private final int growthChance;
     private final RegistryObject<Block> buddingBlock;
     private final BudSet budSet;
     private RegistryObject<Item> drop;
@@ -31,13 +32,14 @@ public final class CrystalSet
     private float normalDrop;
     private float maxDrop;
 
-    CrystalSet(String compatMod, String name, String translation, ResourceLocation crystalTexture, ResourceLocation buddingTexture, RegistryObject<Block> buddingBlock, BudSet budSet, RegistryObject<Item> drop, RegistryObject<Item> ingredient, float normalDrop, float maxDrop)
+    CrystalSet(String compatMod, String name, String translation, ResourceLocation crystalTexture, ResourceLocation buddingTexture, int growthChance, RegistryObject<Block> buddingBlock, BudSet budSet, RegistryObject<Item> drop, RegistryObject<Item> ingredient, float normalDrop, float maxDrop)
     {
         this.compatMod = compatMod;
         this.name = name;
         this.translation = translation;
         this.crystalTexture = crystalTexture;
         this.buddingTexture = buddingTexture;
+        this.growthChance = growthChance;
         this.buddingBlock = buddingBlock;
         this.budSet = budSet;
         this.drop = drop;
@@ -53,6 +55,8 @@ public final class CrystalSet
     public ResourceLocation getCrystalSourceTexture() { return crystalTexture; }
 
     public ResourceLocation getBuddingSourceTexture() { return buddingTexture; }
+
+    public int getGrowthChance() { return growthChance; }
 
     public Block getBuddingBlock() { return buddingBlock.get(); }
 
@@ -146,6 +150,7 @@ public final class CrystalSet
                 "Amethyst",
                 new ResourceLocation("minecraft:item/amethyst_shard"),
                 new ResourceLocation("minecraft:item/amethyst_shard"),
+                5,
                 RegistryObject.create(new ResourceLocation("budding_amethyst"), ForgeRegistries.BLOCKS),
                 budSet,
                 drop,
@@ -329,6 +334,7 @@ public final class CrystalSet
                     translation,
                     crystalTexture,
                     buddingTexture,
+                    growthChance,
                     buddingBlock,
                     budSet,
                     drop,
