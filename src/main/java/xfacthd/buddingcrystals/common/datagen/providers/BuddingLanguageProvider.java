@@ -16,7 +16,7 @@ public final class BuddingLanguageProvider extends LanguageProvider
         add(BuddingCrystals.CREATIVE_TAB.getDisplayName().getString(), "BuddingCrystals");
 
         add(BCContent.AMETHYST.getConfigTranslation(), "Allow crafting of budding Amethyst block");
-        BCContent.ALL_SETS.forEach(set ->
+        BCContent.builtinSets().forEach(set ->
         {
             translate(set, set.getTranslation());
             add(set.getConfigTranslation(), "Allow crafting of budding " + set.getTranslation() + " block");

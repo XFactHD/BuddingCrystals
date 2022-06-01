@@ -23,7 +23,7 @@ public final class BuddingBlockTagsProvider extends TagsProvider<Block>
         TagAppender<Block> crystalSoundBlocks = tag(BlockTags.CRYSTAL_SOUND_BLOCKS);
         TagAppender<Block> pickaxeMineable = tag(BlockTags.MINEABLE_WITH_PICKAXE);
 
-        BCContent.ALL_SETS.forEach(set ->
+        BCContent.builtinSets().forEach(set ->
         {
             crystalSoundBlocks.add(set.getBuddingBlock());
             pickaxeMineable.add(set.blocks().toArray(Block[]::new));

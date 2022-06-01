@@ -20,8 +20,8 @@ public final class BuddingRecipeProvider extends RecipeProvider
     @Override
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
     {
-        addBuddingCrystalRecipe(BCContent.AMETHYST, consumer);
-        BCContent.ALL_SETS.forEach(set -> addBuddingCrystalRecipe(set, consumer));
+        addBuddingCrystalRecipe(BCContent.AMETHYST, true, consumer);
+        BCContent.builtinSets().forEach(set -> addBuddingCrystalRecipe(set, true, consumer));
 
         ShapedRecipeBuilder.shaped(BCContent.CRYSTAL_CATALYST.get())
                 .pattern("RBR")
@@ -34,34 +34,45 @@ public final class BuddingRecipeProvider extends RecipeProvider
                 .save(consumer);
     }
 
-    private void addBuddingCrystalRecipe(CrystalSet set, Consumer<FinishedRecipe> consumer)
+    public static void addBuddingCrystalRecipe(CrystalSet set, boolean config, Consumer<FinishedRecipe> consumer)
     {
         RecipeBuilder builder =  ShapedRecipeBuilder.shaped(set.getBuddingBlock())
                 .pattern("MMM")
                 .pattern("MCM")
                 .pattern("MMM")
-                .define('M', set.getDroppedItem())
+                .define('M', set.getIngredient())
                 .define('C', BCContent.CRYSTAL_CATALYST.get())
-                .unlockedBy("has_" + set.getName(), has(set.getDroppedItem()));
+                .unlockedBy("has_" + set.getName(), has(set.getIngredient()));
 
-        wrapInConditions(set, builder, consumer);
+        wrapInConditions(set, builder, config, consumer);
     }
 
-    private static void wrapInConditions(CrystalSet set, RecipeBuilder builder, Consumer<FinishedRecipe> consumer)
+    private static void wrapInConditions(CrystalSet set, RecipeBuilder builder, boolean config, Consumer<FinishedRecipe> consumer)
     {
+        boolean minecraft = set.getCompatMod().equals("minecraft");
+        if (!config && minecraft)
+        {
+            builder.save(consumer);
+            return;
+        }
+
         ConditionalRecipe.Builder conditionalBuilder = ConditionalRecipe.builder();
 
-        if (!set.getCompatMod().equals("minecraft"))
+        if (!minecraft)
         {
             ICondition modCondition = new ModLoadedCondition(set.getCompatMod());
             conditionalBuilder.addCondition(modCondition);
+        }
+        if (config)
+        {
+            ICondition cfgCondition = new ConfigCondition(set.getConfigString());
+            conditionalBuilder.addCondition(cfgCondition);
         }
 
         FinishedRecipe[] recipe = new FinishedRecipe[1];
         builder.save(finishedRecipe -> recipe[0] = finishedRecipe);
 
-        conditionalBuilder.addCondition(new ConfigCondition(set.getConfigString()))
-                .addRecipe(recipe[0])
+        conditionalBuilder.addRecipe(recipe[0])
                 .generateAdvancement(recipe[0].getAdvancementId())
                 .build(consumer, RecipeBuilder.getDefaultRecipeId(builder.getResult()));
     }

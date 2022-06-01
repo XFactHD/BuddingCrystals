@@ -37,7 +37,7 @@ public class CommonConfig
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
 
         builder.push("crystals");
-        Streams.concat(Stream.of(BCContent.AMETHYST), BCContent.ALL_SETS.stream()).forEach(set ->
+        Streams.concat(Stream.of(BCContent.AMETHYST), BCContent.builtinSets().stream()).forEach(set ->
         {
             ForgeConfigSpec.BooleanValue config = builder
                     .comment("Allow crafting of budding " + set.getTranslation() + " block")

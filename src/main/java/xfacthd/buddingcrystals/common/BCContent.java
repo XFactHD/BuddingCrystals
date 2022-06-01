@@ -8,11 +8,9 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.*;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.data.OptionalLootItem;
-import xfacthd.buddingcrystals.common.util.BudSet;
-import xfacthd.buddingcrystals.common.util.CrystalSet;
+import xfacthd.buddingcrystals.common.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public final class BCContent //TODO: balance growth chance and drop counts
@@ -21,7 +19,10 @@ public final class BCContent //TODO: balance growth chance and drop counts
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BuddingCrystals.MOD_ID);
     private static final DeferredRegister<LootPoolEntryType> POOL_ENTRY_TYPES = DeferredRegister.create(Registry.LOOT_ENTRY_REGISTRY, BuddingCrystals.MOD_ID);
 
-    public static final List<CrystalSet> ALL_SETS = new ArrayList<>();
+    public static final Map<String, CrystalSet> ALL_SETS = new HashMap<>();
+    public static final Map<String, CrystalSet> BUILTIN_SETS = new HashMap<>();
+    public static final Map<String, CrystalSet> LOADED_SETS = new HashMap<>();
+
     public static final CrystalSet AMETHYST = CrystalSet.builtinAmethyst();
     public static final CrystalSet REDSTONE = CrystalSet.builder("redstone")
             .translation("Redstone")
@@ -99,11 +100,19 @@ public final class BCContent //TODO: balance growth chance and drop counts
         BLOCKS.register(bus);
         ITEMS.register(bus);
         POOL_ENTRY_TYPES.register(bus);
+
+        CrystalLoader.loadUserSets();
     }
+
+    public static Collection<CrystalSet> allSets() { return ALL_SETS.values(); }
+
+    public static Collection<CrystalSet> builtinSets() { return BUILTIN_SETS.values(); }
+
+    public static Collection<CrystalSet> loadedSets() { return LOADED_SETS.values(); }
 
     public static Iterable<Block> allClusters()
     {
-        return ALL_SETS.stream()
+        return ALL_SETS.values().stream()
                 .map(CrystalSet::getBudSet)
                 .map(BudSet::blocks)
                 .flatMap(List::stream)

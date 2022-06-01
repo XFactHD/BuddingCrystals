@@ -1,16 +1,16 @@
 {
   "replace": false,
   "values": [
-    "buddingcrystals:budding_redstone",
-    "buddingcrystals:budding_diamond",
-    "buddingcrystals:budding_emerald",
-    "buddingcrystals:budding_lapis_lazuli",
-    "buddingcrystals:budding_glowstone",
-    "buddingcrystals:budding_nether_quartz",
     "buddingcrystals:budding_prismarine",
-    "buddingcrystals:budding_certus_quartz",
-    "buddingcrystals:budding_fluix",
+    "buddingcrystals:budding_diamond",
+    "buddingcrystals:budding_nether_quartz",
     "buddingcrystals:budding_salt",
-    "buddingcrystals:budding_fluorite"
+    "buddingcrystals:budding_lapis_lazuli",
+    "buddingcrystals:budding_certus_quartz",
+    "buddingcrystals:budding_fluorite",
+    "buddingcrystals:budding_redstone",
+    "buddingcrystals:budding_emerald",
+    "buddingcrystals:budding_glowstone",
+    "buddingcrystals:budding_fluix"
   ]
 }

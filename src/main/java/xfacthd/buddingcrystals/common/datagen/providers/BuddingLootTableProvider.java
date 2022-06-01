@@ -42,7 +42,7 @@ public final class BuddingLootTableProvider extends LootTableProvider
         @Override
         protected Iterable<Block> getKnownBlocks()
         {
-            return BCContent.ALL_SETS.stream()
+            return BCContent.builtinSets().stream()
                     .map(CrystalSet::blocks)
                     .flatMap(List::stream)
                     .toList();
@@ -51,7 +51,7 @@ public final class BuddingLootTableProvider extends LootTableProvider
         @Override
         protected void addTables()
         {
-            BCContent.ALL_SETS.forEach(set ->
+            BCContent.builtinSets().forEach(set ->
             {
                 add(set.getBuddingBlock(), noDrop());
 

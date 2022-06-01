@@ -18,24 +18,24 @@ public final class BuddingStateProvider extends BlockStateProvider
     }
 
     @Override
-    protected void registerStatesAndModels() { BCContent.ALL_SETS.forEach(this::makeModels); }
+    protected void registerStatesAndModels() { BCContent.builtinSets().forEach(set -> makeModels(this, set)); }
 
-    private void makeModels(CrystalSet set)
+    public static void makeModels(BlockStateProvider provider, CrystalSet set)
     {
-        cluster(set.getSmallBud(), "item/small_amethyst_bud", rl("block/small_bud/" + set.getName()));
-        cluster(set.getMediumBud(), "item/medium_amethyst_bud", rl("block/medium_bud/" + set.getName()));
-        cluster(set.getLargeBud(), "item/large_amethyst_bud", rl("block/large_bud/" + set.getName()));
-        cluster(set.getCluster(), "item/amethyst_cluster", rl("block/cluster/" + set.getName()));
-        buddingBlock(set.getBuddingBlock(), set.getName());
+        cluster(provider, set.getSmallBud(), "item/small_amethyst_bud", rl("block/small_bud/" + set.getName()));
+        cluster(provider, set.getMediumBud(), "item/medium_amethyst_bud", rl("block/medium_bud/" + set.getName()));
+        cluster(provider, set.getLargeBud(), "item/large_amethyst_bud", rl("block/large_bud/" + set.getName()));
+        cluster(provider, set.getCluster(), "item/amethyst_cluster", rl("block/cluster/" + set.getName()));
+        buddingBlock(provider, set.getBuddingBlock(), set.getName());
     }
 
-    private void cluster(Block block, String itemParent, ResourceLocation texture)
+    private static void cluster(BlockStateProvider provider, Block block, String itemParent, ResourceLocation texture)
     {
         //noinspection ConstantConditions
         String name = block.getRegistryName().getPath();
 
-        ModelFile model = models().withExistingParent(name, modLoc("block/cross")).texture("cross", texture);
-        getVariantBuilder(block).forAllStatesExcept(state ->
+        ModelFile model = provider.models().withExistingParent(name, provider.modLoc("block/cross")).texture("cross", texture);
+        provider.getVariantBuilder(block).forAllStatesExcept(state ->
         {
             int rotX;
             int rotY;
@@ -82,16 +82,16 @@ public final class BuddingStateProvider extends BlockStateProvider
                     .build();
         }, AmethystClusterBlock.WATERLOGGED);
 
-        itemModels().withExistingParent(name, itemParent).texture("layer0", texture);
+        provider.itemModels().withExistingParent(name, itemParent).texture("layer0", texture);
     }
 
-    private void buddingBlock(Block block, String name)
+    private static void buddingBlock(BlockStateProvider provider, Block block, String name)
     {
         //noinspection ConstantConditions
         String path = block.getRegistryName().getPath();
-        simpleBlock(block, models().withExistingParent(path, modLoc("block/cube_all")).texture("all", rl("block/budding/" + name)));
+        provider.simpleBlock(block, provider.models().withExistingParent(path, provider.modLoc("block/cube_all")).texture("all", rl("block/budding/" + name)));
 
-        itemModels().withExistingParent(path, modLoc("block/" + path));
+        provider.itemModels().withExistingParent(path, provider.modLoc("block/" + path));
     }
 
     private static ResourceLocation rl(String path) { return new ResourceLocation(BuddingCrystals.MOD_ID, path); }

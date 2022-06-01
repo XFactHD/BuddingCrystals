@@ -3,6 +3,7 @@ package xfacthd.buddingcrystals.common.util;
 import com.google.common.base.Preconditions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
@@ -20,16 +21,17 @@ public final class CrystalSet
 {
     private final String compatMod;
     private final String name;
-    private final String translation;
-    private final ResourceLocation crystalTexture;
-    private final ResourceLocation buddingTexture;
+    private String translation;
+    private ResourceLocation crystalTexture;
+    private ResourceLocation buddingTexture;
     private final RegistryObject<Block> buddingBlock;
     private final BudSet budSet;
-    private final RegistryObject<Item> drop;
-    private final float normalDrop;
-    private final float maxDrop;
+    private RegistryObject<Item> drop;
+    private RegistryObject<Item> ingredient;
+    private float normalDrop;
+    private float maxDrop;
 
-    private CrystalSet(String compatMod, String name, String translation, ResourceLocation crystalTexture, ResourceLocation buddingTexture, RegistryObject<Block> buddingBlock, BudSet budSet, RegistryObject<Item> drop, float normalDrop, float maxDrop)
+    CrystalSet(String compatMod, String name, String translation, ResourceLocation crystalTexture, ResourceLocation buddingTexture, RegistryObject<Block> buddingBlock, BudSet budSet, RegistryObject<Item> drop, RegistryObject<Item> ingredient, float normalDrop, float maxDrop)
     {
         this.compatMod = compatMod;
         this.name = name;
@@ -39,6 +41,7 @@ public final class CrystalSet
         this.buddingBlock = buddingBlock;
         this.budSet = budSet;
         this.drop = drop;
+        this.ingredient = ingredient;
         this.normalDrop = normalDrop;
         this.maxDrop = maxDrop;
     }
@@ -63,7 +66,9 @@ public final class CrystalSet
 
     public BudSet getBudSet() { return budSet; }
 
-    public Item getDroppedItem() { return drop.get(); }
+    public Item getDroppedItem() { return drop.orElse(Items.AIR); }
+
+    public Item getIngredient() { return ingredient.orElse(Items.AIR); }
 
     public float getNormalDrops() { return normalDrop; }
 
@@ -88,6 +93,39 @@ public final class CrystalSet
 
     public String getConfigTranslation() { return "config." + BuddingCrystals.MOD_ID + "." + getConfigString(); }
 
+    public void updateClientData(String translation, ResourceLocation crystalTexture, ResourceLocation buddingTexture)
+    {
+        this.translation = translation;
+        this.crystalTexture = crystalTexture;
+        this.buddingTexture = buddingTexture;
+    }
+
+    public void updateServerData(ResourceLocation dropName, ResourceLocation ingredientName, float normalDrop, float maxDrop)
+    {
+        this.drop = RegistryObject.create(dropName, ForgeRegistries.ITEMS);
+        this.ingredient = this.drop;
+        if (!dropName.equals(ingredientName))
+        {
+            this.ingredient = RegistryObject.create(ingredientName, ForgeRegistries.ITEMS);
+        }
+        this.normalDrop = normalDrop;
+        this.maxDrop = maxDrop;
+
+        validate();
+    }
+
+    public void validate()
+    {
+        if (!drop.isPresent())
+        {
+            CrystalLoader.LOGGER.error("CrystalSet '{}' references an invalid item, it will be not drop anything!", name);
+        }
+        if (!ingredient.isPresent())
+        {
+            CrystalLoader.LOGGER.error("CrystalSet '{}' references an invalid item, it will be not be craftable!", name);
+        }
+    }
+
 
 
     public static CrystalSet.Builder builder(String name) { return new Builder(name); }
@@ -101,6 +139,7 @@ public final class CrystalSet
                 RegistryObject.create(new ResourceLocation("amethyst_cluster"), ForgeRegistries.BLOCKS)
         );
 
+        RegistryObject<Item> drop = RegistryObject.create(new ResourceLocation("amethyst_shard"), ForgeRegistries.ITEMS);
         return new CrystalSet(
                 "minecraft",
                 "amethyst",
@@ -109,7 +148,8 @@ public final class CrystalSet
                 new ResourceLocation("minecraft:item/amethyst_shard"),
                 RegistryObject.create(new ResourceLocation("budding_amethyst"), ForgeRegistries.BLOCKS),
                 budSet,
-                RegistryObject.create(new ResourceLocation("amethyst_shard"), ForgeRegistries.ITEMS),
+                drop,
+                drop,
                 2,
                 4
         );
@@ -117,15 +157,19 @@ public final class CrystalSet
 
 
 
+    @SuppressWarnings({ "unused", "UnusedReturnValue" })
     public static final class Builder
     {
         private final String name;
         private String translation;
         private String compatMod = "minecraft";
-        private String crystalTexture;
-        private String buddingTexture;
+        private String crystalTexPath;
+        private String buddingTexPath;
+        private ResourceLocation crystalTexture;
+        private ResourceLocation buddingTexture;
         private int growthChance = 5;
         private RegistryObject<Item> drop;
+        private RegistryObject<Item> ingredient;
         private float normalDrop = 2;
         private float maxDrop = 4;
 
@@ -152,21 +196,43 @@ public final class CrystalSet
         public Builder sourceTexture(String texture)
         {
             Preconditions.checkArgument(texture != null && !texture.isEmpty(), "Texture must not be empty");
-            this.crystalTexture = texture;
-            this.buddingTexture = texture;
+            this.crystalTexPath = texture;
+            this.buddingTexPath = texture;
             return this;
         }
 
         public Builder buddingSourceTexture(String texture)
         {
             Preconditions.checkArgument(texture != null && !texture.isEmpty(), "Budding texture must not be empty");
-            this.buddingTexture = texture;
+            this.buddingTexPath = texture;
             return this;
         }
 
         public Builder crystalSourceTexture(String texture)
         {
             Preconditions.checkArgument(texture != null && !texture.isEmpty(), "Crystal texture must not be empty");
+            this.crystalTexPath = texture;
+            return this;
+        }
+
+        public Builder sourceTexture(ResourceLocation texture)
+        {
+            Preconditions.checkArgument(texture != null, "Texture must not be null");
+            this.buddingTexture = texture;
+            this.crystalTexture = texture;
+            return this;
+        }
+
+        public Builder buddingSourceTexture(ResourceLocation texture)
+        {
+            Preconditions.checkArgument(texture != null, "Budding texture must not be null");
+            this.buddingTexture = texture;
+            return this;
+        }
+
+        public Builder crystalSourceTexture(ResourceLocation texture)
+        {
+            Preconditions.checkArgument(texture != null, "Crystal texture must not be null");
             this.crystalTexture = texture;
             return this;
         }
@@ -181,7 +247,20 @@ public final class CrystalSet
         public Builder drop(String drop)
         {
             Preconditions.checkArgument(drop != null && !drop.isEmpty(), "Dropped item must not be empty");
-            this.drop = RegistryObject.create(new ResourceLocation(drop), ForgeRegistries.ITEMS);
+            return drop(new ResourceLocation(drop));
+        }
+
+        public Builder drop(ResourceLocation drop)
+        {
+            Preconditions.checkArgument(drop != null, "Dropped item must not be null");
+            this.drop = RegistryObject.create(drop, ForgeRegistries.ITEMS);
+            return this;
+        }
+
+        public Builder ingredient(ResourceLocation ingredient)
+        {
+            Preconditions.checkArgument(ingredient != null, "Ingredient item must not be null");
+            this.ingredient = RegistryObject.create(ingredient, ForgeRegistries.ITEMS);
             return this;
         }
 
@@ -201,9 +280,12 @@ public final class CrystalSet
 
         public CrystalSet build()
         {
+            CrystalLoader.overrideFromJson(name, this);
+
             Preconditions.checkState(translation != null, "No translation set");
-            Preconditions.checkState(crystalTexture != null, "No crystal source texture set");
-            Preconditions.checkState(buddingTexture != null, "No budding block source texture set");
+            Preconditions.checkState(crystalTexPath != null || crystalTexture != null, "No crystal source texture set");
+            Preconditions.checkState(buddingTexPath != null || buddingTexture != null, "No budding block source texture set");
+            Preconditions.checkState(drop != null, "No dropped item specified");
             Preconditions.checkState(maxDrop >= normalDrop, "Max drop must be higher or equal to normal drop");
 
             RegistryObject<Block> smallBud = register("small_" + name + "_bud", Builder::smallBud, compatMod);
@@ -226,33 +308,44 @@ public final class CrystalSet
                     compatMod
             );
 
+            if (crystalTexture == null)
+            {
+                crystalTexture = new ResourceLocation(compatMod, crystalTexPath);
+            }
+            if (buddingTexture == null)
+            {
+                buddingTexture = new ResourceLocation(compatMod, buddingTexPath);
+            }
+
             CrystalSet set = new CrystalSet(
                     compatMod,
                     name,
                     translation,
-                    new ResourceLocation(compatMod, crystalTexture),
-                    new ResourceLocation(compatMod, buddingTexture),
+                    crystalTexture,
+                    buddingTexture,
                     buddingBlock,
                     budSet,
                     drop,
+                    ingredient == null ? drop : ingredient,
                     normalDrop,
                     maxDrop
             );
-            BCContent.ALL_SETS.add(set);
+            BCContent.ALL_SETS.put(name, set);
+            BCContent.BUILTIN_SETS.put(name, set);
             return set;
         }
 
 
 
-        private static AmethystClusterBlock smallBud() { return cluster(SoundType.SMALL_AMETHYST_BUD, 1, 3, 4); }
+        static AmethystClusterBlock smallBud() { return cluster(SoundType.SMALL_AMETHYST_BUD, 1, 3, 4); }
 
-        private static AmethystClusterBlock mediumBud() { return cluster(SoundType.SMALL_AMETHYST_BUD, 2, 4, 3); }
+        static AmethystClusterBlock mediumBud() { return cluster(SoundType.SMALL_AMETHYST_BUD, 2, 4, 3); }
 
-        private static AmethystClusterBlock largeBud() { return cluster(SoundType.SMALL_AMETHYST_BUD, 4, 5, 3); }
+        static AmethystClusterBlock largeBud() { return cluster(SoundType.SMALL_AMETHYST_BUD, 4, 5, 3); }
 
-        private static AmethystClusterBlock cluster() { return cluster(SoundType.AMETHYST_CLUSTER, 5, 7, 3); }
+        static AmethystClusterBlock cluster() { return cluster(SoundType.AMETHYST_CLUSTER, 5, 7, 3); }
 
-        private static AmethystClusterBlock cluster(SoundType sound, int light, int height, int widthShrink)
+        static AmethystClusterBlock cluster(SoundType sound, int light, int height, int widthShrink)
         {
             BlockBehaviour.Properties props = BlockBehaviour.Properties
                     .of(Material.AMETHYST)
@@ -265,7 +358,7 @@ public final class CrystalSet
             return new AmethystClusterBlock(height, widthShrink, props);
         }
 
-        private static RegistryObject<Block> register(String name, Supplier<Block> blockFactory, String compatMod)
+        static RegistryObject<Block> register(String name, Supplier<Block> blockFactory, String compatMod)
         {
             RegistryObject<Block> block = BCContent.BLOCKS.register(name, blockFactory);
             BCContent.ITEMS.register(name, () -> CrystalBlockItem.make(block.get(), compatMod));
