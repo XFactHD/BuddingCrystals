@@ -257,6 +257,12 @@ public final class CrystalSet
             return this;
         }
 
+        public Builder ingredient(String ingredient)
+        {
+            Preconditions.checkArgument(ingredient != null && !ingredient.isEmpty(), "Ingredient item must not be empty");
+            return ingredient(new ResourceLocation(ingredient));
+        }
+
         public Builder ingredient(ResourceLocation ingredient)
         {
             Preconditions.checkArgument(ingredient != null, "Ingredient item must not be null");

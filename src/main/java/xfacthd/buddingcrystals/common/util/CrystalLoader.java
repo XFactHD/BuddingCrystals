@@ -26,11 +26,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 @SuppressWarnings("SameParameterValue")
 public class CrystalLoader
 {
+    private static final Pattern VALID_NAME = Pattern.compile("^[a-z][a-z\\d_]+$");
     private static final Path CRYSTAL_PATH = FMLPaths.GAMEDIR.get().resolve("buddingcrystals");
     static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson GSON = new Gson();
@@ -50,6 +52,12 @@ public class CrystalLoader
                     .forEach(filePath ->
                     {
                         String name = getName(filePath);
+                        if (!VALID_NAME.matcher(name).matches())
+                        {
+                            LOGGER.error("Invalid crystal definition name {}, does not match pattern {} ", name, VALID_NAME.pattern());
+                            return;
+                        }
+
                         try
                         {
                             JsonObject json = readJsonFile(filePath);
@@ -89,9 +97,11 @@ public class CrystalLoader
             }
 
             builder.translation(def.translation)
+                    .compatMod(def.compatMod)
                     .buddingSourceTexture(def.buddingTexture)
                     .crystalSourceTexture(def.crystalTexture)
                     .growthChance(def.growthChance)
+                    .ingredient(def.ingredientName)
                     .drop(def.dropName)
                     .normalDrop(def.normalDrop)
                     .maxDrop(def.maxDrop);
