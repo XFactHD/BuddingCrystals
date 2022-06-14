@@ -5,16 +5,16 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddPackFindersEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.dynpack.BuddingServerPack;
 import xfacthd.buddingcrystals.common.util.*;
@@ -34,9 +34,12 @@ public final class BuddingCrystals
     }
 
     @SubscribeEvent
-    public void registerRecipeConditions(final RegistryEvent.Register<RecipeSerializer<?>> event)
+    public void registerRecipeConditions(final RegisterEvent event)
     {
-        CraftingHelper.register(new ConfigCondition.Serializer());
+        if (event.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS))
+        {
+            CraftingHelper.register(new ConfigCondition.Serializer());
+        }
     }
 
     @SubscribeEvent

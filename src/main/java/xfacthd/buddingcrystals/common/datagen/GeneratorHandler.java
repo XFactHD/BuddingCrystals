@@ -34,12 +34,12 @@ public final class GeneratorHandler
             fileHelper.trackGenerated(bcRl("block/cluster/" + name), TEXTURE_TYPE);
         });
 
-        gen.addProvider(new BuddingStateProvider(gen, fileHelper));
-        gen.addProvider(new BuddingItemModelProvider(gen, fileHelper));
-        gen.addProvider(new BuddingLanguageProvider(gen));
-        gen.addProvider(new BuddingBlockTagsProvider(gen, fileHelper));
-        gen.addProvider(new BuddingLootTableProvider(gen));
-        gen.addProvider(new BuddingRecipeProvider(gen));
+        gen.addProvider(event.includeClient(), new BuddingStateProvider(gen, fileHelper));
+        gen.addProvider(event.includeClient(), new BuddingItemModelProvider(gen, fileHelper));
+        gen.addProvider(event.includeClient(), new BuddingLanguageProvider(gen));
+        gen.addProvider(event.includeServer(), new BuddingBlockTagsProvider(gen, fileHelper));
+        gen.addProvider(event.includeServer(), new BuddingLootTableProvider(gen));
+        gen.addProvider(event.includeServer(), new BuddingRecipeProvider(gen));
     }
 
     private static ResourceLocation bcRl(String path) { return new ResourceLocation(BuddingCrystals.MOD_ID, path); }

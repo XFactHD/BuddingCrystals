@@ -2,13 +2,12 @@ package xfacthd.buddingcrystals.common.dynpack;
 
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.util.CrystalLoader;
@@ -31,7 +30,7 @@ public abstract class BuddingPackResources implements PackResources
     {
         this.type = type;
         this.namespaces = namespaces;
-        this.packMetadata = new PackMetadataSection(new TextComponent(getName()), packFormat);
+        this.packMetadata = new PackMetadataSection(Component.literal(getName()), packFormat);
 
         String typeName = type == PackType.CLIENT_RESOURCES ? "resourcepack" : "datapack";
 
@@ -66,17 +65,15 @@ public abstract class BuddingPackResources implements PackResources
     }
 
     @Override
-    public final Collection<ResourceLocation> getResources(PackType type, String namespace, String path, int maxDepth, Predicate<String> filter)
+    public Collection<ResourceLocation> getResources(PackType type, String namespace, String path, Predicate<ResourceLocation> filter)
     {
         if (type == this.type)
         {
-            int pathLen = path.length();
             return dataCache.keySet()
                     .stream()
                     .filter(loc -> loc.getNamespace().equals(namespace))
                     .filter(loc -> loc.getPath().startsWith(path))
-                    .filter(loc -> filter.test(loc.toString()))
-                    .filter(loc -> StringUtils.countMatches(loc.getPath().substring(pathLen), '/') <= maxDepth)
+                    .filter(filter)
                     .toList();
         }
         return Set.of();

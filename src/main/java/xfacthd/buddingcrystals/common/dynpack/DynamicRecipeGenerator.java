@@ -1,13 +1,16 @@
 package xfacthd.buddingcrystals.common.dynpack;
 
 import com.google.gson.JsonObject;
-import net.minecraft.data.HashCache;
+import net.minecraft.DetectedVersion;
+import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.datagen.providers.BuddingRecipeProvider;
 
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -17,8 +20,7 @@ final class DynamicRecipeGenerator extends RecipeProvider
 
     public DynamicRecipeGenerator(Map<ResourceLocation, String> cache)
     {
-        //noinspection ConstantConditions
-        super(null);
+        super(new DataGenerator(Path.of(""), List.of(), DetectedVersion.tryDetectVersion(), true));
         this.cache = cache;
     }
 
@@ -31,7 +33,7 @@ final class DynamicRecipeGenerator extends RecipeProvider
     }
 
     @Override
-    public void run(HashCache cache)
+    public void run(CachedOutput cache)
     {
         Set<ResourceLocation> built = new HashSet<>();
 

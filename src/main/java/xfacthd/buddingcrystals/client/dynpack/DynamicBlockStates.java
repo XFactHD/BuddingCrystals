@@ -1,13 +1,14 @@
 package xfacthd.buddingcrystals.client.dynpack;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.HashCache;
+import net.minecraft.DetectedVersion;
+import net.minecraft.data.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.datagen.providers.BuddingStateProvider;
@@ -23,7 +24,7 @@ public final class DynamicBlockStates extends BlockStateProvider
 
     public DynamicBlockStates(Map<ResourceLocation, String> cache)
     {
-        super(new DataGenerator(Path.of(""), List.of()),
+        super(new DataGenerator(Path.of(""), List.of(), DetectedVersion.tryDetectVersion(), true),
                 BuddingCrystals.MOD_ID,
                 new ExistingFileHelper(List.of(), Set.of(), false, null, null)
         );
@@ -37,7 +38,7 @@ public final class DynamicBlockStates extends BlockStateProvider
     }
 
     @Override
-    public void run(HashCache cache)
+    public void run(CachedOutput cache)
     {
         try
         {
@@ -68,7 +69,7 @@ public final class DynamicBlockStates extends BlockStateProvider
 
         for (Map.Entry<Block, IGeneratedBlockstate> entry : registeredBlocks.entrySet())
         {
-            ResourceLocation blockName = Preconditions.checkNotNull(entry.getKey().getRegistryName());
+            ResourceLocation blockName = Preconditions.checkNotNull(ForgeRegistries.BLOCKS.getKey(entry.getKey()));
             ResourceLocation stateLocation = new ResourceLocation(blockName.getNamespace(), "blockstates/" + blockName.getPath() + ".json");
             this.cache.put(stateLocation, entry.getValue().toJson().toString());
         }

@@ -20,10 +20,6 @@ public final class ConfigCondition implements ICondition
     @Override
     public boolean test(IContext context) { return CommonConfig.isEnabled(config); }
 
-    @Override
-    @SuppressWarnings("removal")
-    public boolean test() { return false; }
-
     public static class Serializer implements IConditionSerializer<ConfigCondition>
     {
         @Override

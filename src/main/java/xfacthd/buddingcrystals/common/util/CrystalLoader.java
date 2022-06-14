@@ -170,8 +170,8 @@ public final class CrystalLoader
 
         json.addProperty("growth_chance", set.getGrowthChance());
 
-        ResourceLocation dropped = Preconditions.checkNotNull(set.getDroppedItem().getRegistryName());
-        ResourceLocation ingredient = Preconditions.checkNotNull(set.getIngredient().getRegistryName());
+        ResourceLocation dropped =    Preconditions.checkNotNull(ForgeRegistries.ITEMS.getKey(set.getDroppedItem()));
+        ResourceLocation ingredient = Preconditions.checkNotNull(ForgeRegistries.ITEMS.getKey(set.getIngredient()));
         json.addProperty("dropped_item", dropped.toString());
         if (!dropped.equals(ingredient))
         {

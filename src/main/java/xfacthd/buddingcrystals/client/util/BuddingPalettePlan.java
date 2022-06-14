@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public final class BuddingPalettePlan implements IPalettePlan
 {
-    private static final ResourceLocation FALLBACK_TEXTURE = bcRl("textures/block/fallback.png");
+    private static final ResourceLocation FALLBACK_TEXTURE = bcRl("block/fallback");
     private static final ResourceLocation EMPTY_TEXTURE = bcRl("textures/block/empty.png");
 
     private final ResourceLocation background;

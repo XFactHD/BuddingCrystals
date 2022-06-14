@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
@@ -32,7 +33,7 @@ public final class BuddingStateProvider extends BlockStateProvider
     private static void cluster(BlockStateProvider provider, Block block, String itemParent, ResourceLocation texture)
     {
         //noinspection ConstantConditions
-        String name = block.getRegistryName().getPath();
+        String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
 
         ModelFile model = provider.models().withExistingParent(name, provider.modLoc("block/cross")).texture("cross", texture);
         provider.getVariantBuilder(block).forAllStatesExcept(state ->
@@ -88,7 +89,7 @@ public final class BuddingStateProvider extends BlockStateProvider
     private static void buddingBlock(BlockStateProvider provider, Block block, String name)
     {
         //noinspection ConstantConditions
-        String path = block.getRegistryName().getPath();
+        String path = ForgeRegistries.BLOCKS.getKey(block).getPath();
         provider.simpleBlock(block, provider.models().withExistingParent(path, provider.modLoc("block/cube_all")).texture("all", rl("block/budding/" + name)));
 
         provider.itemModels().withExistingParent(path, provider.modLoc("block/" + path));

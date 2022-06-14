@@ -9,7 +9,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.logging.LogUtils;
 import net.minecraft.commands.*;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
@@ -32,10 +32,10 @@ public final class ExportCommand
     public static final String MSG_CRYSTAL_EXISTS = "commands." + BuddingCrystals.MOD_ID + ".crystal_exists";
 
     private static final DynamicCommandExceptionType NO_SUCH_CRYSTAL = new DynamicCommandExceptionType(
-            crystal -> new TranslatableComponent(MSG_NO_SUCH_CRYSTAL, crystal)
+            crystal -> Component.translatable(MSG_NO_SUCH_CRYSTAL, crystal)
     );
     private static final Dynamic2CommandExceptionType EXPORT_ERROR = new Dynamic2CommandExceptionType(
-            (name, error) -> new TranslatableComponent(MSG_EXPORT_ERROR, name, error)
+            (name, error) -> Component.translatable(MSG_EXPORT_ERROR, name, error)
     );
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
@@ -82,11 +82,11 @@ public final class ExportCommand
 
         if (overwrite)
         {
-            ctx.getSource().sendSuccess(new TranslatableComponent(MSG_CRYSTALS_OVERWRITTEN, count, total, overwritten), true);
+            ctx.getSource().sendSuccess(Component.translatable(MSG_CRYSTALS_OVERWRITTEN, count, total, overwritten), true);
         }
         else
         {
-            ctx.getSource().sendSuccess(new TranslatableComponent(MSG_CRYSTALS_EXPORTED, count, total, total - count), true);
+            ctx.getSource().sendSuccess(Component.translatable(MSG_CRYSTALS_EXPORTED, count, total, total - count), true);
         }
         return count;
     }
@@ -104,16 +104,16 @@ public final class ExportCommand
         Result result = exportCrystalDefinition(crystal, overwrite);
         if (result == Result.EXISTS)
         {
-            ctx.getSource().sendFailure(new TranslatableComponent(MSG_CRYSTAL_EXISTS, crystal));
+            ctx.getSource().sendFailure(Component.translatable(MSG_CRYSTAL_EXISTS, crystal));
             return 0;
         }
         else if (result == Result.EXPORTED)
         {
-            ctx.getSource().sendSuccess(new TranslatableComponent(MSG_CRYSTAL_EXPORTED, crystal), true);
+            ctx.getSource().sendSuccess(Component.translatable(MSG_CRYSTAL_EXPORTED, crystal), true);
         }
         else
         {
-            ctx.getSource().sendSuccess(new TranslatableComponent(MSG_CRYSTAL_OVERWRITTEN, crystal), true);
+            ctx.getSource().sendSuccess(Component.translatable(MSG_CRYSTAL_OVERWRITTEN, crystal), true);
         }
         return 1;
     }
