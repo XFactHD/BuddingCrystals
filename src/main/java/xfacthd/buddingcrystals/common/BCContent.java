@@ -77,6 +77,7 @@ public final class BCContent //TODO: balance growth chance and drop counts
             .sourceTexture("item/salt")
             .drop("mekanism:salt")
             .compatMod("mekanism")
+            .growthChance(1)
             .build();
     public static final CrystalSet FLUORITE = CrystalSet.builder("fluorite")
             .translation("Fluorite")

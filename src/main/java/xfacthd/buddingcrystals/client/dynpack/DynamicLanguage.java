@@ -12,7 +12,7 @@ import xfacthd.buddingcrystals.common.util.CrystalSet;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class DynamicLanguage
+public final class DynamicLanguage
 {
     private static final Gson GSON = (new GsonBuilder()).disableHtmlEscaping().create();
 

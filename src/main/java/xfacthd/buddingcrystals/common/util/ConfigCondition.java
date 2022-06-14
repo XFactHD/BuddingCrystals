@@ -7,7 +7,7 @@ import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 import xfacthd.buddingcrystals.BuddingCrystals;
 
-public class ConfigCondition implements ICondition
+public final class ConfigCondition implements ICondition
 {
     private static final ResourceLocation NAME = new ResourceLocation(BuddingCrystals.MOD_ID, "config");
     private final String config;

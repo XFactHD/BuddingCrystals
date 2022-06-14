@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 @SuppressWarnings("SameParameterValue")
-public class CrystalLoader
+public final class CrystalLoader
 {
     private static final Pattern VALID_NAME = Pattern.compile("^[a-z][a-z\\d_]+$");
     public static final Path CRYSTAL_PATH = FMLPaths.GAMEDIR.get().resolve("buddingcrystals");

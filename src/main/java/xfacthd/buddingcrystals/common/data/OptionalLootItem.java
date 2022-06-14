@@ -14,7 +14,7 @@ import xfacthd.buddingcrystals.common.BCContent;
 
 import java.util.function.Consumer;
 
-public class OptionalLootItem extends LootPoolSingletonContainer
+public final class OptionalLootItem extends LootPoolSingletonContainer
 {
     private final Item item;
 

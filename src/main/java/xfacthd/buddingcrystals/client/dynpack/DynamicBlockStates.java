@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.*;
 
-public class DynamicBlockStates extends BlockStateProvider
+public final class DynamicBlockStates extends BlockStateProvider
 {
     private final Map<ResourceLocation, String> cache;
 

@@ -14,12 +14,12 @@ import xfacthd.buddingcrystals.common.BCContent;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
-public class DynamicTagGenerator extends TagsProvider<Block>
+public final class DynamicTagGenerator extends TagsProvider<Block>
 {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     private final Map<ResourceLocation, String> cache;
 
-    protected DynamicTagGenerator(Map<ResourceLocation, String> cache)
+    DynamicTagGenerator(Map<ResourceLocation, String> cache)
     {
         //noinspection ConstantConditions
         super(null, Registry.BLOCK, BuddingCrystals.MOD_ID, null);

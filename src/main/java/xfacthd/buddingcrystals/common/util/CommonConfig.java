@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class CommonConfig
+public final class CommonConfig
 {
     public static final ForgeConfigSpec SPEC;
     public static final CommonConfig INSTANCE;

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.concurrent.CompletableFuture;
 
-public class ExportCommand
+public final class ExportCommand
 {
     private static final Logger LOGGER = LogUtils.getLogger();
 
