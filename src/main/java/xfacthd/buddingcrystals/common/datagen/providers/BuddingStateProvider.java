@@ -35,7 +35,11 @@ public final class BuddingStateProvider extends BlockStateProvider
         //noinspection ConstantConditions
         String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
 
-        ModelFile model = provider.models().withExistingParent(name, provider.modLoc("block/cross")).texture("cross", texture);
+        ModelFile model = provider.models()
+                .withExistingParent(name, provider.modLoc("block/cross"))
+                .texture("cross", texture)
+                .renderType("cutout");
+
         provider.getVariantBuilder(block).forAllStatesExcept(state ->
         {
             int rotX;
@@ -90,7 +94,11 @@ public final class BuddingStateProvider extends BlockStateProvider
     {
         //noinspection ConstantConditions
         String path = ForgeRegistries.BLOCKS.getKey(block).getPath();
-        provider.simpleBlock(block, provider.models().withExistingParent(path, provider.modLoc("block/cube_all")).texture("all", rl("block/budding/" + name)));
+        provider.simpleBlock(block, provider.models()
+                .withExistingParent(path, provider.modLoc("block/cube_all"))
+                .texture("all", rl("block/budding/" + name))
+                .renderType("solid")
+        );
 
         provider.itemModels().withExistingParent(path, provider.modLoc("block/" + path));
     }

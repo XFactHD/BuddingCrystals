@@ -67,7 +67,7 @@ public final class DynamicBlockStates extends BlockStateProvider
             this.cache.put(modelLocation, builder.toJson().toString());
         });
 
-        for (Map.Entry<Block, IGeneratedBlockstate> entry : registeredBlocks.entrySet())
+        for (Map.Entry<Block, IGeneratedBlockState> entry : registeredBlocks.entrySet())
         {
             ResourceLocation blockName = Preconditions.checkNotNull(ForgeRegistries.BLOCKS.getKey(entry.getKey()));
             ResourceLocation stateLocation = new ResourceLocation(blockName.getNamespace(), "blockstates/" + blockName.getPath() + ".json");

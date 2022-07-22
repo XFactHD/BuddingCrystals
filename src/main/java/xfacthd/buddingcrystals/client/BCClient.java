@@ -1,7 +1,5 @@
 package xfacthd.buddingcrystals.client;
 
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
@@ -14,7 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import xfacthd.buddingcrystals.BuddingCrystals;
-import xfacthd.buddingcrystals.client.util.BuddingPalettePlan;
+import xfacthd.buddingcrystals.client.util.BuddingPalettePlanner;
 import xfacthd.buddingcrystals.client.dynpack.BuddingResourcePack;
 import xfacthd.buddingcrystals.client.util.ExportCommand;
 import xfacthd.buddingcrystals.common.BCContent;
@@ -25,10 +23,6 @@ public final class BCClient
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
-        BCContent.allClusters().forEach(block ->
-                ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout())
-        );
-
         MinecraftForge.EVENT_BUS.addListener(BCClient::onRegisterClientCommands);
     }
 
@@ -61,8 +55,8 @@ public final class BCClient
 
     static
     {
-        BCContent.allSets().forEach(BuddingPalettePlan::plan);
-        BuddingPalettePlan.planCatalyst();
+        BCContent.allSets().forEach(BuddingPalettePlanner::plan);
+        BuddingPalettePlanner.planCatalyst();
     }
 
 

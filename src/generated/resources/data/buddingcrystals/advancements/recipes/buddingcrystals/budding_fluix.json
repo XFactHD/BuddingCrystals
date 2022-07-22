@@ -1,41 +1,26 @@
 {
   "advancements": [
     {
-      "conditions": [
-        {
-          "modid": "ae2",
-          "type": "forge:mod_loaded"
-        },
-        {
-          "config": "enable_crafting_budding_fluix",
-          "type": "buddingcrystals:config"
-        }
-      ],
       "advancement": {
         "parent": "minecraft:recipes/root",
-        "rewards": {
-          "recipes": [
-            "buddingcrystals:budding_fluix"
-          ]
-        },
         "criteria": {
           "has_fluix": {
-            "trigger": "minecraft:inventory_changed",
             "conditions": {
               "items": [
                 {
                   "items": [
-                    "ae2:fluix_crystal"
+                    "minecraft:air"
                   ]
                 }
               ]
-            }
+            },
+            "trigger": "minecraft:inventory_changed"
           },
           "has_the_recipe": {
-            "trigger": "minecraft:recipe_unlocked",
             "conditions": {
               "recipe": "buddingcrystals:budding_fluix"
-            }
+            },
+            "trigger": "minecraft:recipe_unlocked"
           }
         },
         "requirements": [
@@ -43,8 +28,23 @@
             "has_fluix",
             "has_the_recipe"
           ]
-        ]
-      }
+        ],
+        "rewards": {
+          "recipes": [
+            "buddingcrystals:budding_fluix"
+          ]
+        }
+      },
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "ae2"
+        },
+        {
+          "type": "buddingcrystals:config",
+          "config": "enable_crafting_budding_fluix"
+        }
+      ]
     }
   ]
 }

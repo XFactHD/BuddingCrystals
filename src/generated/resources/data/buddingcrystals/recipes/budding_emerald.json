@@ -4,25 +4,25 @@
     {
       "conditions": [
         {
-          "config": "enable_crafting_budding_emerald",
-          "type": "buddingcrystals:config"
+          "type": "buddingcrystals:config",
+          "config": "enable_crafting_budding_emerald"
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "C": {
+            "item": "buddingcrystals:crystal_catalyst"
+          },
+          "M": {
+            "item": "minecraft:emerald"
+          }
+        },
         "pattern": [
           "MMM",
           "MCM",
           "MMM"
         ],
-        "key": {
-          "M": {
-            "item": "minecraft:emerald"
-          },
-          "C": {
-            "item": "buddingcrystals:crystal_catalyst"
-          }
-        },
         "result": {
           "item": "buddingcrystals:budding_emerald"
         }

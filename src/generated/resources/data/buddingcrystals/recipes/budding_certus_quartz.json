@@ -4,29 +4,27 @@
     {
       "conditions": [
         {
-          "modid": "ae2",
-          "type": "forge:mod_loaded"
+          "type": "forge:mod_loaded",
+          "modid": "ae2"
         },
         {
-          "config": "enable_crafting_budding_certus_quartz",
-          "type": "buddingcrystals:config"
+          "type": "buddingcrystals:config",
+          "config": "enable_crafting_budding_certus_quartz"
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "C": {
+            "item": "buddingcrystals:crystal_catalyst"
+          },
+          "M": []
+        },
         "pattern": [
           "MMM",
           "MCM",
           "MMM"
         ],
-        "key": {
-          "M": {
-            "item": "ae2:certus_quartz_crystal"
-          },
-          "C": {
-            "item": "buddingcrystals:crystal_catalyst"
-          }
-        },
         "result": {
           "item": "buddingcrystals:budding_certus_quartz"
         }

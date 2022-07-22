@@ -4,8 +4,10 @@
       "model": "buddingcrystals:block/medium_fluix_bud",
       "x": 180
     },
-    "facing=up": {
-      "model": "buddingcrystals:block/medium_fluix_bud"
+    "facing=east": {
+      "model": "buddingcrystals:block/medium_fluix_bud",
+      "x": 90,
+      "y": 90
     },
     "facing=north": {
       "model": "buddingcrystals:block/medium_fluix_bud",
@@ -16,15 +18,13 @@
       "x": 90,
       "y": 180
     },
+    "facing=up": {
+      "model": "buddingcrystals:block/medium_fluix_bud"
+    },
     "facing=west": {
       "model": "buddingcrystals:block/medium_fluix_bud",
       "x": 90,
       "y": 270
-    },
-    "facing=east": {
-      "model": "buddingcrystals:block/medium_fluix_bud",
-      "x": 90,
-      "y": 90
     }
   }
 }
