@@ -1,10 +1,12 @@
 package xfacthd.buddingcrystals.common.util;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.gson.*;
+import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
-import net.minecraft.ResourceLocationException;
+import com.mojang.serialization.*;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.util.GsonHelper;
@@ -20,13 +22,15 @@ import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.block.BuddingCrystalBlock;
+import xfacthd.buddingcrystals.common.data.BCCodecs;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -37,6 +41,23 @@ public final class CrystalLoader
     public static final Path CRYSTAL_PATH = FMLPaths.GAMEDIR.get().resolve("buddingcrystals");
     static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
+    public static final Codec<CrystalDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            BCCodecs.NON_EMPTY_STRING.optionalFieldOf("compat_mod", "minecraft").forGetter(CrystalDefinition::compatMod),
+            BCCodecs.NON_EMPTY_STRING.fieldOf("translation").forGetter(CrystalDefinition::translation),
+            Codec.either(
+                    Codec.pair(
+                            ResourceLocation.CODEC.fieldOf("crystal_texture").codec(),
+                            ResourceLocation.CODEC.fieldOf("budding_texture").codec()
+                    ),
+                    ResourceLocation.CODEC
+            ).fieldOf("texture").forGetter(CrystalDefinition::eitherTexture),
+            BCCodecs.intMin(0).fieldOf("growth_chance").forGetter(CrystalDefinition::growthChance),
+            ResourceLocation.CODEC.fieldOf("dropped_item").forGetter(CrystalDefinition::dropName),
+            ResourceLocation.CODEC.optionalFieldOf("recipe_item").forGetter(CrystalDefinition::recipeName),
+            BCCodecs.floatMin(0).fieldOf("normal_drop_chance").forGetter(CrystalDefinition::normalDrop),
+            BCCodecs.floatMin(0).fieldOf("max_drop_chance").forGetter(CrystalDefinition::maxDrop)
+    ).apply(instance, CrystalDefinition::new));
 
     public static void loadUserSets()
     {
@@ -146,41 +167,8 @@ public final class CrystalLoader
     public static String export(String name)
     {
         CrystalSet set = BCContent.BUILTIN_SETS.get(name);
-
-        JsonObject json = new JsonObject();
-
-        json.addProperty("translation", set.getTranslation());
-
-        if (!set.getCompatMod().equals("minecraft"))
-        {
-            json.addProperty("compat_mod", set.getCompatMod());
-        }
-
-        ResourceLocation crystal = set.getCrystalSourceTexture();
-        ResourceLocation budding = set.getBuddingSourceTexture();
-        if (crystal.equals(budding))
-        {
-            json.addProperty("texture", crystal.toString());
-        }
-        else
-        {
-            json.addProperty("crystal_texture", crystal.toString());
-            json.addProperty("budding_textures", budding.toString());
-        }
-
-        json.addProperty("growth_chance", set.getGrowthChance());
-
-        ResourceLocation dropped =    Preconditions.checkNotNull(ForgeRegistries.ITEMS.getKey(set.getDroppedItem()));
-        ResourceLocation ingredient = Preconditions.checkNotNull(ForgeRegistries.ITEMS.getKey(set.getIngredient()));
-        json.addProperty("dropped_item", dropped.toString());
-        if (!dropped.equals(ingredient))
-        {
-            json.addProperty("recipe_item", ingredient.toString());
-        }
-
-        json.addProperty("normal_drop_chance", set.getNormalDrops());
-        json.addProperty("max_drop_chance", set.getMaxDrops());
-
+        CrystalDefinition def = CrystalDefinition.fromSet(set);
+        JsonElement json = CODEC.encodeStart(JsonOps.INSTANCE, def).result().orElseThrow();
         return GSON.toJson(json);
     }
 
@@ -188,12 +176,9 @@ public final class CrystalLoader
 
     private static JsonObject readJsonFile(Path path)
     {
-        try
+        try (Reader reader = Files.newBufferedReader(path))
         {
-            Reader reader = Files.newBufferedReader(path);
-            JsonObject json = GsonHelper.fromJson(GSON, reader, JsonObject.class);
-            reader.close();
-            return json;
+            return GsonHelper.fromJson(GSON, reader, JsonObject.class);
         }
         catch (IOException e)
         {
@@ -253,89 +238,12 @@ public final class CrystalLoader
 
     private static CrystalDefinition parseJson(JsonObject json)
     {
-        Predicate<String> stringValidator = s -> s != null && !s.isEmpty();
-
-        String compatMod = getString(json, "compat_mod", "minecraft", stringValidator, "Compat mod must not be empty");
-        String translation = getString(json, "translation", stringValidator, "Translation must not be empty");
-
-        String crystalTex;
-        String buddingTex;
-        if (json.has("crystal_texture") && json.has("budding_texture"))
+        DataResult<CrystalDefinition> result = CODEC.parse(JsonOps.INSTANCE, json);
+        if (result.error().isPresent())
         {
-            crystalTex = getString(json, "crystal_texture", stringValidator, "Crystal texture must not be empty");
-            buddingTex = getString(json, "budding_texture", stringValidator, "Budding texture must not be empty");
+            throw new JsonParseException(result.error().get().message());
         }
-        else
-        {
-            crystalTex = buddingTex = getString(json, "texture", stringValidator, "Texture must not be empty");
-        }
-        ResourceLocation crystalTexture = ResourceLocation.tryParse(crystalTex);
-        ResourceLocation buddingTexture = ResourceLocation.tryParse(buddingTex);
-
-        int growthChance = getInt(json, "growth_chance", i -> i > 0, "Growth chance must be higher than 0");
-        ResourceLocation dropName = getResLoc(json, "dropped_item");
-        ResourceLocation recipeName = getResLoc(json, "recipe_item", dropName.toString());
-        float normalDrop = getFloat(json, "normal_drop_chance", f -> f > 0F, "Normal drop count must be higher than 0");
-        float maxDrop = getFloat(json, "max_drop_chance", f -> f > 0F, "Max drop count must be higher than 0");
-
-        return new CrystalDefinition(compatMod, translation, crystalTexture, buddingTexture, growthChance, recipeName, dropName, normalDrop, maxDrop);
-    }
-
-    private static ResourceLocation getResLoc(JsonObject json, String key, String _default)
-    {
-        try
-        {
-            return new ResourceLocation(GsonHelper.getAsString(json, key, _default));
-        }
-        catch (ResourceLocationException e)
-        {
-            throw new JsonSyntaxException(e);
-        }
-    }
-
-    private static ResourceLocation getResLoc(JsonObject json, String key)
-    {
-        try
-        {
-            return new ResourceLocation(GsonHelper.getAsString(json, key));
-        }
-        catch (ResourceLocationException e)
-        {
-            throw new JsonSyntaxException(e);
-        }
-    }
-
-    private static String getString(JsonObject json, String key, String _default, Predicate<String> validator, String message)
-    {
-        String value = GsonHelper.getAsString(json, key, _default);
-        return validate(value, validator, message);
-    }
-
-    private static String getString(JsonObject json, String key, Predicate<String> validator, String message)
-    {
-        String value = GsonHelper.getAsString(json, key);
-        return validate(value, validator, message);
-    }
-
-    private static int getInt(JsonObject json, String key, Predicate<Integer> validator, String message)
-    {
-        int value = GsonHelper.getAsInt(json, key);
-        return validate(value, validator, message);
-    }
-
-    private static float getFloat(JsonObject json, String key, Predicate<Float> validator, String message)
-    {
-        float value = GsonHelper.getAsInt(json, key);
-        return validate(value, validator, message);
-    }
-
-    private static <T> T validate(T value, Predicate<T> validator, String message)
-    {
-        if (!validator.test(value))
-        {
-            throw new JsonSyntaxException(message);
-        }
-        return value;
+        return result.result().orElseThrow();
     }
 
     private static String getName(Path path)
@@ -377,5 +285,53 @@ public final class CrystalLoader
             ResourceLocation dropName,
             float normalDrop,
             float maxDrop
-    ) { }
+    )
+    {
+        @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+        public CrystalDefinition(
+                String compatMod,
+                String translation,
+                Either<Pair<ResourceLocation, ResourceLocation>, ResourceLocation> texture,
+                int growthChance,
+                ResourceLocation dropName,
+                Optional<ResourceLocation> ingredientName,
+                float normalDrop,
+                float maxDrop
+        ) {
+            this(compatMod, translation, either(texture, Pair::getFirst), either(texture, Pair::getSecond), growthChance, dropName, ingredientName.orElse(dropName), normalDrop, maxDrop);
+        }
+
+        public Either<Pair<ResourceLocation, ResourceLocation>, ResourceLocation> eitherTexture()
+        {
+            if (crystalTexture.equals(buddingTexture))
+            {
+                return Either.right(crystalTexture);
+            }
+            return Either.left(Pair.of(crystalTexture, buddingTexture));
+        }
+
+        public Optional<ResourceLocation> recipeName() { return Optional.of(ingredientName); }
+
+        private static ResourceLocation either(
+                Either<Pair<ResourceLocation, ResourceLocation>, ResourceLocation> texture,
+                Function<Pair<ResourceLocation, ResourceLocation>, ResourceLocation> pairMapper
+        ) {
+            return texture.mapLeft(pairMapper).left().orElse(texture.right().orElseThrow());
+        }
+
+        public static CrystalDefinition fromSet(CrystalSet set)
+        {
+            return new CrystalDefinition(
+                    set.getCompatMod(),
+                    set.getTranslation(),
+                    set.getCrystalSourceTexture(),
+                    set.getBuddingSourceTexture(),
+                    set.getGrowthChance(),
+                    ForgeRegistries.ITEMS.getKey(set.getIngredient()),
+                    ForgeRegistries.ITEMS.getKey(set.getDroppedItem()),
+                    set.getNormalDrops(),
+                    set.getMaxDrops()
+            );
+        }
+    }
 }
