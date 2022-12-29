@@ -1,27 +1,28 @@
 package xfacthd.buddingcrystals.common.datagen.providers;
 
-import net.minecraft.core.Registry;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
 
-public final class BuddingBlockTagsProvider extends TagsProvider<Block>
+import java.util.concurrent.CompletableFuture;
+
+public final class BuddingBlockTagsProvider extends BlockTagsProvider
 {
-    public BuddingBlockTagsProvider(DataGenerator generator, ExistingFileHelper fileHelper)
+    public BuddingBlockTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper fileHelper)
     {
-        //noinspection deprecation
-        super(generator, Registry.BLOCK, BuddingCrystals.MOD_ID, fileHelper);
+        super(output, lookupProvider, BuddingCrystals.MOD_ID, fileHelper);
     }
 
     @Override
-    protected void addTags()
+    protected void addTags(HolderLookup.Provider provider)
     {
-        TagAppender<Block> crystalSoundBlocks = tag(BlockTags.CRYSTAL_SOUND_BLOCKS);
-        TagAppender<Block> pickaxeMineable = tag(BlockTags.MINEABLE_WITH_PICKAXE);
+        IntrinsicTagAppender<Block> crystalSoundBlocks = tag(BlockTags.CRYSTAL_SOUND_BLOCKS);
+        IntrinsicTagAppender<Block> pickaxeMineable = tag(BlockTags.MINEABLE_WITH_PICKAXE);
 
         BCContent.builtinSets().forEach(set ->
         {

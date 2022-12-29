@@ -1,6 +1,6 @@
 package xfacthd.buddingcrystals.common.datagen.providers;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
@@ -15,15 +15,15 @@ import java.util.function.Consumer;
 
 public final class BuddingRecipeProvider extends RecipeProvider
 {
-    public BuddingRecipeProvider(DataGenerator generator) { super(generator); }
+    public BuddingRecipeProvider(PackOutput output) { super(output); }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
+    protected void buildRecipes(Consumer<FinishedRecipe> consumer)
     {
         addBuddingCrystalRecipe(BCContent.AMETHYST, true, consumer);
         BCContent.builtinSets().forEach(set -> addBuddingCrystalRecipe(set, true, consumer));
 
-        ShapedRecipeBuilder.shaped(BCContent.CRYSTAL_CATALYST.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BCContent.CRYSTAL_CATALYST.get())
                 .pattern("RBR")
                 .pattern("BAB")
                 .pattern("RBR")
@@ -36,7 +36,7 @@ public final class BuddingRecipeProvider extends RecipeProvider
 
     public static void addBuddingCrystalRecipe(CrystalSet set, boolean config, Consumer<FinishedRecipe> consumer)
     {
-        RecipeBuilder builder =  ShapedRecipeBuilder.shaped(set.getBuddingBlock())
+        RecipeBuilder builder =  ShapedRecipeBuilder.shaped(RecipeCategory.MISC, set.getBuddingBlock())
                 .pattern("MMM")
                 .pattern("MCM")
                 .pattern("MMM")

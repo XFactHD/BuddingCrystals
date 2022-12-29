@@ -1,10 +1,11 @@
 package xfacthd.buddingcrystals;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,21 +21,21 @@ import xfacthd.buddingcrystals.common.dynpack.BuddingServerPack;
 import xfacthd.buddingcrystals.common.util.*;
 
 @Mod(BuddingCrystals.MOD_ID)
+@Mod.EventBusSubscriber(modid = BuddingCrystals.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class BuddingCrystals
 {
     public static final String MOD_ID = "buddingcrystals";
-
-    public static final CreativeModeTab CREATIVE_TAB = new CrystalTab();
+    public static final int SERVER_PACK_FORMAT = 10;
+    public static final int RESOURCE_PACK_FORMAT = 12;
 
     public BuddingCrystals()
     {
         BCContent.register(FMLJavaModLoadingContext.get().getModEventBus());
-        FMLJavaModLoadingContext.get().getModEventBus().register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
     }
 
     @SubscribeEvent
-    public void registerRecipeConditions(final RegisterEvent event)
+    public static void registerRecipeConditions(final RegisterEvent event)
     {
         if (event.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS))
         {
@@ -43,24 +44,33 @@ public final class BuddingCrystals
     }
 
     @SubscribeEvent
-    public void onCommonSetup(final FMLCommonSetupEvent event) { BCContent.loadedSets().forEach(CrystalSet::validate); }
+    public static void onCommonSetup(final FMLCommonSetupEvent event) { BCContent.loadedSets().forEach(CrystalSet::validate); }
 
     @SubscribeEvent
-    public void onAddServerPack(final AddPackFindersEvent event)
+    public static void onAddServerPack(final AddPackFindersEvent event)
     {
         if (event.getPackType() == PackType.SERVER_DATA)
         {
-            event.addRepositorySource((packConsumer, packConstructor) ->
+            event.addRepositorySource((packConsumer) ->
             {
                 @SuppressWarnings("resource")
                 PackResources pack = new BuddingServerPack();
 
                 packConsumer.accept(Pack.create(
                         MOD_ID + "_json_crystals",
+                        Component.literal("BuddingCrystals - JSON Crystals"),
                         true,
-                        () -> pack,
-                        packConstructor,
+                        s -> pack,
+                        new Pack.Info(
+                                Component.literal(pack.packId()),
+                                SERVER_PACK_FORMAT,
+                                RESOURCE_PACK_FORMAT,
+                                FeatureFlagSet.of(),
+                                true
+                        ),
+                        PackType.SERVER_DATA,
                         Pack.Position.BOTTOM,
+                        true,
                         PackSource.DEFAULT
                 ));
             });

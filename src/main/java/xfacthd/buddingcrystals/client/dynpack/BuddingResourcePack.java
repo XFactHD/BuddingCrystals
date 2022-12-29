@@ -17,13 +17,16 @@ public final class BuddingResourcePack extends BuddingPackResources
             new LanguageInfo("en_us", "US", "English", false)
     ));
 
-    public BuddingResourcePack() { super(PackType.CLIENT_RESOURCES, 8, Set.of(BuddingCrystals.MOD_ID)); }
+    public BuddingResourcePack()
+    {
+        super(PackType.CLIENT_RESOURCES, BuddingCrystals.RESOURCE_PACK_FORMAT, Set.of(BuddingCrystals.MOD_ID));
+    }
 
     @Override
     protected void buildResources(Map<ResourceLocation, String> cache)
     {
         //noinspection ConstantConditions
-        new DynamicBlockStates(cache).run(null);
+        new DynamicBlockStates(cache).run(null).join();
         DynamicLanguage.run(cache);
     }
 
@@ -39,5 +42,5 @@ public final class BuddingResourcePack extends BuddingPackResources
     }
 
     @Override
-    public String getName() { return "BuddingCrystals JSON Crystal Data"; }
+    public String packId() { return "BuddingCrystals JSON Crystal Data"; }
 }

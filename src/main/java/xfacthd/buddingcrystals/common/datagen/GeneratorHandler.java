@@ -1,6 +1,8 @@
 package xfacthd.buddingcrystals.common.datagen;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -11,6 +13,8 @@ import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.datagen.providers.*;
 
+import java.util.concurrent.CompletableFuture;
+
 @Mod.EventBusSubscriber(modid = BuddingCrystals.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class GeneratorHandler
 {
@@ -20,6 +24,8 @@ public final class GeneratorHandler
     public static void onGatherData(final GatherDataEvent event)
     {
         DataGenerator gen = event.getGenerator();
+        PackOutput output = gen.getPackOutput();
+        CompletableFuture<HolderLookup.Provider> holderProvider = event.getLookupProvider();
         ExistingFileHelper fileHelper = event.getExistingFileHelper();
 
         // Trick the generators into thinking the textures exist
@@ -34,12 +40,12 @@ public final class GeneratorHandler
             fileHelper.trackGenerated(bcRl("block/cluster/" + name), TEXTURE_TYPE);
         });
 
-        gen.addProvider(event.includeClient(), new BuddingStateProvider(gen, fileHelper));
-        gen.addProvider(event.includeClient(), new BuddingItemModelProvider(gen, fileHelper));
-        gen.addProvider(event.includeClient(), new BuddingLanguageProvider(gen));
-        gen.addProvider(event.includeServer(), new BuddingBlockTagsProvider(gen, fileHelper));
-        gen.addProvider(event.includeServer(), new BuddingLootTableProvider(gen));
-        gen.addProvider(event.includeServer(), new BuddingRecipeProvider(gen));
+        gen.addProvider(event.includeClient(), new BuddingStateProvider(output, fileHelper));
+        gen.addProvider(event.includeClient(), new BuddingItemModelProvider(output, fileHelper));
+        gen.addProvider(event.includeClient(), new BuddingLanguageProvider(output));
+        gen.addProvider(event.includeServer(), new BuddingBlockTagsProvider(output, holderProvider, fileHelper));
+        gen.addProvider(event.includeServer(), new BuddingLootTableProvider(output));
+        gen.addProvider(event.includeServer(), new BuddingRecipeProvider(output));
     }
 
     private static ResourceLocation bcRl(String path) { return new ResourceLocation(BuddingCrystals.MOD_ID, path); }

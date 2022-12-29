@@ -373,7 +373,7 @@ public final class CrystalSet
         static RegistryObject<Block> register(String name, Supplier<Block> blockFactory, String compatMod)
         {
             RegistryObject<Block> block = BCContent.BLOCKS.register(name, blockFactory);
-            BCContent.ITEMS.register(name, () -> CrystalBlockItem.make(block.get(), compatMod));
+            BCContent.ITEMS.register(name, () -> new CrystalBlockItem(block.get(), compatMod));
             return block;
         }
     }

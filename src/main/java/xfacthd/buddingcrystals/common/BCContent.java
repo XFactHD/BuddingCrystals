@@ -1,6 +1,6 @@
 package xfacthd.buddingcrystals.common;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
@@ -17,7 +17,7 @@ public final class BCContent //TODO: balance growth chance and drop counts
 {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, BuddingCrystals.MOD_ID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BuddingCrystals.MOD_ID);
-    private static final DeferredRegister<LootPoolEntryType> POOL_ENTRY_TYPES = DeferredRegister.create(Registry.LOOT_ENTRY_REGISTRY, BuddingCrystals.MOD_ID);
+    private static final DeferredRegister<LootPoolEntryType> POOL_ENTRY_TYPES = DeferredRegister.create(Registries.LOOT_POOL_ENTRY_TYPE, BuddingCrystals.MOD_ID);
 
     public static final Map<String, CrystalSet> ALL_SETS = new HashMap<>();
     public static final Map<String, CrystalSet> BUILTIN_SETS = new HashMap<>();
@@ -88,7 +88,7 @@ public final class BCContent //TODO: balance growth chance and drop counts
 
     public static final RegistryObject<Item> CRYSTAL_CATALYST = ITEMS.register(
             "crystal_catalyst",
-            () -> new Item(new Item.Properties().tab(BuddingCrystals.CREATIVE_TAB))
+            () -> new Item(new Item.Properties())
     );
 
     public static final RegistryObject<LootPoolEntryType> OPTIONAL_LOOT_ITEM = POOL_ENTRY_TYPES.register(

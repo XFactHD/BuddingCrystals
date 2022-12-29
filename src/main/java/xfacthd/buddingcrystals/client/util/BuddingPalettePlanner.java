@@ -1,16 +1,18 @@
 package xfacthd.buddingcrystals.client.util;
 
-import io.github.lukebemish.dynamic_asset_generator.api.client.AssetResourceCache;
-import io.github.lukebemish.dynamic_asset_generator.api.client.generators.DynamicTextureSource;
-import io.github.lukebemish.dynamic_asset_generator.api.client.generators.texsources.CombinedPaletteImage;
-import io.github.lukebemish.dynamic_asset_generator.api.client.generators.texsources.TextureReader;
+import dev.lukebemish.dynamicassetgenerator.api.ResourceCache;
+import dev.lukebemish.dynamicassetgenerator.api.client.AssetResourceCache;
+import dev.lukebemish.dynamicassetgenerator.api.client.generators.TextureGenerator;
+import dev.lukebemish.dynamicassetgenerator.api.client.generators.texsources.CombinedPaletteImage;
+import dev.lukebemish.dynamicassetgenerator.api.client.generators.texsources.TextureReader;
 import net.minecraft.resources.ResourceLocation;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
 
 public final class BuddingPalettePlanner
 {
-    private static final ResourceLocation FALLBACK_TEXTURE = bcRl("block/fallback");
+    private static final AssetResourceCache ASSET_CACHE = ResourceCache.register(new AssetResourceCache(new ResourceLocation(BuddingCrystals.MOD_ID, "assets")));
+    private static final ResourceLocation FALLBACK_TEXTURE = rl("forge", "white");
     private static final ResourceLocation EMPTY_TEXTURE = rl("dynamic_asset_generator", "empty");
 
     public static void plan(CrystalSet set)
@@ -47,8 +49,8 @@ public final class BuddingPalettePlanner
 
     private static void plan(String path, ResourceLocation background, ResourceLocation paletted)
     {
-        AssetResourceCache.INSTANCE.planSource(
-                new DynamicTextureSource(
+        ASSET_CACHE.planSource(
+                new TextureGenerator(
                         bcRl(path),
                         new CombinedPaletteImage(
                                 new TextureReader(EMPTY_TEXTURE),

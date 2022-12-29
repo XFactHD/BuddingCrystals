@@ -8,6 +8,7 @@ import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
+import net.minecraft.server.packs.resources.IoSupplier;
 import org.slf4j.Logger;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.util.CrystalLoader;
@@ -15,14 +16,14 @@ import xfacthd.buddingcrystals.common.util.CrystalLoader;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 
 public abstract class BuddingPackResources implements PackResources
 {
     protected static final Logger LOGGER = LogUtils.getLogger();
     private final PackMetadataSection packMetadata;
-    private final Map<ResourceLocation, String> dataCache = new HashMap<>();
+    private final Map<ResourceLocation, String> dataCache = new ConcurrentHashMap<>();
     private final PackType type;
     private final Set<String> namespaces;
 
@@ -30,7 +31,7 @@ public abstract class BuddingPackResources implements PackResources
     {
         this.type = type;
         this.namespaces = namespaces;
-        this.packMetadata = new PackMetadataSection(Component.literal(getName()), packFormat);
+        this.packMetadata = new PackMetadataSection(Component.literal(packId()), packFormat);
 
         String typeName = type == PackType.CLIENT_RESOURCES ? "resourcepack" : "datapack";
 
@@ -52,41 +53,34 @@ public abstract class BuddingPackResources implements PackResources
     }
 
     @Override
-    public InputStream getRootResource(String fileName) { return null; }
+    public IoSupplier<InputStream> getRootResource(String... fileName) { return null; }
 
     @Override
-    public final InputStream getResource(PackType type, ResourceLocation location) throws IOException
+    public final IoSupplier<InputStream> getResource(PackType type, ResourceLocation location)
     {
-        if (hasResource(type, location))
+        if (type == this.type && dataCache.containsKey(location))
         {
-            return new ByteArrayInputStream(dataCache.get(location).getBytes(StandardCharsets.UTF_8));
+            return supplierForPath(location);
         }
-        throw new IOException(String.format("Couldn't find resource %s in BuddingCrystals dynamic data pack", location));
+        return null;
     }
 
     @Override
-    public Collection<ResourceLocation> getResources(PackType type, String namespace, String path, Predicate<ResourceLocation> filter)
+    public void listResources(PackType type, String namespace, String path, ResourceOutput output)
     {
         if (type == this.type)
         {
-            return dataCache.keySet()
+            dataCache.keySet()
                     .stream()
                     .filter(loc -> loc.getNamespace().equals(namespace))
                     .filter(loc -> loc.getPath().startsWith(path))
-                    .filter(filter)
-                    .toList();
+                    .forEach(loc -> output.accept(loc, supplierForPath(loc)));
         }
-        return Set.of();
     }
 
-    @Override
-    public final boolean hasResource(PackType type, ResourceLocation location)
+    private IoSupplier<InputStream> supplierForPath(ResourceLocation loc)
     {
-        if (type == this.type)
-        {
-            return dataCache.containsKey(location);
-        }
-        return false;
+        return () -> new ByteArrayInputStream(dataCache.get(loc).getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
@@ -96,7 +90,7 @@ public abstract class BuddingPackResources implements PackResources
     @SuppressWarnings("unchecked")
     public <T> T getMetadataSection(MetadataSectionSerializer<T> deserializer)
     {
-        if (deserializer == PackMetadataSection.SERIALIZER)
+        if (deserializer == PackMetadataSection.TYPE)
         {
             return (T) packMetadata;
         }

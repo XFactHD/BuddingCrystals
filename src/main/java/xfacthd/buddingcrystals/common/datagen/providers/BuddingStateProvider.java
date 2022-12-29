@@ -1,6 +1,6 @@
 package xfacthd.buddingcrystals.common.datagen.providers;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Block;
@@ -13,9 +13,9 @@ import xfacthd.buddingcrystals.common.util.CrystalSet;
 
 public final class BuddingStateProvider extends BlockStateProvider
 {
-    public BuddingStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper)
+    public BuddingStateProvider(PackOutput output, ExistingFileHelper exFileHelper)
     {
-        super(gen, BuddingCrystals.MOD_ID, exFileHelper);
+        super(output, BuddingCrystals.MOD_ID, exFileHelper);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package xfacthd.buddingcrystals.client.dynpack;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.DetectedVersion;
 import net.minecraft.data.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -12,11 +11,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.datagen.providers.BuddingStateProvider;
+import xfacthd.buddingcrystals.common.dynpack.DummyPackOutput;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public final class DynamicBlockStates extends BlockStateProvider
 {
@@ -24,7 +24,7 @@ public final class DynamicBlockStates extends BlockStateProvider
 
     public DynamicBlockStates(Map<ResourceLocation, String> cache)
     {
-        super(new DataGenerator(Path.of(""), List.of(), DetectedVersion.tryDetectVersion(), true),
+        super(DummyPackOutput.INSTANCE,
                 BuddingCrystals.MOD_ID,
                 new ExistingFileHelper(List.of(), Set.of(), false, null, null)
         );
@@ -38,7 +38,7 @@ public final class DynamicBlockStates extends BlockStateProvider
     }
 
     @Override
-    public void run(CachedOutput cache)
+    public CompletableFuture<?> run(CachedOutput cache)
     {
         try
         {
@@ -73,5 +73,7 @@ public final class DynamicBlockStates extends BlockStateProvider
             ResourceLocation stateLocation = new ResourceLocation(blockName.getNamespace(), "blockstates/" + blockName.getPath() + ".json");
             this.cache.put(stateLocation, entry.getValue().toJson().toString());
         }
+
+        return CompletableFuture.completedFuture(null);
     }
 }

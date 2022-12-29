@@ -14,6 +14,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "C": {
             "item": "buddingcrystals:crystal_catalyst"

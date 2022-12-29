@@ -1,9 +1,11 @@
 package xfacthd.buddingcrystals.client;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -31,17 +33,26 @@ public final class BCClient
     {
         if (event.getPackType() == PackType.CLIENT_RESOURCES)
         {
-            event.addRepositorySource((packConsumer, packConstructor) ->
+            event.addRepositorySource((packConsumer) ->
             {
                 @SuppressWarnings("resource")
                 PackResources pack = new BuddingResourcePack();
 
                 packConsumer.accept(Pack.create(
                         BuddingCrystals.MOD_ID + "_json_crystals",
+                        Component.literal("BuddingCrystals - JSON Crystals"),
                         true,
-                        () -> pack,
-                        packConstructor,
+                        s -> pack,
+                        new Pack.Info(
+                                Component.literal(pack.packId()),
+                                BuddingCrystals.SERVER_PACK_FORMAT,
+                                BuddingCrystals.RESOURCE_PACK_FORMAT,
+                                FeatureFlagSet.of(),
+                                true
+                        ),
+                        PackType.CLIENT_RESOURCES,
                         Pack.Position.BOTTOM,
+                        true,
                         PackSource.DEFAULT
                 ));
             });

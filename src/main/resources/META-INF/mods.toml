@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[41,)"
+loaderVersion="[44,)"
 issueTrackerURL="https://www.github.com/xfacthd/buddingcrystals"
 license="LGPL v2.1"
 
@@ -18,20 +18,20 @@ license="LGPL v2.1"
 [[dependencies.buddingcrystals]]
     modId="forge"
     mandatory=true
-    versionRange="[41.0.94,)"
+    versionRange="[44.0.29,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.buddingcrystals]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="[1.19.3,1.20)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.buddingcrystals]]
     modId="dynamic_asset_generator"
     mandatory=true
-    versionRange="[1.0.0,)"
+    versionRange="[3.0.0,)"
     ordering="AFTER"
     side="CLIENT"

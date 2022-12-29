@@ -1,17 +1,15 @@
 package xfacthd.buddingcrystals.common.dynpack;
 
 import com.google.gson.JsonObject;
-import net.minecraft.DetectedVersion;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.datagen.providers.BuddingRecipeProvider;
 
-import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 final class DynamicRecipeGenerator extends RecipeProvider
@@ -20,12 +18,12 @@ final class DynamicRecipeGenerator extends RecipeProvider
 
     public DynamicRecipeGenerator(Map<ResourceLocation, String> cache)
     {
-        super(new DataGenerator(Path.of(""), List.of(), DetectedVersion.tryDetectVersion(), true));
+        super(DummyPackOutput.INSTANCE);
         this.cache = cache;
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
+    protected void buildRecipes(Consumer<FinishedRecipe> consumer)
     {
         BCContent.loadedSets().forEach(set ->
                 BuddingRecipeProvider.addBuddingCrystalRecipe(set, false, consumer)
@@ -33,11 +31,11 @@ final class DynamicRecipeGenerator extends RecipeProvider
     }
 
     @Override
-    public void run(CachedOutput cache)
+    public CompletableFuture<?> run(CachedOutput cache)
     {
         Set<ResourceLocation> built = new HashSet<>();
 
-        buildCraftingRecipes(recipe ->
+        buildRecipes(recipe ->
         {
             if (!built.add(recipe.getId()))
             {
@@ -55,5 +53,6 @@ final class DynamicRecipeGenerator extends RecipeProvider
                 this.cache.put(advancementPath, advancement.toString());
             }
         });
+        return CompletableFuture.completedFuture(null);
     }
 }

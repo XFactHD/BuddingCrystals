@@ -1,20 +1,21 @@
 package xfacthd.buddingcrystals.common.datagen.providers;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.client.util.ExportCommand;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
+import xfacthd.buddingcrystals.common.util.CrystalTab;
 
 public final class BuddingLanguageProvider extends LanguageProvider
 {
-    public BuddingLanguageProvider(DataGenerator gen) { super(gen, BuddingCrystals.MOD_ID, "en_us"); }
+    public BuddingLanguageProvider(PackOutput output) { super(output, BuddingCrystals.MOD_ID, "en_us"); }
 
     @Override
     protected void addTranslations()
     {
-        add(BuddingCrystals.CREATIVE_TAB.getDisplayName().getString(), "BuddingCrystals");
+        add(CrystalTab.TAB_TITLE.getString(), "BuddingCrystals");
 
         add(BCContent.AMETHYST.getConfigTranslation(), "Allow crafting of budding Amethyst block");
         BCContent.builtinSets().forEach(set ->
