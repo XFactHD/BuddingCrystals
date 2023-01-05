@@ -59,6 +59,19 @@ public final class CrystalLoader
             BCCodecs.floatMin(0).fieldOf("max_drop_chance").forGetter(CrystalDefinition::maxDrop)
     ).apply(instance, CrystalDefinition::new));
 
+    private static final Codec<CrystalDefinition> LEGACY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            BCCodecs.NON_EMPTY_STRING.optionalFieldOf("compat_mod", "minecraft").forGetter(CrystalDefinition::compatMod),
+            BCCodecs.NON_EMPTY_STRING.fieldOf("translation").forGetter(CrystalDefinition::translation),
+            ResourceLocation.CODEC.optionalFieldOf("crystal_texture").forGetter(def -> Optional.of(def.crystalTexture)),
+            ResourceLocation.CODEC.optionalFieldOf("budding_texture").forGetter(def -> Optional.of(def.buddingTexture)),
+            ResourceLocation.CODEC.optionalFieldOf("texture").forGetter(def -> Optional.empty()),
+            BCCodecs.intMin(0).fieldOf("growth_chance").forGetter(CrystalDefinition::growthChance),
+            ResourceLocation.CODEC.fieldOf("dropped_item").forGetter(CrystalDefinition::dropName),
+            ResourceLocation.CODEC.optionalFieldOf("recipe_item").forGetter(CrystalDefinition::recipeName),
+            BCCodecs.floatMin(0).fieldOf("normal_drop_chance").forGetter(CrystalDefinition::normalDrop),
+            BCCodecs.floatMin(0).fieldOf("max_drop_chance").forGetter(CrystalDefinition::maxDrop)
+    ).apply(instance, CrystalDefinition::new));
+
     public static void loadUserSets()
     {
         LOGGER.info("Loading custom crystal definitions");
@@ -110,7 +123,7 @@ public final class CrystalLoader
             try
             {
                 JsonObject json = readJsonFile(file);
-                def = parseJson(json);
+                def = parseJson(name, json);
             }
             catch (JsonParseException e)
             {
@@ -147,7 +160,7 @@ public final class CrystalLoader
             try
             {
                 JsonObject json = readJsonFile(filePath);
-                CrystalDefinition def = parseJson(json);
+                CrystalDefinition def = parseJson(set.getName(), json);
                 if (type == Update.SERVER)
                 {
                     set.updateServerData(def.dropName, def.ingredientName, def.normalDrop, def.maxDrop);
@@ -188,7 +201,7 @@ public final class CrystalLoader
 
     private static void loadDefinition(String name, JsonObject json)
     {
-        CrystalDefinition def = parseJson(json);
+        CrystalDefinition def = parseJson(name, json);
 
         RegistryObject<Item> drop = RegistryObject.create(def.dropName, ForgeRegistries.ITEMS);
         RegistryObject<Item> ingredient = drop;
@@ -236,12 +249,26 @@ public final class CrystalLoader
         BCContent.LOADED_SETS.put(name, set);
     }
 
-    private static CrystalDefinition parseJson(JsonObject json)
+    private static CrystalDefinition parseJson(String name, JsonObject json)
     {
+        //Attempt to parse legacy format
+        DataResult<CrystalDefinition> legacyResult = LEGACY_CODEC.parse(JsonOps.INSTANCE, json);
+        if (legacyResult.error().isEmpty())
+        {
+            LOGGER.warn(
+                    "Crystal definition '" + name + "' is using the legacy format, please consider updating " +
+                    "it to the new format outlined on the BuddingCrystals wiki."
+            );
+            return legacyResult.result().orElseThrow();
+        }
+
         DataResult<CrystalDefinition> result = CODEC.parse(JsonOps.INSTANCE, json);
         if (result.error().isPresent())
         {
-            throw new JsonParseException(result.error().get().message());
+            String message = "Encountered an error while parsing crystal definition '" + name + "'. " +
+                    "If this file is using the legacy format, please consider updating it to the new format " +
+                    "outlined on the BuddingCrystals wiki.\n";
+            throw new JsonParseException(message + result.error().get().message());
         }
         return result.result().orElseThrow();
     }
@@ -298,7 +325,44 @@ public final class CrystalLoader
                 float normalDrop,
                 float maxDrop
         ) {
-            this(compatMod, translation, either(texture, Pair::getFirst), either(texture, Pair::getSecond), growthChance, dropName, ingredientName.orElse(dropName), normalDrop, maxDrop);
+            this(
+                    compatMod,
+                    translation,
+                    either(texture, Pair::getFirst),
+                    either(texture, Pair::getSecond),
+                    growthChance,
+                    dropName,
+                    ingredientName.orElse(dropName),
+                    normalDrop,
+                    maxDrop
+            );
+        }
+
+        @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+        public CrystalDefinition(
+                String compatMod,
+                String translation,
+                Optional<ResourceLocation> crystalTexture,
+                Optional<ResourceLocation> buddingTexture,
+                Optional<ResourceLocation> texture,
+                int growthChance,
+                ResourceLocation dropName,
+                Optional<ResourceLocation> ingredientName,
+                float normalDrop,
+                float maxDrop
+        )
+        {
+            this(
+                    compatMod,
+                    translation,
+                    crystalTexture.orElse(texture.orElseThrow()),
+                    buddingTexture.orElse(texture.orElseThrow()),
+                    growthChance,
+                    dropName,
+                    ingredientName.orElse(dropName),
+                    normalDrop,
+                    maxDrop
+            );
         }
 
         public Either<Pair<ResourceLocation, ResourceLocation>, ResourceLocation> eitherTexture()
