@@ -5,7 +5,7 @@ import com.mojang.serialization.DataResult;
 
 import java.util.function.Function;
 
-public class BCCodecs
+public final class BCCodecs
 {
     public static final Codec<String> NON_EMPTY_STRING = Codec.STRING.flatXmap(
             s -> s.isEmpty() ? DataResult.error("String value must not be empty") : DataResult.success(s),

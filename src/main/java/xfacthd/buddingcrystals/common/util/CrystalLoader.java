@@ -251,6 +251,12 @@ public final class CrystalLoader
 
     private static CrystalDefinition parseJson(String name, JsonObject json)
     {
+        DataResult<CrystalDefinition> result = CODEC.parse(JsonOps.INSTANCE, json);
+        if (result.error().isEmpty())
+        {
+            return result.result().orElseThrow();
+        }
+
         //Attempt to parse legacy format
         DataResult<CrystalDefinition> legacyResult = LEGACY_CODEC.parse(JsonOps.INSTANCE, json);
         if (legacyResult.error().isEmpty())
@@ -262,15 +268,10 @@ public final class CrystalLoader
             return legacyResult.result().orElseThrow();
         }
 
-        DataResult<CrystalDefinition> result = CODEC.parse(JsonOps.INSTANCE, json);
-        if (result.error().isPresent())
-        {
-            String message = "Encountered an error while parsing crystal definition '" + name + "'. " +
-                    "If this file is using the legacy format, please consider updating it to the new format " +
-                    "outlined on the BuddingCrystals wiki.\n";
-            throw new JsonParseException(message + result.error().get().message());
-        }
-        return result.result().orElseThrow();
+        String message = "Encountered an error while parsing crystal definition '" + name + "'. " +
+                "If this file is using the legacy format, please consider updating it to the new format " +
+                "outlined on the BuddingCrystals wiki.\n";
+        throw new JsonParseException(message + result.error().get().message());
     }
 
     private static String getName(Path path)
