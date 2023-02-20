@@ -18,7 +18,9 @@
           "C": {
             "item": "buddingcrystals:crystal_catalyst"
           },
-          "M": []
+          "M": {
+            "item": "mekanism:fluorite_gem"
+          }
         },
         "pattern": [
           "MMM",

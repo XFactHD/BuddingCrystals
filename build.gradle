@@ -21,7 +21,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '2.1.1'
+version = '2.1.2'
 group = 'xfacthd.buddingcrystals'
 archivesBaseName = 'BuddingCrystals'
 
@@ -127,8 +127,8 @@ dependencies {
     implementation fg.deobf("curse.maven:dag-577096:3884277")
 
     // Compat mods
-    //runtimeOnly fg.deobf("curse.maven:ae2-223794:3792686")
-    //runtimeOnly fg.deobf("curse.maven:mekanism-268560:3743835")
+    //runtimeOnly fg.deobf("curse.maven:ae2-223794:4293558")
+    //runtimeOnly fg.deobf("curse.maven:mekanism-268560:4385637")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

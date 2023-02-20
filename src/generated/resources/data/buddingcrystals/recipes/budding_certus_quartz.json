@@ -18,7 +18,9 @@
           "C": {
             "item": "buddingcrystals:crystal_catalyst"
           },
-          "M": []
+          "M": {
+            "item": "ae2:certus_quartz_crystal"
+          }
         },
         "pattern": [
           "MMM",

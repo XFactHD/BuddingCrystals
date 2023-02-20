@@ -18,7 +18,9 @@
           "C": {
             "item": "buddingcrystals:crystal_catalyst"
           },
-          "M": []
+          "M": {
+            "item": "ae2:fluix_crystal"
+          }
         },
         "pattern": [
           "MMM",
