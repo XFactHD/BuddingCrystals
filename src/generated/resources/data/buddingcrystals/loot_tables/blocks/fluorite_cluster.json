@@ -51,7 +51,7 @@
                       "function": "minecraft:apply_bonus"
                     }
                   ],
-                  "name": "minecraft:air"
+                  "name": "mekanism:fluorite_gem"
                 },
                 {
                   "type": "buddingcrystals:optional_item",
@@ -65,7 +65,7 @@
                       "function": "minecraft:explosion_decay"
                     }
                   ],
-                  "name": "minecraft:air"
+                  "name": "mekanism:fluorite_gem"
                 }
               ]
             }

@@ -14,12 +14,13 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "category": "misc",
         "key": {
           "C": {
             "item": "buddingcrystals:crystal_catalyst"
           },
-          "M": []
+          "M": {
+            "item": "mekanism:fluorite_gem"
+          }
         },
         "pattern": [
           "MMM",
