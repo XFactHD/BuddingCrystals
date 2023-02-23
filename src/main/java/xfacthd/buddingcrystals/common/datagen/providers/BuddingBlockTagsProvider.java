@@ -22,11 +22,13 @@ public final class BuddingBlockTagsProvider extends BlockTagsProvider
     protected void addTags(HolderLookup.Provider provider)
     {
         IntrinsicTagAppender<Block> crystalSoundBlocks = tag(BlockTags.CRYSTAL_SOUND_BLOCKS);
+        IntrinsicTagAppender<Block> buddingBlocks = tag(BCContent.BUDDING_BLOCKS_TAG);
         IntrinsicTagAppender<Block> pickaxeMineable = tag(BlockTags.MINEABLE_WITH_PICKAXE);
 
         BCContent.builtinSets().forEach(set ->
         {
             crystalSoundBlocks.add(set.getBuddingBlock());
+            buddingBlocks.add(set.getBuddingBlock());
             pickaxeMineable.add(set.blocks().toArray(Block[]::new));
         });
     }

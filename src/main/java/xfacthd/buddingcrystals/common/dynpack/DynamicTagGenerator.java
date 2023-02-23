@@ -6,7 +6,6 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.Util;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.*;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.world.level.block.Block;
@@ -34,12 +33,14 @@ public final class DynamicTagGenerator extends BlockTagsProvider
     @Override
     protected void addTags(HolderLookup.Provider provider)
     {
-        IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block> crystalSoundBlocks = tag(BlockTags.CRYSTAL_SOUND_BLOCKS);
-        IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block> pickaxeMineable = tag(BlockTags.MINEABLE_WITH_PICKAXE);
+        IntrinsicTagAppender<Block> crystalSoundBlocks = tag(BlockTags.CRYSTAL_SOUND_BLOCKS);
+        IntrinsicTagAppender<Block> buddingBlocks = tag(BCContent.BUDDING_BLOCKS_TAG);
+        IntrinsicTagAppender<Block> pickaxeMineable = tag(BlockTags.MINEABLE_WITH_PICKAXE);
 
         BCContent.loadedSets().forEach(set ->
         {
             crystalSoundBlocks.add(set.getBuddingBlock());
+            buddingBlocks.add(set.getBuddingBlock());
             pickaxeMineable.add(set.blocks().toArray(Block[]::new));
         });
     }
