@@ -37,11 +37,13 @@ public final class DynamicTagGenerator extends TagsProvider<Block>
     protected void addTags()
     {
         TagAppender<Block> crystalSoundBlocks = tag(BlockTags.CRYSTAL_SOUND_BLOCKS);
+        TagAppender<Block> buddingBlocks = tag(BCContent.BUDDING_BLOCKS_TAG);
         TagAppender<Block> pickaxeMineable = tag(BlockTags.MINEABLE_WITH_PICKAXE);
 
         BCContent.loadedSets().forEach(set ->
         {
             crystalSoundBlocks.add(set.getBuddingBlock());
+            buddingBlocks.add(set.getBuddingBlock());
             pickaxeMineable.add(set.blocks().toArray(Block[]::new));
         });
     }
