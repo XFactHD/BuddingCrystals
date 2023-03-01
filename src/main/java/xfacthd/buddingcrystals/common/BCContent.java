@@ -1,6 +1,9 @@
 package xfacthd.buddingcrystals.common;
 
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
@@ -95,6 +98,8 @@ public final class BCContent //TODO: balance growth chance and drop counts
             "optional_item",
             () -> new LootPoolEntryType(new OptionalLootItem.Serializer())
     );
+
+    public static final TagKey<Block> BUDDING_BLOCKS_TAG = BlockTags.create(new ResourceLocation("forge", "budding_blocks"));
 
     public static void register(IEventBus bus)
     {
