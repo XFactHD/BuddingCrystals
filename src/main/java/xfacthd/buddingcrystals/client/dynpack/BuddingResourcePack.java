@@ -19,7 +19,7 @@ public final class BuddingResourcePack extends BuddingPackResources
 
     public BuddingResourcePack()
     {
-        super(PackType.CLIENT_RESOURCES, BuddingCrystals.RESOURCE_PACK_FORMAT, Set.of(BuddingCrystals.MOD_ID));
+        super(PackType.CLIENT_RESOURCES, BuddingCrystals.RESOURCE_PACK_FORMAT);
     }
 
     @Override

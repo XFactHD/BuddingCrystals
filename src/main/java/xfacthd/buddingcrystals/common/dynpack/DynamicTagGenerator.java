@@ -3,7 +3,6 @@ package xfacthd.buddingcrystals.common.dynpack;
 import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.Util;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.*;
 import net.minecraft.resources.ResourceLocation;
@@ -54,19 +53,18 @@ public final class DynamicTagGenerator extends BlockTagsProvider
     @Override
     public CompletableFuture<?> run(CachedOutput cache)
     {
-        return this.lookupProvider.thenCompose(provider -> CompletableFuture.runAsync(() ->
+        builders.clear();
+        addTags(lookupProvider.join());
+        builders.forEach((loc, tag) ->
         {
-            builders.clear();
-            addTags(provider);
-            builders.forEach((loc, tag) ->
-            {
-                List<TagEntry> list = tag.build();
-                this.cache.put(
-                        new ResourceLocation(loc.getNamespace(), TagManager.getTagDir(registryKey) + "/" + loc.getPath() + ".json"),
-                        GSON.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(list, false)).getOrThrow(false, LOGGER::error))
-                );
-            });
-        }, Util.backgroundExecutor()));
+            List<TagEntry> list = tag.build();
+            this.cache.put(
+                    new ResourceLocation(loc.getNamespace(), TagManager.getTagDir(registryKey) + "/" + loc.getPath() + ".json"),
+                    GSON.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(list, false)).getOrThrow(false, LOGGER::error))
+            );
+        });
+
+        return CompletableFuture.completedFuture(null);
     }
 
     @Override
