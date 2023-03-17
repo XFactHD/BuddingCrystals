@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public abstract class BuddingPackResources implements PackResources
 {
@@ -26,10 +27,9 @@ public abstract class BuddingPackResources implements PackResources
     private final PackType type;
     private final Set<String> namespaces;
 
-    protected BuddingPackResources(PackType type, int packFormat, Set<String> namespaces)
+    protected BuddingPackResources(PackType type, int packFormat)
     {
         this.type = type;
-        this.namespaces = namespaces;
         this.packMetadata = new PackMetadataSection(Component.literal(getName()), packFormat);
 
         String typeName = type == PackType.CLIENT_RESOURCES ? "resourcepack" : "datapack";
@@ -46,6 +46,10 @@ public abstract class BuddingPackResources implements PackResources
 
         stopwatch = Stopwatch.createStarted();
         buildResources(dataCache);
+        this.namespaces = dataCache.keySet()
+                .stream()
+                .map(ResourceLocation::getNamespace)
+                .collect(Collectors.toSet());
         stopwatch.stop();
 
         LOGGER.info("Generated dynamic {} in {}ms", typeName, stopwatch.elapsed(TimeUnit.MILLISECONDS));

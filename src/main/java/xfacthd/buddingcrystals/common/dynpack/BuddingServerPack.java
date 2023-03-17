@@ -9,7 +9,7 @@ import java.util.Set;
 
 public final class BuddingServerPack extends BuddingPackResources
 {
-    public BuddingServerPack() { super(PackType.SERVER_DATA, 9, Set.of("minecraft", BuddingCrystals.MOD_ID)); }
+    public BuddingServerPack() { super(PackType.SERVER_DATA, 9); }
 
     @Override
     protected void buildResources(Map<ResourceLocation, String> cache)

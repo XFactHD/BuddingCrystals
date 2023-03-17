@@ -5,7 +5,6 @@ import net.minecraft.client.resources.metadata.language.LanguageMetadataSection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
-import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.dynpack.BuddingPackResources;
 
 import java.util.Map;
@@ -17,7 +16,7 @@ public final class BuddingResourcePack extends BuddingPackResources
             new LanguageInfo("en_us", "US", "English", false)
     ));
 
-    public BuddingResourcePack() { super(PackType.CLIENT_RESOURCES, 8, Set.of(BuddingCrystals.MOD_ID)); }
+    public BuddingResourcePack() { super(PackType.CLIENT_RESOURCES, 8); }
 
     @Override
     protected void buildResources(Map<ResourceLocation, String> cache)
