@@ -2,14 +2,12 @@ package xfacthd.buddingcrystals.common.dynpack;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
-import xfacthd.buddingcrystals.BuddingCrystals;
 
 import java.util.Map;
-import java.util.Set;
 
 public final class BuddingServerPack extends BuddingPackResources
 {
-    public BuddingServerPack() { super(PackType.SERVER_DATA, 9, Set.of("minecraft", BuddingCrystals.MOD_ID)); }
+    public BuddingServerPack() { super(PackType.SERVER_DATA, 9); }
 
     @Override
     protected void buildResources(Map<ResourceLocation, String> cache)

@@ -17,7 +17,7 @@ public final class BuddingResourcePack extends BuddingPackResources
             new LanguageInfo("en_us", "US", "English", false)
     ));
 
-    public BuddingResourcePack() { super(PackType.CLIENT_RESOURCES, 8, Set.of(BuddingCrystals.MOD_ID)); }
+    public BuddingResourcePack() { super(PackType.CLIENT_RESOURCES, 8); }
 
     @Override
     protected void buildResources(Map<ResourceLocation, String> cache)
