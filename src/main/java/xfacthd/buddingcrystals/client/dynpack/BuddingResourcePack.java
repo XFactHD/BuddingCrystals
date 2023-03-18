@@ -9,17 +9,16 @@ import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.dynpack.BuddingPackResources;
 
 import java.util.Map;
-import java.util.Set;
 
 public final class BuddingResourcePack extends BuddingPackResources
 {
-    private final LanguageMetadataSection langMetadata = new LanguageMetadataSection(Set.of(
-            new LanguageInfo("en_us", "US", "English", false)
+    private final LanguageMetadataSection langMetadata = new LanguageMetadataSection(Map.of(
+            "en_us", new LanguageInfo("US", "English", false)
     ));
 
     public BuddingResourcePack()
     {
-        super(PackType.CLIENT_RESOURCES, BuddingCrystals.RESOURCE_PACK_FORMAT, Set.of(BuddingCrystals.MOD_ID));
+        super(PackType.CLIENT_RESOURCES, BuddingCrystals.RESOURCE_PACK_FORMAT);
     }
 
     @Override
@@ -34,7 +33,7 @@ public final class BuddingResourcePack extends BuddingPackResources
     @SuppressWarnings("unchecked")
     public <T> T getMetadataSection(MetadataSectionSerializer<T> deserializer)
     {
-        if (deserializer == LanguageMetadataSection.SERIALIZER)
+        if (deserializer == LanguageMetadataSection.TYPE)
         {
             return (T) langMetadata;
         }

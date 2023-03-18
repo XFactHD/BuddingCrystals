@@ -8,14 +8,13 @@ import net.minecraft.server.packs.PackType;
 import xfacthd.buddingcrystals.BuddingCrystals;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public final class BuddingServerPack extends BuddingPackResources
 {
     public BuddingServerPack()
     {
-        super(PackType.SERVER_DATA, BuddingCrystals.SERVER_PACK_FORMAT, Set.of("minecraft", BuddingCrystals.MOD_ID));
+        super(PackType.SERVER_DATA, BuddingCrystals.SERVER_PACK_FORMAT);
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -43,8 +44,8 @@ public final class CrystalLoader
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public static final Codec<CrystalDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            BCCodecs.NON_EMPTY_STRING.optionalFieldOf("compat_mod", "minecraft").forGetter(CrystalDefinition::compatMod),
-            BCCodecs.NON_EMPTY_STRING.fieldOf("translation").forGetter(CrystalDefinition::translation),
+            ExtraCodecs.NON_EMPTY_STRING.optionalFieldOf("compat_mod", "minecraft").forGetter(CrystalDefinition::compatMod),
+            ExtraCodecs.NON_EMPTY_STRING.fieldOf("translation").forGetter(CrystalDefinition::translation),
             Codec.either(
                     Codec.pair(
                             ResourceLocation.CODEC.fieldOf("crystal_texture").codec(),

@@ -45,7 +45,7 @@ public final class CrystalTab extends CreativeModeTab
         event.registerCreativeModeTab(new ResourceLocation(BuddingCrystals.MOD_ID, "main"), builder ->
             builder.title(TAB_TITLE)
                     .withTabFactory(CrystalTab::new)
-                    .displayItems((flagSet, output, hasPerms) ->
+                    .displayItems((params, output) ->
                     {
                         for (CrystalSet set : BCContent.allSets())
                         {

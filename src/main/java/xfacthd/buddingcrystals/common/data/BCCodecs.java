@@ -7,11 +7,6 @@ import java.util.function.Function;
 
 public class BCCodecs
 {
-    public static final Codec<String> NON_EMPTY_STRING = Codec.STRING.flatXmap(
-            s -> s.isEmpty() ? DataResult.error("String value must not be empty") : DataResult.success(s),
-            s -> s.isEmpty() ? DataResult.error("String value must not be empty") : DataResult.success(s)
-    );
-
     public static Codec<Integer> intMin(int minExclusive)
     {
         final Function<Integer, DataResult<Integer>> checker = checkMin(minExclusive);
@@ -32,7 +27,7 @@ public class BCCodecs
             {
                 return DataResult.success(value);
             }
-            return DataResult.error("Value " + value + " is lower than or equal to " + minExclusive, value);
+            return DataResult.error(() -> "Value " + value + " is lower than or equal to " + minExclusive, value);
         };
     }
 }

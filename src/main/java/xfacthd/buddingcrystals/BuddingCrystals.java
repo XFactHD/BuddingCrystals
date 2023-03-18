@@ -25,8 +25,8 @@ import xfacthd.buddingcrystals.common.util.*;
 public final class BuddingCrystals
 {
     public static final String MOD_ID = "buddingcrystals";
-    public static final int SERVER_PACK_FORMAT = 10;
-    public static final int RESOURCE_PACK_FORMAT = 12;
+    public static final int SERVER_PACK_FORMAT = 12;
+    public static final int RESOURCE_PACK_FORMAT = 13;
 
     public BuddingCrystals()
     {
