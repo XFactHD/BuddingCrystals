@@ -15,9 +15,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.fml.loading.FileUtils;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
@@ -65,7 +65,14 @@ public final class CrystalLoader
         LOGGER.info("Loading custom crystal definitions");
         Stopwatch stopwatch = Stopwatch.createStarted();
 
-        FileUtils.getOrCreateDirectory(CRYSTAL_PATH, "BuddingCrystals crystal definitions");
+        try
+        {
+            Files.createDirectories(CRYSTAL_PATH);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Failed to create crystal definitions directory", e);
+        }
 
         try (Stream<Path> paths = Files.list(CRYSTAL_PATH))
         {
@@ -209,7 +216,9 @@ public final class CrystalLoader
                 () -> new BuddingCrystalBlock(
                         budSet,
                         def.growthChance,
-                        BlockBehaviour.Properties.of(Material.AMETHYST)
+                        BlockBehaviour.Properties.of()
+                                .mapColor(MapColor.COLOR_PURPLE)
+                                .pushReaction(PushReaction.DESTROY)
                                 .randomTicks()
                                 .strength(1.5F)
                                 .sound(SoundType.AMETHYST)
@@ -299,7 +308,17 @@ public final class CrystalLoader
                 float normalDrop,
                 float maxDrop
         ) {
-            this(compatMod, translation, either(texture, Pair::getFirst), either(texture, Pair::getSecond), growthChance, dropName, ingredientName.orElse(dropName), normalDrop, maxDrop);
+            this(
+                    compatMod,
+                    translation,
+                    either(texture, Pair::getFirst),
+                    either(texture, Pair::getSecond),
+                    growthChance,
+                    dropName,
+                    ingredientName.orElse(dropName),
+                    normalDrop,
+                    maxDrop
+            );
         }
 
         public Either<Pair<ResourceLocation, ResourceLocation>, ResourceLocation> eitherTexture()
@@ -311,13 +330,16 @@ public final class CrystalLoader
             return Either.left(Pair.of(crystalTexture, buddingTexture));
         }
 
-        public Optional<ResourceLocation> recipeName() { return Optional.of(ingredientName); }
+        public Optional<ResourceLocation> recipeName()
+        {
+            return Optional.of(ingredientName);
+        }
 
         private static ResourceLocation either(
                 Either<Pair<ResourceLocation, ResourceLocation>, ResourceLocation> texture,
                 Function<Pair<ResourceLocation, ResourceLocation>, ResourceLocation> pairMapper
         ) {
-            return texture.mapLeft(pairMapper).left().orElse(texture.right().orElseThrow());
+            return texture.mapLeft(pairMapper).left().orElseGet(texture.right()::orElseThrow);
         }
 
         public static CrystalDefinition fromSet(CrystalSet set)
@@ -335,4 +357,8 @@ public final class CrystalLoader
             );
         }
     }
+
+
+
+    private CrystalLoader() { }
 }

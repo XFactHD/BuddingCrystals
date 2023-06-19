@@ -6,7 +6,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.*;
 import xfacthd.buddingcrystals.BuddingCrystals;
@@ -310,7 +311,9 @@ public final class CrystalSet
                     () -> new BuddingCrystalBlock(
                             budSet,
                             growthChance,
-                            BlockBehaviour.Properties.of(Material.AMETHYST)
+                            BlockBehaviour.Properties.of()
+                                    .mapColor(MapColor.COLOR_PURPLE)
+                                    .pushReaction(PushReaction.DESTROY)
                                     .randomTicks()
                                     .strength(1.5F)
                                     .sound(SoundType.AMETHYST)
@@ -349,18 +352,33 @@ public final class CrystalSet
 
 
 
-        static AmethystClusterBlock smallBud() { return cluster(SoundType.SMALL_AMETHYST_BUD, 1, 3, 4); }
+        static AmethystClusterBlock smallBud()
+        {
+            return cluster(SoundType.SMALL_AMETHYST_BUD, 1, 3, 4);
+        }
 
-        static AmethystClusterBlock mediumBud() { return cluster(SoundType.SMALL_AMETHYST_BUD, 2, 4, 3); }
+        static AmethystClusterBlock mediumBud()
+        {
+            return cluster(SoundType.SMALL_AMETHYST_BUD, 2, 4, 3);
+        }
 
-        static AmethystClusterBlock largeBud() { return cluster(SoundType.SMALL_AMETHYST_BUD, 4, 5, 3); }
+        static AmethystClusterBlock largeBud()
+        {
+            return cluster(SoundType.SMALL_AMETHYST_BUD, 4, 5, 3);
+        }
 
-        static AmethystClusterBlock cluster() { return cluster(SoundType.AMETHYST_CLUSTER, 5, 7, 3); }
+        static AmethystClusterBlock cluster()
+        {
+            return cluster(SoundType.AMETHYST_CLUSTER, 5, 7, 3);
+        }
 
         static AmethystClusterBlock cluster(SoundType sound, int light, int height, int widthShrink)
         {
             BlockBehaviour.Properties props = BlockBehaviour.Properties
-                    .of(Material.AMETHYST)
+                    .of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .forceSolidOn()
+                    .pushReaction(PushReaction.DESTROY)
                     .noOcclusion()
                     .randomTicks()
                     .sound(sound)

@@ -31,6 +31,7 @@ public final class BuddingCrystals
     public BuddingCrystals()
     {
         BCContent.register(FMLJavaModLoadingContext.get().getModEventBus());
+        CrystalTab.registerCreativeTab();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
     }
 
@@ -44,7 +45,10 @@ public final class BuddingCrystals
     }
 
     @SubscribeEvent
-    public static void onCommonSetup(final FMLCommonSetupEvent event) { BCContent.loadedSets().forEach(CrystalSet::validate); }
+    public static void onCommonSetup(final FMLCommonSetupEvent event)
+    {
+        BCContent.loadedSets().forEach(CrystalSet::validate);
+    }
 
     @SubscribeEvent
     public static void onAddServerPack(final AddPackFindersEvent event)

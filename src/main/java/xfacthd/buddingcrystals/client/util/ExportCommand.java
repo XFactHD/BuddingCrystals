@@ -80,14 +80,16 @@ public final class ExportCommand
             }
         }
 
+        Component msg;
         if (overwrite)
         {
-            ctx.getSource().sendSuccess(Component.translatable(MSG_CRYSTALS_OVERWRITTEN, count, total, overwritten), true);
+            msg = Component.translatable(MSG_CRYSTALS_OVERWRITTEN, count, total, overwritten);
         }
         else
         {
-            ctx.getSource().sendSuccess(Component.translatable(MSG_CRYSTALS_EXPORTED, count, total, total - count), true);
+            msg = Component.translatable(MSG_CRYSTALS_EXPORTED, count, total, total - count);
         }
+        ctx.getSource().sendSuccess(() -> msg, true);
         return count;
     }
 
@@ -109,11 +111,11 @@ public final class ExportCommand
         }
         else if (result == Result.EXPORTED)
         {
-            ctx.getSource().sendSuccess(Component.translatable(MSG_CRYSTAL_EXPORTED, crystal), true);
+            ctx.getSource().sendSuccess(() -> Component.translatable(MSG_CRYSTAL_EXPORTED, crystal), true);
         }
         else
         {
-            ctx.getSource().sendSuccess(Component.translatable(MSG_CRYSTAL_OVERWRITTEN, crystal), true);
+            ctx.getSource().sendSuccess(() -> Component.translatable(MSG_CRYSTAL_OVERWRITTEN, crystal), true);
         }
         return 1;
     }
@@ -153,4 +155,8 @@ public final class ExportCommand
         EXPORTED,
         OVERWRITTEN
     }
+
+
+
+    private ExportCommand() { }
 }

@@ -45,13 +45,17 @@ final class DynamicBlockLoot extends BlockLootSubProvider
         {
             if (!built.containsKey(loc))
             {
-                built.put(loc, builder.setParamSet(LootContextParamSets.BLOCK).build());
+                LootTable table = builder
+                        .setRandomSequence(loc)
+                        .setParamSet(LootContextParamSets.BLOCK)
+                        .build();
+                built.put(loc, table);
             }
         });
 
         built.forEach((loc, table) -> cache.put(
                 new ResourceLocation(loc.getNamespace(), "loot_tables/" + loc.getPath() + ".json"),
-                LootTables.serialize(table).toString()
+                LootDataType.TABLE.parser().toJsonTree(table).toString()
         ));
     }
 

@@ -1,37 +1,35 @@
 modLoader="javafml"
-loaderVersion="[45,)"
+loaderVersion="${loader_version_range}"
 issueTrackerURL="https://www.github.com/xfacthd/buddingcrystals"
 license="LGPL v2.1"
 
 [[mods]]
     modId="buddingcrystals"
-    version="${file.jarVersion}"
+    version="${mod_version}"
     displayName="BuddingCrystals"
-    #updateJSONURL="https://change.me.example.invalid/updates.json"
-    #displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/buddingcrystals"
     logoFile="logo.png"
-    credits="Thanks for this example mod goes to Java"
-    authors="Love, Cheese and small house plants"
+    authors="XFactHD"
     description='''
     '''
 
 [[dependencies.buddingcrystals]]
     modId="forge"
     mandatory=true
-    versionRange="[45.0.9,)"
+    versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.buddingcrystals]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.4,1.20)"
+    versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.buddingcrystals]]
     modId="dynamic_asset_generator"
     mandatory=true
-    versionRange="[3.0.3,)"
+    versionRange="[4.0.1,)"
     ordering="AFTER"
     side="CLIENT"
