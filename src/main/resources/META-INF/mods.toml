@@ -6,7 +6,7 @@ license="LGPL v2.1"
 [[mods]]
     modId="buddingcrystals"
     version="${file.jarVersion}"
-    displayName="BuddingCrystals"
+    displayName="BuddingCrystals-Unbreakable"
     #updateJSONURL="https://change.me.example.invalid/updates.json"
     #displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
     logoFile="logo.png"

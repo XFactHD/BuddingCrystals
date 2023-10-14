@@ -207,6 +207,8 @@ public final class CrystalLoader
 
         RegistryObject<Item> drop = RegistryObject.create(def.dropName, ForgeRegistries.ITEMS);
         RegistryObject<Item> ingredient = drop;
+        boolean isUnbreakable = def.isUnbreakable;
+
         if (!def.dropName.equals(def.ingredientName))
         {
             ingredient = RegistryObject.create(def.ingredientName, ForgeRegistries.ITEMS);
@@ -225,7 +227,11 @@ public final class CrystalLoader
                         def.growthChance,
                         BlockBehaviour.Properties.of(Material.AMETHYST)
                                 .randomTicks()
-                                .strength(1.5F)
+                                .strength(-1, 3600000)
+                                .strength(
+                                        isUnbreakable ? -1 : 1.5F,
+                                        isUnbreakable ? 3600000 : 1.5F
+                                )
                                 .sound(SoundType.AMETHYST)
                                 .requiresCorrectToolForDrops()
                 ),
@@ -277,8 +283,9 @@ public final class CrystalLoader
         ResourceLocation recipeName = getResLoc(json, "recipe_item", dropName.toString());
         float normalDrop = getFloat(json, "normal_drop_chance", f -> f > 0F, "Normal drop count must be higher than 0");
         float maxDrop = getFloat(json, "max_drop_chance", f -> f > 0F, "Max drop count must be higher than 0");
+        boolean inUnbreakable = getBoolean(json, "is_unbreakable", f -> true, "Should be a boolean value.");
 
-        return new CrystalDefinition(compatMod, translation, crystalTexture, buddingTexture, growthChance, recipeName, dropName, normalDrop, maxDrop);
+        return new CrystalDefinition(compatMod, translation, crystalTexture, buddingTexture, growthChance, recipeName, dropName, normalDrop, maxDrop, inUnbreakable);
     }
 
     private static ResourceLocation getResLoc(JsonObject json, String key, String _default)
@@ -329,6 +336,12 @@ public final class CrystalLoader
         return validate(value, validator, message);
     }
 
+    private static boolean getBoolean(JsonObject json, String key, Predicate<Boolean> validator, String message)
+    {
+        boolean value = GsonHelper.getAsBoolean(json, key);
+        return validate(value, validator, message);
+    }
+
     private static <T> T validate(T value, Predicate<T> validator, String message)
     {
         if (!validator.test(value))
@@ -376,6 +389,7 @@ public final class CrystalLoader
             ResourceLocation ingredientName,
             ResourceLocation dropName,
             float normalDrop,
-            float maxDrop
+            float maxDrop,
+            boolean isUnbreakable
     ) { }
 }
