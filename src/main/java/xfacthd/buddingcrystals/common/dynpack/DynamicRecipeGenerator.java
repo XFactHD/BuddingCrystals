@@ -1,29 +1,31 @@
 package xfacthd.buddingcrystals.common.dynpack;
 
 import com.google.gson.JsonObject;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.common.conditions.ICondition;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.datagen.providers.BuddingRecipeProvider;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 final class DynamicRecipeGenerator extends RecipeProvider
 {
     private final Map<ResourceLocation, String> cache;
 
-    public DynamicRecipeGenerator(Map<ResourceLocation, String> cache)
+    public DynamicRecipeGenerator(Map<ResourceLocation, String> cache, CompletableFuture<HolderLookup.Provider> holderProvider)
     {
-        super(DummyPackOutput.INSTANCE);
+        super(DummyPackOutput.INSTANCE, holderProvider);
         this.cache = cache;
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> consumer)
+    protected void buildRecipes(RecipeOutput consumer)
     {
         BCContent.loadedSets().forEach(set ->
                 BuddingRecipeProvider.addBuddingCrystalRecipe(set, false, consumer)
@@ -35,24 +37,42 @@ final class DynamicRecipeGenerator extends RecipeProvider
     {
         Set<ResourceLocation> built = new HashSet<>();
 
-        buildRecipes(recipe ->
+        lookupProvider.thenAccept(provider -> buildRecipes(new RecipeOutput()
         {
-            if (!built.add(recipe.getId()))
+            @Override
+            @SuppressWarnings("removal")
+            public Advancement.Builder advancement()
             {
-                throw new IllegalStateException("Duplicate recipe " + recipe.getId());
+                return Advancement.Builder.recipeAdvancement().parent(RecipeBuilder.ROOT_RECIPE_ADVANCEMENT);
             }
 
-            ResourceLocation recipePath = BuddingPackResources.bcRl("recipes/" + recipe.getId().getPath() + ".json");
-            this.cache.put(recipePath, recipe.serializeRecipe().toString());
-
-            JsonObject advancement = recipe.serializeAdvancement();
-            if (advancement != null)
+            @Override
+            public void accept(FinishedRecipe recipe, ICondition... conditions)
             {
-                //noinspection ConstantConditions
-                ResourceLocation advancementPath = BuddingPackResources.bcRl("advancements/" + recipe.getAdvancementId().getPath() + ".json");
-                this.cache.put(advancementPath, advancement.toString());
+                if (!built.add(recipe.id()))
+                {
+                    throw new IllegalStateException("Duplicate recipe " + recipe.id());
+                }
+
+                JsonObject serializedRecipe = recipe.serializeRecipe();
+                ICondition.writeConditions(provider, serializedRecipe, conditions);
+                DynamicRecipeGenerator.this.cache.put(
+                        BuddingPackResources.bcRl("recipes/" + recipe.id().getPath() + ".json"),
+                        serializedRecipe.toString()
+                );
+
+                AdvancementHolder advancementholder = recipe.advancement();
+                if (advancementholder != null)
+                {
+                    JsonObject serializedAdvancement = advancementholder.value().serializeToJson();
+                    ICondition.writeConditions(provider, serializedAdvancement, conditions);
+                    DynamicRecipeGenerator.this.cache.put(
+                            BuddingPackResources.bcRl("advancements/" + advancementholder.id().getPath() + ".json"),
+                            serializedAdvancement.toString()
+                    );
+                }
             }
-        });
+        })).join();
         return CompletableFuture.completedFuture(null);
     }
 }

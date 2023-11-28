@@ -1,18 +1,18 @@
 package xfacthd.buddingcrystals.common.util;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 
 public final class BudSet
 {
-    final RegistryObject<Block> smallBud;
-    final RegistryObject<Block> mediumBud;
-    final RegistryObject<Block> largeBud;
-    final RegistryObject<Block> cluster;
+    final Holder<Block> smallBud;
+    final Holder<Block> mediumBud;
+    final Holder<Block> largeBud;
+    final Holder<Block> cluster;
 
-    BudSet(RegistryObject<Block> smallBud, RegistryObject<Block> mediumBud, RegistryObject<Block> largeBud, RegistryObject<Block> cluster)
+    BudSet(Holder<Block> smallBud, Holder<Block> mediumBud, Holder<Block> largeBud, Holder<Block> cluster)
     {
         this.smallBud = smallBud;
         this.mediumBud = mediumBud;
@@ -20,21 +20,33 @@ public final class BudSet
         this.cluster = cluster;
     }
 
-    public Block getSmallBud() { return smallBud.get(); }
+    public Block getSmallBud()
+    {
+        return smallBud.value();
+    }
 
-    public Block getMediumBud() { return mediumBud.get(); }
+    public Block getMediumBud()
+    {
+        return mediumBud.value();
+    }
 
-    public Block getLargeBud() { return largeBud.get(); }
+    public Block getLargeBud()
+    {
+        return largeBud.value();
+    }
 
-    public Block getCluster() { return cluster.get(); }
+    public Block getCluster()
+    {
+        return cluster.value();
+    }
 
     public List<Block> blocks()
     {
         return List.of(
-                smallBud.get(),
-                mediumBud.get(),
-                largeBud.get(),
-                cluster.get()
+                smallBud.value(),
+                mediumBud.value(),
+                largeBud.value(),
+                cluster.value()
         );
     }
 }

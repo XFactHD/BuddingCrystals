@@ -1,46 +1,41 @@
 {
-  "advancements": [
+  "neoforge:conditions": [
     {
-      "advancement": {
-        "parent": "minecraft:recipes/root",
-        "criteria": {
-          "has_emerald": {
-            "conditions": {
-              "items": [
-                {
-                  "items": [
-                    "minecraft:emerald"
-                  ]
-                }
-              ]
-            },
-            "trigger": "minecraft:inventory_changed"
-          },
-          "has_the_recipe": {
-            "conditions": {
-              "recipe": "buddingcrystals:budding_emerald"
-            },
-            "trigger": "minecraft:recipe_unlocked"
-          }
-        },
-        "requirements": [
-          [
-            "has_emerald",
-            "has_the_recipe"
-          ]
-        ],
-        "rewards": {
-          "recipes": [
-            "buddingcrystals:budding_emerald"
-          ]
-        }
-      },
-      "conditions": [
-        {
-          "type": "buddingcrystals:config",
-          "config": "enable_crafting_budding_emerald"
-        }
-      ]
+      "type": "buddingcrystals:config",
+      "config": "enable_crafting_budding_emerald"
     }
-  ]
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_emerald": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:emerald"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "buddingcrystals:budding_emerald"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_emerald"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "buddingcrystals:budding_emerald"
+    ]
+  },
+  "sends_telemetry_event": false
 }

@@ -1,5 +1,7 @@
 package xfacthd.buddingcrystals.common.dynpack;
 
+import com.mojang.serialization.JsonOps;
+import net.minecraft.Util;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -14,7 +16,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.data.OptionalLootItem;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
@@ -38,7 +40,7 @@ final class DynamicBlockLoot extends BlockLootSubProvider
     {
         generate();
 
-        Map<ResourceLocation, LootTable.Builder> tables = ObfuscationReflectionHelper.getPrivateValue(BlockLootSubProvider.class, this, "f_244441_");
+        Map<ResourceLocation, LootTable.Builder> tables = ObfuscationReflectionHelper.getPrivateValue(BlockLootSubProvider.class, this, "map");
         Map<ResourceLocation, LootTable> built = new HashMap<>();
 
         Objects.requireNonNull(tables).forEach((loc, builder) ->
@@ -55,7 +57,7 @@ final class DynamicBlockLoot extends BlockLootSubProvider
 
         built.forEach((loc, table) -> cache.put(
                 new ResourceLocation(loc.getNamespace(), "loot_tables/" + loc.getPath() + ".json"),
-                LootDataType.TABLE.parser().toJsonTree(table).toString()
+                Util.getOrThrow(LootTable.CODEC.encodeStart(JsonOps.INSTANCE, table), IllegalStateException::new).toString()
         ));
     }
 

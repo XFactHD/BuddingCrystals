@@ -5,7 +5,7 @@ import com.mojang.serialization.DataResult;
 
 import java.util.function.Function;
 
-public class BCCodecs
+public final class BCCodecs
 {
     public static Codec<Integer> intMin(int minExclusive)
     {
@@ -30,4 +30,8 @@ public class BCCodecs
             return DataResult.error(() -> "Value " + value + " is lower than or equal to " + minExclusive, value);
         };
     }
+
+
+
+    private BCCodecs() { }
 }

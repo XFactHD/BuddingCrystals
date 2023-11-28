@@ -1,33 +1,27 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "buddingcrystals:config",
-          "config": "enable_crafting_budding_amethyst"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "category": "misc",
-        "key": {
-          "C": {
-            "item": "buddingcrystals:crystal_catalyst"
-          },
-          "M": {
-            "item": "minecraft:amethyst_shard"
-          }
-        },
-        "pattern": [
-          "MMM",
-          "MCM",
-          "MMM"
-        ],
-        "result": {
-          "item": "minecraft:budding_amethyst"
-        }
-      }
+      "type": "buddingcrystals:config",
+      "config": "enable_crafting_budding_amethyst"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "buddingcrystals:crystal_catalyst"
+    },
+    "M": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "item": "minecraft:budding_amethyst"
+  },
+  "show_notification": true
 }

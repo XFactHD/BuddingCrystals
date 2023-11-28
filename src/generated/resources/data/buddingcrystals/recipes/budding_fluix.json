@@ -1,36 +1,31 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "forge:mod_loaded",
-          "modid": "ae2"
-        },
-        {
-          "type": "buddingcrystals:config",
-          "config": "enable_crafting_budding_fluix"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "key": {
-          "C": {
-            "item": "buddingcrystals:crystal_catalyst"
-          },
-          "M": {
-            "item": "ae2:fluix_crystal"
-          }
-        },
-        "pattern": [
-          "MMM",
-          "MCM",
-          "MMM"
-        ],
-        "result": {
-          "item": "buddingcrystals:budding_fluix"
-        }
-      }
+      "type": "neoforge:mod_loaded",
+      "modid": "ae2"
+    },
+    {
+      "type": "buddingcrystals:config",
+      "config": "enable_crafting_budding_fluix"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "buddingcrystals:crystal_catalyst"
+    },
+    "M": {
+      "item": "ae2:fluix_crystal"
+    }
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "item": "buddingcrystals:budding_fluix"
+  },
+  "show_notification": true
 }

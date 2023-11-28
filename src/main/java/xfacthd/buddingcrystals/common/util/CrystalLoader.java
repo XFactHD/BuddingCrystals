@@ -7,6 +7,9 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.util.ExtraCodecs;
@@ -17,9 +20,8 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.slf4j.Logger;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.block.BuddingCrystalBlock;
@@ -43,7 +45,7 @@ public final class CrystalLoader
     static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    public static final Codec<CrystalDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    private static final Codec<CrystalDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ExtraCodecs.NON_EMPTY_STRING.optionalFieldOf("compat_mod", "minecraft").forGetter(CrystalDefinition::compatMod),
             ExtraCodecs.NON_EMPTY_STRING.fieldOf("translation").forGetter(CrystalDefinition::translation),
             Codec.either(
@@ -198,20 +200,20 @@ public final class CrystalLoader
     {
         CrystalDefinition def = parseJson(json);
 
-        RegistryObject<Item> drop = RegistryObject.create(def.dropName, ForgeRegistries.ITEMS);
-        RegistryObject<Item> ingredient = drop;
+        Holder<Item> drop = DeferredHolder.create(Registries.ITEM, def.dropName);
+        Holder<Item> ingredient = drop;
         if (!def.dropName.equals(def.ingredientName))
         {
-            ingredient = RegistryObject.create(def.ingredientName, ForgeRegistries.ITEMS);
+            ingredient = DeferredHolder.create(Registries.ITEM, def.ingredientName);
         }
 
-        RegistryObject<Block> smallBud = CrystalSet.Builder.register("small_" + name + "_bud", CrystalSet.Builder::smallBud, def.compatMod);
-        RegistryObject<Block> mediumBud = CrystalSet.Builder.register("medium_" + name + "_bud", CrystalSet.Builder::mediumBud, def.compatMod);
-        RegistryObject<Block> largeBud = CrystalSet.Builder.register("large_" + name + "_bud", CrystalSet.Builder::largeBud, def.compatMod);
-        RegistryObject<Block> cluster = CrystalSet.Builder.register(name + "_cluster", CrystalSet.Builder::cluster, def.compatMod);
+        Holder<Block> smallBud = CrystalSet.Builder.register("small_" + name + "_bud", CrystalSet.Builder::smallBud, def.compatMod);
+        Holder<Block> mediumBud = CrystalSet.Builder.register("medium_" + name + "_bud", CrystalSet.Builder::mediumBud, def.compatMod);
+        Holder<Block> largeBud = CrystalSet.Builder.register("large_" + name + "_bud", CrystalSet.Builder::largeBud, def.compatMod);
+        Holder<Block> cluster = CrystalSet.Builder.register(name + "_cluster", CrystalSet.Builder::cluster, def.compatMod);
         BudSet budSet = new BudSet(smallBud, mediumBud, largeBud, cluster);
 
-        RegistryObject<Block> buddingBlock = CrystalSet.Builder.register(
+        Holder<Block> buddingBlock = CrystalSet.Builder.register(
                 "budding_" + name,
                 () -> new BuddingCrystalBlock(
                         budSet,
@@ -350,8 +352,8 @@ public final class CrystalLoader
                     set.getCrystalSourceTexture(),
                     set.getBuddingSourceTexture(),
                     set.getGrowthChance(),
-                    ForgeRegistries.ITEMS.getKey(set.getIngredient()),
-                    ForgeRegistries.ITEMS.getKey(set.getDroppedItem()),
+                    BuiltInRegistries.ITEM.getKey(set.getIngredient()),
+                    BuiltInRegistries.ITEM.getKey(set.getDroppedItem()),
                     set.getNormalDrops(),
                     set.getMaxDrops()
             );

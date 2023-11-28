@@ -1,46 +1,41 @@
 {
-  "advancements": [
+  "neoforge:conditions": [
     {
-      "advancement": {
-        "parent": "minecraft:recipes/root",
-        "criteria": {
-          "has_amethyst": {
-            "conditions": {
-              "items": [
-                {
-                  "items": [
-                    "minecraft:amethyst_shard"
-                  ]
-                }
-              ]
-            },
-            "trigger": "minecraft:inventory_changed"
-          },
-          "has_the_recipe": {
-            "conditions": {
-              "recipe": "minecraft:budding_amethyst"
-            },
-            "trigger": "minecraft:recipe_unlocked"
-          }
-        },
-        "requirements": [
-          [
-            "has_amethyst",
-            "has_the_recipe"
-          ]
-        ],
-        "rewards": {
-          "recipes": [
-            "minecraft:budding_amethyst"
-          ]
-        }
-      },
-      "conditions": [
-        {
-          "type": "buddingcrystals:config",
-          "config": "enable_crafting_budding_amethyst"
-        }
-      ]
+      "type": "buddingcrystals:config",
+      "config": "enable_crafting_budding_amethyst"
     }
-  ]
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_amethyst": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:amethyst_shard"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:budding_amethyst"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_amethyst"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:budding_amethyst"
+    ]
+  },
+  "sends_telemetry_event": false
 }

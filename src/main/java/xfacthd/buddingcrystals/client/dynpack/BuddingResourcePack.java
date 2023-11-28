@@ -1,11 +1,11 @@
 package xfacthd.buddingcrystals.client.dynpack;
 
+import net.minecraft.SharedConstants;
 import net.minecraft.client.resources.language.LanguageInfo;
 import net.minecraft.client.resources.metadata.language.LanguageMetadataSection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
-import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.dynpack.BuddingPackResources;
 
 import java.util.Map;
@@ -16,9 +16,10 @@ public final class BuddingResourcePack extends BuddingPackResources
             "en_us", new LanguageInfo("US", "English", false)
     ));
 
+    @SuppressWarnings("deprecation")
     public BuddingResourcePack()
     {
-        super(PackType.CLIENT_RESOURCES, BuddingCrystals.RESOURCE_PACK_FORMAT);
+        super(PackType.CLIENT_RESOURCES, SharedConstants.RESOURCE_PACK_FORMAT);
     }
 
     @Override
@@ -41,5 +42,8 @@ public final class BuddingResourcePack extends BuddingPackResources
     }
 
     @Override
-    public String packId() { return "BuddingCrystals JSON Crystal Data"; }
+    public String packId()
+    {
+        return "BuddingCrystals JSON Crystal Data";
+    }
 }

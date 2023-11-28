@@ -3,21 +3,21 @@ package xfacthd.buddingcrystals.client;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterClientCommandsEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AddPackFindersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraft.server.packs.repository.*;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.client.util.BuddingPalettePlanner;
 import xfacthd.buddingcrystals.client.dynpack.BuddingResourcePack;
 import xfacthd.buddingcrystals.client.util.ExportCommand;
 import xfacthd.buddingcrystals.common.BCContent;
+import xfacthd.buddingcrystals.common.util.SimplePackInfo;
+import xfacthd.buddingcrystals.common.util.SimpleResourcesSupplier;
 
 @Mod.EventBusSubscriber(modid = BuddingCrystals.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class BCClient
@@ -25,7 +25,7 @@ public final class BCClient
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
-        MinecraftForge.EVENT_BUS.addListener(BCClient::onRegisterClientCommands);
+        NeoForge.EVENT_BUS.addListener(BCClient::onRegisterClientCommands);
     }
 
     @SubscribeEvent
@@ -35,22 +35,14 @@ public final class BCClient
         {
             event.addRepositorySource((packConsumer) ->
             {
-                @SuppressWarnings("resource")
                 PackResources pack = new BuddingResourcePack();
 
                 packConsumer.accept(Pack.create(
                         BuddingCrystals.MOD_ID + "_json_crystals",
                         Component.literal("BuddingCrystals - JSON Crystals"),
                         true,
-                        s -> pack,
-                        new Pack.Info(
-                                Component.literal(pack.packId()),
-                                BuddingCrystals.SERVER_PACK_FORMAT,
-                                BuddingCrystals.RESOURCE_PACK_FORMAT,
-                                FeatureFlagSet.of(),
-                                true
-                        ),
-                        PackType.CLIENT_RESOURCES,
+                        new SimpleResourcesSupplier(pack),
+                        SimplePackInfo.of(pack),
                         Pack.Position.BOTTOM,
                         true,
                         PackSource.DEFAULT

@@ -1,7 +1,7 @@
 package xfacthd.buddingcrystals.common.datagen.providers;
 
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.client.util.ExportCommand;
 import xfacthd.buddingcrystals.common.BCContent;
@@ -10,7 +10,10 @@ import xfacthd.buddingcrystals.common.util.CrystalTab;
 
 public final class BuddingLanguageProvider extends LanguageProvider
 {
-    public BuddingLanguageProvider(PackOutput output) { super(output, BuddingCrystals.MOD_ID, "en_us"); }
+    public BuddingLanguageProvider(PackOutput output)
+    {
+        super(output, BuddingCrystals.MOD_ID, "en_us");
+    }
 
     @Override
     protected void addTranslations()
@@ -24,7 +27,7 @@ public final class BuddingLanguageProvider extends LanguageProvider
             add(set.getConfigTranslation(), "Allow crafting of budding " + set.getTranslation() + " block");
         });
 
-        add(BCContent.CRYSTAL_CATALYST.get(), "Crystal Catalyst");
+        add(BCContent.CRYSTAL_CATALYST.value(), "Crystal Catalyst");
 
         add(ExportCommand.MSG_NO_SUCH_CRYSTAL     , "No crystal named '%s' exists");
         add(ExportCommand.MSG_EXPORT_ERROR        , "Encountered an error while exporting crystal definition named '%s': %s");

@@ -1,12 +1,12 @@
 package xfacthd.buddingcrystals.common.datagen.providers;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.generators.*;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.*;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
@@ -19,7 +19,10 @@ public final class BuddingStateProvider extends BlockStateProvider
     }
 
     @Override
-    protected void registerStatesAndModels() { BCContent.builtinSets().forEach(set -> makeModels(this, set)); }
+    protected void registerStatesAndModels()
+    {
+        BCContent.builtinSets().forEach(set -> makeModels(this, set));
+    }
 
     public static void makeModels(BlockStateProvider provider, CrystalSet set)
     {
@@ -33,7 +36,7 @@ public final class BuddingStateProvider extends BlockStateProvider
     private static void cluster(BlockStateProvider provider, Block block, String itemParent, ResourceLocation texture)
     {
         //noinspection ConstantConditions
-        String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
+        String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
 
         ModelFile model = provider.models()
                 .withExistingParent(name, provider.modLoc("block/cross"))
@@ -93,7 +96,7 @@ public final class BuddingStateProvider extends BlockStateProvider
     private static void buddingBlock(BlockStateProvider provider, Block block, String name)
     {
         //noinspection ConstantConditions
-        String path = ForgeRegistries.BLOCKS.getKey(block).getPath();
+        String path = BuiltInRegistries.BLOCK.getKey(block).getPath();
         provider.simpleBlock(block, provider.models()
                 .withExistingParent(path, provider.modLoc("block/cube_all"))
                 .texture("all", rl("block/budding/" + name))
@@ -103,5 +106,8 @@ public final class BuddingStateProvider extends BlockStateProvider
         provider.itemModels().withExistingParent(path, provider.modLoc("block/" + path));
     }
 
-    private static ResourceLocation rl(String path) { return new ResourceLocation(BuddingCrystals.MOD_ID, path); }
+    private static ResourceLocation rl(String path)
+    {
+        return new ResourceLocation(BuddingCrystals.MOD_ID, path);
+    }
 }

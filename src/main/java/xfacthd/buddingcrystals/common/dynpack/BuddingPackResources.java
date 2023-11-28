@@ -57,7 +57,10 @@ public abstract class BuddingPackResources implements PackResources
     }
 
     @Override
-    public IoSupplier<InputStream> getRootResource(String... fileName) { return null; }
+    public IoSupplier<InputStream> getRootResource(String... fileName)
+    {
+        return null;
+    }
 
     @Override
     public final IoSupplier<InputStream> getResource(PackType type, ResourceLocation location)
@@ -88,7 +91,10 @@ public abstract class BuddingPackResources implements PackResources
     }
 
     @Override
-    public final Set<String> getNamespaces(PackType type) { return type == this.type ? namespaces : Set.of(); }
+    public final Set<String> getNamespaces(PackType type)
+    {
+        return type == this.type ? namespaces : Set.of();
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -105,11 +111,22 @@ public abstract class BuddingPackResources implements PackResources
     public void close() { }
 
     @Override
-    public final boolean isHidden() { return true; }
+    public final boolean isHidden()
+    {
+        return true;
+    }
 
     protected abstract void buildResources(Map<ResourceLocation, String> cache);
 
-    protected static ResourceLocation mcRl(String path) { return new ResourceLocation("minecraft", path); }
 
-    protected static ResourceLocation bcRl(String path) { return new ResourceLocation(BuddingCrystals.MOD_ID, path); }
+
+    protected static ResourceLocation mcRl(String path)
+    {
+        return new ResourceLocation("minecraft", path);
+    }
+
+    protected static ResourceLocation bcRl(String path)
+    {
+        return new ResourceLocation(BuddingCrystals.MOD_ID, path);
+    }
 }

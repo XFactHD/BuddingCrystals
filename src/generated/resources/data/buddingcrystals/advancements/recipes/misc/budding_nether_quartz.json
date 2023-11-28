@@ -1,46 +1,41 @@
 {
-  "advancements": [
+  "neoforge:conditions": [
     {
-      "advancement": {
-        "parent": "minecraft:recipes/root",
-        "criteria": {
-          "has_nether_quartz": {
-            "conditions": {
-              "items": [
-                {
-                  "items": [
-                    "minecraft:quartz"
-                  ]
-                }
-              ]
-            },
-            "trigger": "minecraft:inventory_changed"
-          },
-          "has_the_recipe": {
-            "conditions": {
-              "recipe": "buddingcrystals:budding_nether_quartz"
-            },
-            "trigger": "minecraft:recipe_unlocked"
-          }
-        },
-        "requirements": [
-          [
-            "has_nether_quartz",
-            "has_the_recipe"
-          ]
-        ],
-        "rewards": {
-          "recipes": [
-            "buddingcrystals:budding_nether_quartz"
-          ]
-        }
-      },
-      "conditions": [
-        {
-          "type": "buddingcrystals:config",
-          "config": "enable_crafting_budding_nether_quartz"
-        }
-      ]
+      "type": "buddingcrystals:config",
+      "config": "enable_crafting_budding_nether_quartz"
     }
-  ]
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_nether_quartz": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:quartz"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "buddingcrystals:budding_nether_quartz"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_nether_quartz"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "buddingcrystals:budding_nether_quartz"
+    ]
+  },
+  "sends_telemetry_event": false
 }

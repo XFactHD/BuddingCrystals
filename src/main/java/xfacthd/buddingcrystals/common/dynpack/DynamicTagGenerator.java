@@ -8,11 +8,12 @@ import net.minecraft.data.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import org.slf4j.Logger;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -62,7 +63,7 @@ public final class DynamicTagGenerator extends BlockTagsProvider
             );
             String tagJson = GSON.toJson(TagFile.CODEC.encodeStart(
                     JsonOps.INSTANCE,
-                    new TagFile(tag.build(), false)
+                    new TagFile(tag.build(), false, List.of())
             ).getOrThrow(false, LOGGER::error));
 
             this.cache.put(path, tagJson);
@@ -72,5 +73,8 @@ public final class DynamicTagGenerator extends BlockTagsProvider
     }
 
     @Override
-    public String getName() { return "dynamic_tags"; }
+    public String getName()
+    {
+        return "dynamic_tags";
+    }
 }

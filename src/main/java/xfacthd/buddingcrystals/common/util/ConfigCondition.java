@@ -1,40 +1,31 @@
 package xfacthd.buddingcrystals.common.util;
 
-import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
-import xfacthd.buddingcrystals.BuddingCrystals;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.neoforged.neoforge.common.conditions.ICondition;
 
 public final class ConfigCondition implements ICondition
 {
-    private static final ResourceLocation NAME = new ResourceLocation(BuddingCrystals.MOD_ID, "config");
+    public static final Codec<ConfigCondition> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+            Codec.STRING.fieldOf("config").forGetter(cond -> cond.config)
+    ).apply(inst, ConfigCondition::new));
+
     private final String config;
 
-    public ConfigCondition(String config) { this.config = config; }
-
-    @Override
-    public ResourceLocation getID() { return NAME; }
-
-    @Override
-    public boolean test(IContext context) { return CommonConfig.isEnabled(config); }
-
-    public static class Serializer implements IConditionSerializer<ConfigCondition>
+    public ConfigCondition(String config)
     {
-        @Override
-        public void write(JsonObject json, ConfigCondition value)
-        {
-            json.addProperty("config", value.config);
-        }
+        this.config = config;
+    }
 
-        @Override
-        public ConfigCondition read(JsonObject json)
-        {
-            return new ConfigCondition(GsonHelper.getAsString(json, "config"));
-        }
+    @Override
+    public Codec<? extends ICondition> codec()
+    {
+        return CODEC;
+    }
 
-        @Override
-        public ResourceLocation getID() { return NAME; }
+    @Override
+    public boolean test(IContext context)
+    {
+        return CommonConfig.isEnabled(config);
     }
 }

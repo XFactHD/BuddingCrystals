@@ -1,29 +1,31 @@
 package xfacthd.buddingcrystals.common.datagen.providers;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.crafting.ConditionalRecipe;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.util.ConfigCondition;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public final class BuddingRecipeProvider extends RecipeProvider
 {
-    public BuddingRecipeProvider(PackOutput output) { super(output); }
+    public BuddingRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
+    {
+        super(output, lookupProvider);
+    }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> consumer)
+    protected void buildRecipes(RecipeOutput consumer)
     {
         addBuddingCrystalRecipe(BCContent.AMETHYST, true, consumer);
         BCContent.builtinSets().forEach(set -> addBuddingCrystalRecipe(set, true, consumer));
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BCContent.CRYSTAL_CATALYST.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BCContent.CRYSTAL_CATALYST.value())
                 .pattern("RBR")
                 .pattern("BAB")
                 .pattern("RBR")
@@ -34,20 +36,20 @@ public final class BuddingRecipeProvider extends RecipeProvider
                 .save(consumer);
     }
 
-    public static void addBuddingCrystalRecipe(CrystalSet set, boolean config, Consumer<FinishedRecipe> consumer)
+    public static void addBuddingCrystalRecipe(CrystalSet set, boolean config, RecipeOutput consumer)
     {
         RecipeBuilder builder =  ShapedRecipeBuilder.shaped(RecipeCategory.MISC, set.getBuddingBlock())
                 .pattern("MMM")
                 .pattern("MCM")
                 .pattern("MMM")
                 .define('M', set.getIngredient())
-                .define('C', BCContent.CRYSTAL_CATALYST.get())
+                .define('C', BCContent.CRYSTAL_CATALYST.value())
                 .unlockedBy("has_" + set.getName(), has(set.getIngredient()));
 
         wrapInConditions(set, builder, config, consumer);
     }
 
-    private static void wrapInConditions(CrystalSet set, RecipeBuilder builder, boolean config, Consumer<FinishedRecipe> consumer)
+    private static void wrapInConditions(CrystalSet set, RecipeBuilder builder, boolean config, RecipeOutput consumer)
     {
         boolean minecraft = set.getCompatMod().equals("minecraft");
         if (!config && minecraft)
@@ -56,24 +58,14 @@ public final class BuddingRecipeProvider extends RecipeProvider
             return;
         }
 
-        ConditionalRecipe.Builder conditionalBuilder = ConditionalRecipe.builder();
-
         if (!minecraft)
         {
-            ICondition modCondition = new ModLoadedCondition(set.getCompatMod());
-            conditionalBuilder.addCondition(modCondition);
+            consumer = consumer.withConditions(new ModLoadedCondition(set.getCompatMod()));
         }
         if (config)
         {
-            ICondition cfgCondition = new ConfigCondition(set.getConfigString());
-            conditionalBuilder.addCondition(cfgCondition);
+            consumer = consumer.withConditions(new ConfigCondition(set.getConfigString()));
         }
-
-        FinishedRecipe[] recipe = new FinishedRecipe[1];
-        builder.save(finishedRecipe -> recipe[0] = finishedRecipe);
-
-        conditionalBuilder.addRecipe(recipe[0])
-                .generateAdvancement(recipe[0].getAdvancementId())
-                .build(consumer, RecipeBuilder.getDefaultRecipeId(builder.getResult()));
+        builder.save(consumer);
     }
 }

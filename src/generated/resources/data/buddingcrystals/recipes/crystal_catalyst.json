@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "buddingcrystals:crystal_catalyst"
-  }
+  },
+  "show_notification": true
 }

@@ -1,33 +1,27 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "buddingcrystals:config",
-          "config": "enable_crafting_budding_redstone"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "category": "misc",
-        "key": {
-          "C": {
-            "item": "buddingcrystals:crystal_catalyst"
-          },
-          "M": {
-            "item": "minecraft:redstone"
-          }
-        },
-        "pattern": [
-          "MMM",
-          "MCM",
-          "MMM"
-        ],
-        "result": {
-          "item": "buddingcrystals:budding_redstone"
-        }
-      }
+      "type": "buddingcrystals:config",
+      "config": "enable_crafting_budding_redstone"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "buddingcrystals:crystal_catalyst"
+    },
+    "M": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "item": "buddingcrystals:budding_redstone"
+  },
+  "show_notification": true
 }

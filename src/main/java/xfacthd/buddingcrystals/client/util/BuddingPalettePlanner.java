@@ -12,7 +12,7 @@ import xfacthd.buddingcrystals.common.util.CrystalSet;
 public final class BuddingPalettePlanner
 {
     private static final AssetResourceCache ASSET_CACHE = ResourceCache.register(new AssetResourceCache(new ResourceLocation(BuddingCrystals.MOD_ID, "assets")));
-    private static final ResourceLocation FALLBACK_TEXTURE = rl("forge", "white");
+    private static final ResourceLocation FALLBACK_TEXTURE = rl("neoforge", "white");
     private static final ResourceLocation EMPTY_TEXTURE = rl("dynamic_asset_generator", "empty");
 
     public static void plan(CrystalSet set)

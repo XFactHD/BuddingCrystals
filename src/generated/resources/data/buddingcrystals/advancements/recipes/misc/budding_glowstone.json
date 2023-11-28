@@ -1,46 +1,41 @@
 {
-  "advancements": [
+  "neoforge:conditions": [
     {
-      "advancement": {
-        "parent": "minecraft:recipes/root",
-        "criteria": {
-          "has_glowstone": {
-            "conditions": {
-              "items": [
-                {
-                  "items": [
-                    "minecraft:glowstone_dust"
-                  ]
-                }
-              ]
-            },
-            "trigger": "minecraft:inventory_changed"
-          },
-          "has_the_recipe": {
-            "conditions": {
-              "recipe": "buddingcrystals:budding_glowstone"
-            },
-            "trigger": "minecraft:recipe_unlocked"
-          }
-        },
-        "requirements": [
-          [
-            "has_glowstone",
-            "has_the_recipe"
-          ]
-        ],
-        "rewards": {
-          "recipes": [
-            "buddingcrystals:budding_glowstone"
-          ]
-        }
-      },
-      "conditions": [
-        {
-          "type": "buddingcrystals:config",
-          "config": "enable_crafting_budding_glowstone"
-        }
-      ]
+      "type": "buddingcrystals:config",
+      "config": "enable_crafting_budding_glowstone"
     }
-  ]
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_glowstone": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:glowstone_dust"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "buddingcrystals:budding_glowstone"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_glowstone"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "buddingcrystals:budding_glowstone"
+    ]
+  },
+  "sends_telemetry_event": false
 }

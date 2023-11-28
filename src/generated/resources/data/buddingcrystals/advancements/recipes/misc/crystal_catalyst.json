@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "hasAmethyst",
-      "has_the_recipe"
+      "has_the_recipe",
+      "hasAmethyst"
     ]
   ],
   "rewards": {
     "recipes": [
       "buddingcrystals:crystal_catalyst"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

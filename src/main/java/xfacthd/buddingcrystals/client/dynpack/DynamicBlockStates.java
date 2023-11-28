@@ -1,13 +1,13 @@
 package xfacthd.buddingcrystals.client.dynpack;
 
 import com.google.common.base.Preconditions;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.generators.*;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.neoforge.client.model.generators.*;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.datagen.providers.BuddingStateProvider;
@@ -69,7 +69,7 @@ public final class DynamicBlockStates extends BlockStateProvider
 
         for (Map.Entry<Block, IGeneratedBlockState> entry : registeredBlocks.entrySet())
         {
-            ResourceLocation blockName = Preconditions.checkNotNull(ForgeRegistries.BLOCKS.getKey(entry.getKey()));
+            ResourceLocation blockName = Preconditions.checkNotNull(BuiltInRegistries.BLOCK.getKey(entry.getKey()));
             ResourceLocation stateLocation = new ResourceLocation(blockName.getNamespace(), "blockstates/" + blockName.getPath() + ".json");
             this.cache.put(stateLocation, entry.getValue().toJson().toString());
         }

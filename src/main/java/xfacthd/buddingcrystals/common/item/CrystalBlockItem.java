@@ -13,5 +13,8 @@ public final class CrystalBlockItem extends BlockItem
         this.compatMod = compatMod;
     }
 
-    public String getCompatMod() { return compatMod; }
+    public String getCompatMod()
+    {
+        return compatMod;
+    }
 }

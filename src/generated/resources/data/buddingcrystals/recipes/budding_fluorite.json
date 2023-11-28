@@ -1,36 +1,31 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "forge:mod_loaded",
-          "modid": "mekanism"
-        },
-        {
-          "type": "buddingcrystals:config",
-          "config": "enable_crafting_budding_fluorite"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "key": {
-          "C": {
-            "item": "buddingcrystals:crystal_catalyst"
-          },
-          "M": {
-            "item": "mekanism:fluorite_gem"
-          }
-        },
-        "pattern": [
-          "MMM",
-          "MCM",
-          "MMM"
-        ],
-        "result": {
-          "item": "buddingcrystals:budding_fluorite"
-        }
-      }
+      "type": "neoforge:mod_loaded",
+      "modid": "mekanism"
+    },
+    {
+      "type": "buddingcrystals:config",
+      "config": "enable_crafting_budding_fluix"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "buddingcrystals:crystal_catalyst"
+    },
+    "M": {
+      "item": "mekanism:fluorite_gem"
+    }
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "item": "buddingcrystals:budding_fluorite"
+  },
+  "show_notification": true
 }

@@ -1,5 +1,7 @@
 package xfacthd.buddingcrystals.common;
 
+import com.mojang.serialization.Codec;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -7,8 +9,10 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.*;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.data.OptionalLootItem;
 import xfacthd.buddingcrystals.common.util.*;
@@ -18,9 +22,10 @@ import java.util.*;
 @SuppressWarnings("unused")
 public final class BCContent //TODO: balance growth chance and drop counts
 {
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, BuddingCrystals.MOD_ID);
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BuddingCrystals.MOD_ID);
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(BuddingCrystals.MOD_ID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(BuddingCrystals.MOD_ID);
     private static final DeferredRegister<LootPoolEntryType> POOL_ENTRY_TYPES = DeferredRegister.create(Registries.LOOT_POOL_ENTRY_TYPE, BuddingCrystals.MOD_ID);
+    private static final DeferredRegister<Codec<? extends ICondition>> CONDITIONS = DeferredRegister.create(NeoForgeRegistries.CONDITION_SERIALIZERS, BuddingCrystals.MOD_ID);
 
     public static final Map<String, CrystalSet> ALL_SETS = new HashMap<>();
     public static final Map<String, CrystalSet> BUILTIN_SETS = new HashMap<>();
@@ -62,12 +67,6 @@ public final class BCContent //TODO: balance growth chance and drop counts
             .sourceTexture("item/prismarine_shard")
             .drop("minecraft:prismarine")
             .build();
-    public static final CrystalSet CERTUS_QUARTZ = CrystalSet.builder("certus_quartz")
-            .translation("Certus Quartz")
-            .sourceTexture("item/certus_quartz_crystal")
-            .drop("ae2:certus_quartz_crystal")
-            .compatMod("ae2")
-            .build();
     public static final CrystalSet FLUIX = CrystalSet.builder("fluix")
             .translation("Fluix")
             .crystalSourceTexture("item/fluix_dust")
@@ -89,36 +88,55 @@ public final class BCContent //TODO: balance growth chance and drop counts
             .compatMod("mekanism")
             .build();
 
-    public static final RegistryObject<Item> CRYSTAL_CATALYST = ITEMS.register(
+    public static final Holder<Item> CRYSTAL_CATALYST = ITEMS.register(
             "crystal_catalyst",
             () -> new Item(new Item.Properties())
     );
 
-    public static final RegistryObject<LootPoolEntryType> OPTIONAL_LOOT_ITEM = POOL_ENTRY_TYPES.register(
-            "optional_item",
-            () -> new LootPoolEntryType(new OptionalLootItem.Serializer())
+    public static final Holder<LootPoolEntryType> OPTIONAL_LOOT_ITEM = POOL_ENTRY_TYPES.register(
+            "optional_item", () -> new LootPoolEntryType(OptionalLootItem.CODEC)
     );
 
-    public static final TagKey<Block> BUDDING_BLOCKS_TAG = BlockTags.create(new ResourceLocation("forge", "budding_blocks"));
+    public static final Holder<Codec<? extends ICondition>> CONFIG_CONDITION = CONDITIONS.register(
+            "config", () -> ConfigCondition.CODEC
+    );
+
+    public static final TagKey<Block> BUDDING_BLOCKS_TAG = BlockTags.create(new ResourceLocation("neoforge", "budding_blocks"));
 
     public static void register(IEventBus bus)
     {
         BLOCKS.register(bus);
         ITEMS.register(bus);
         POOL_ENTRY_TYPES.register(bus);
+        CONDITIONS.register(bus);
 
         CrystalLoader.loadUserSets();
     }
 
-    public static Collection<CrystalSet> allSets() { return ALL_SETS.values(); }
+    public static Collection<CrystalSet> allSets()
+    {
+        return ALL_SETS.values();
+    }
 
-    public static Collection<CrystalSet> builtinSets() { return BUILTIN_SETS.values(); }
+    public static Collection<CrystalSet> builtinSets()
+    {
+        return BUILTIN_SETS.values();
+    }
 
-    public static Collection<CrystalSet> loadedSets() { return LOADED_SETS.values(); }
+    public static Collection<CrystalSet> loadedSets()
+    {
+        return LOADED_SETS.values();
+    }
 
-    public static Collection<String> builtinNames() { return BUILTIN_SETS.keySet(); }
+    public static Collection<String> builtinNames()
+    {
+        return BUILTIN_SETS.keySet();
+    }
 
-    public static boolean isBuiltin(String name) { return BUILTIN_SETS.containsKey(name); }
+    public static boolean isBuiltin(String name)
+    {
+        return BUILTIN_SETS.containsKey(name);
+    }
 
     public static Iterable<Block> allClusters()
     {

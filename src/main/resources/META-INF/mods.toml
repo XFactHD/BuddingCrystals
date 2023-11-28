@@ -14,9 +14,9 @@ license="LGPL v2.1"
     '''
 
 [[dependencies.buddingcrystals]]
-    modId="forge"
+    modId="neoforge"
     mandatory=true
-    versionRange="${forge_version_range}"
+    versionRange="${neo_version_range}"
     ordering="NONE"
     side="BOTH"
 
@@ -30,6 +30,6 @@ license="LGPL v2.1"
 [[dependencies.buddingcrystals]]
     modId="dynamic_asset_generator"
     mandatory=true
-    versionRange="[4.0.1,)"
+    versionRange="[5.0.0,)"
     ordering="AFTER"
     side="CLIENT"

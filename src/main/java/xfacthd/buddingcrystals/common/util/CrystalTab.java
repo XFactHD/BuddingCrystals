@@ -4,16 +4,14 @@ import com.google.common.base.Suppliers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = BuddingCrystals.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class CrystalTab extends CreativeModeTab
 {
     public static final Component TAB_TITLE = Component.translatable("itemGroup.buddingcrystals");
@@ -61,7 +59,7 @@ public final class CrystalTab extends CreativeModeTab
                             set.blocks().forEach(output::accept);
                         }
                     }
-                    output.accept(BCContent.CRYSTAL_CATALYST.get());
+                    output.accept(BCContent.CRYSTAL_CATALYST.value());
                 })
                 .build()
         );

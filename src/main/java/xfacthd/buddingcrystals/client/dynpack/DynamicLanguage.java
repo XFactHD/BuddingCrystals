@@ -41,5 +41,12 @@ public final class DynamicLanguage
         add(translations, set.getBuddingBlock(), "Budding " + name);
     }
 
-    private static void add(Map<String, String> translations, Block key, String value) { translations.put(key.getDescriptionId(), value); }
+    private static void add(Map<String, String> translations, Block key, String value)
+    {
+        translations.put(key.getDescriptionId(), value);
+    }
+
+
+
+    private DynamicLanguage() { }
 }
