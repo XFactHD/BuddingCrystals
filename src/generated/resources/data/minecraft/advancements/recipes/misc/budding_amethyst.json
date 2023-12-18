@@ -36,6 +36,5 @@
     "recipes": [
       "minecraft:budding_amethyst"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -36,6 +36,5 @@
     "recipes": [
       "buddingcrystals:budding_glowstone"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

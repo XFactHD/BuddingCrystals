@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.45'
+    id 'net.neoforged.gradle.userdev' version '7.0.70'
 }
 
 version = mod_version
@@ -68,7 +68,7 @@ dependencies {
     implementation("curse.maven:dag-577096:4900589")
 
     // Compat mods
-    runtimeOnly("curse.maven:ae2-223794:4907420")
+    //runtimeOnly("curse.maven:ae2-223794:4907420")
     //runtimeOnly("curse.maven:mekanism-268560:4385637")
 }
 

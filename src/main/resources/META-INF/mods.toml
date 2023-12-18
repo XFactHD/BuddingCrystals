@@ -15,21 +15,21 @@ license="LGPL v2.1"
 
 [[dependencies.buddingcrystals]]
     modId="neoforge"
-    mandatory=true
+    type="required"
     versionRange="${neo_version_range}"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.buddingcrystals]]
     modId="minecraft"
-    mandatory=true
+    type="required"
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.buddingcrystals]]
     modId="dynamic_asset_generator"
-    mandatory=true
+    type="required"
     versionRange="[5.0.0,)"
     ordering="AFTER"
     side="CLIENT"

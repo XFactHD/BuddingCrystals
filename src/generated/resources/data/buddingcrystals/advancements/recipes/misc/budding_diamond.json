@@ -36,6 +36,5 @@
     "recipes": [
       "buddingcrystals:budding_diamond"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

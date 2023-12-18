@@ -30,6 +30,5 @@
     "recipes": [
       "buddingcrystals:crystal_catalyst"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

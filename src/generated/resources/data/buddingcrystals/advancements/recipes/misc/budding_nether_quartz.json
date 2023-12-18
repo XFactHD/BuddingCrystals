@@ -36,6 +36,5 @@
     "recipes": [
       "buddingcrystals:budding_nether_quartz"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

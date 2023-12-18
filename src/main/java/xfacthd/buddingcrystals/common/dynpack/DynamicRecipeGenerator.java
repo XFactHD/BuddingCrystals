@@ -1,13 +1,18 @@
 package xfacthd.buddingcrystals.common.dynpack;
 
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.Util;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Recipe;
 import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.conditions.WithConditions;
+import net.neoforged.neoforge.common.util.NeoForgeExtraCodecs;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.datagen.providers.BuddingRecipeProvider;
 
@@ -47,27 +52,28 @@ final class DynamicRecipeGenerator extends RecipeProvider
             }
 
             @Override
-            public void accept(FinishedRecipe recipe, ICondition... conditions)
+            public void accept(ResourceLocation id, Recipe<?> recipe, AdvancementHolder advancement, ICondition... conditions)
             {
-                if (!built.add(recipe.id()))
+                if (!built.add(id))
                 {
-                    throw new IllegalStateException("Duplicate recipe " + recipe.id());
+                    throw new IllegalStateException("Duplicate recipe " + id);
                 }
 
-                JsonObject serializedRecipe = recipe.serializeRecipe();
-                ICondition.writeConditions(provider, serializedRecipe, conditions);
+                JsonElement serializedRecipe = Util.getOrThrow(NeoForgeExtraCodecs.CONDITIONAL_RECIPE_CODEC.encodeStart(
+                        JsonOps.INSTANCE, Optional.of(new WithConditions<>(recipe, conditions))
+                ), IllegalStateException::new);
                 DynamicRecipeGenerator.this.cache.put(
-                        BuddingPackResources.bcRl("recipes/" + recipe.id().getPath() + ".json"),
+                        BuddingPackResources.bcRl("recipes/" + id.getPath() + ".json"),
                         serializedRecipe.toString()
                 );
 
-                AdvancementHolder advancementholder = recipe.advancement();
-                if (advancementholder != null)
+                if (advancement != null)
                 {
-                    JsonObject serializedAdvancement = advancementholder.value().serializeToJson();
-                    ICondition.writeConditions(provider, serializedAdvancement, conditions);
+                    JsonElement serializedAdvancement = Util.getOrThrow(NeoForgeExtraCodecs.CONDITIONAL_ADVANCEMENT_CODEC.encodeStart(
+                            JsonOps.INSTANCE, Optional.of(new WithConditions<>(advancement.value(), conditions))
+                    ), IllegalStateException::new);
                     DynamicRecipeGenerator.this.cache.put(
-                            BuddingPackResources.bcRl("advancements/" + advancementholder.id().getPath() + ".json"),
+                            BuddingPackResources.bcRl("advancements/" + id.getPath() + ".json"),
                             serializedAdvancement.toString()
                     );
                 }

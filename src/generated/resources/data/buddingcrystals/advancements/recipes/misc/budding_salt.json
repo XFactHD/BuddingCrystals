@@ -40,6 +40,5 @@
     "recipes": [
       "buddingcrystals:budding_salt"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

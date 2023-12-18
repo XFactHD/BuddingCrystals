@@ -293,8 +293,8 @@ public final class CrystalLoader
             ResourceLocation crystalTexture,
             ResourceLocation buddingTexture,
             int growthChance,
-            ResourceLocation ingredientName,
             ResourceLocation dropName,
+            ResourceLocation ingredientName,
             float normalDrop,
             float maxDrop
     )
@@ -334,6 +334,10 @@ public final class CrystalLoader
 
         public Optional<ResourceLocation> recipeName()
         {
+            if (dropName.equals(ingredientName))
+            {
+                return Optional.empty();
+            }
             return Optional.of(ingredientName);
         }
 
@@ -352,8 +356,8 @@ public final class CrystalLoader
                     set.getCrystalSourceTexture(),
                     set.getBuddingSourceTexture(),
                     set.getGrowthChance(),
-                    BuiltInRegistries.ITEM.getKey(set.getIngredient()),
                     BuiltInRegistries.ITEM.getKey(set.getDroppedItem()),
+                    BuiltInRegistries.ITEM.getKey(set.getIngredient()),
                     set.getNormalDrops(),
                     set.getMaxDrops()
             );

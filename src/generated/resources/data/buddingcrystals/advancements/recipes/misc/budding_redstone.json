@@ -36,6 +36,5 @@
     "recipes": [
       "buddingcrystals:budding_redstone"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }
