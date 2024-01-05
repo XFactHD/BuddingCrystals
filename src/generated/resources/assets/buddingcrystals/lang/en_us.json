@@ -68,5 +68,8 @@
   "config.buddingcrystals.enable_crafting_budding_redstone": "Allow crafting of budding Redstone block",
   "config.buddingcrystals.enable_crafting_budding_salt": "Allow crafting of budding Salt block",
   "item.buddingcrystals.crystal_catalyst": "Crystal Catalyst",
-  "itemGroup.buddingcrystals": "BuddingCrystals"
+  "itemGroup.buddingcrystals": "BuddingCrystals",
+  "msg.config.buddingcrystals.additional_sets_client": "Client has additional crystal sets: %s",
+  "msg.config.buddingcrystals.additional_sets_server": "Server has additional crystal sets: %s",
+  "msg.config.buddingcrystals.check_files_match": "Make sure your server and client have the same files in the crystal configuration directory."
 }

@@ -190,11 +190,11 @@ public final class CrystalSet
     {
         if (!drop.isBound())
         {
-            CrystalLoader.LOGGER.error("CrystalSet '{}' references an invalid item, it will be not drop anything!", name);
+            CrystalLoader.LOGGER.error("CrystalSet '{}' references an invalid item, it won't drop anything!", name);
         }
         if (!ingredient.isBound())
         {
-            CrystalLoader.LOGGER.error("CrystalSet '{}' references an invalid item, it will be not be craftable!", name);
+            CrystalLoader.LOGGER.error("CrystalSet '{}' references an invalid item, it won't be craftable!", name);
         }
     }
 

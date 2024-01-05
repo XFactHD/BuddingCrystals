@@ -1,11 +1,11 @@
 package xfacthd.buddingcrystals;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.*;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.bus.api.*;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
@@ -13,9 +13,9 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.dynpack.BuddingServerPack;
+import xfacthd.buddingcrystals.common.network.NetworkHandler;
 import xfacthd.buddingcrystals.common.util.*;
 
-// TODO: implement config phase task for crystal definition parity when the network refactor is done
 @Mod(BuddingCrystals.MOD_ID)
 @SuppressWarnings("UtilityClassWithPublicConstructor")
 @Mod.EventBusSubscriber(modid = BuddingCrystals.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -28,6 +28,8 @@ public final class BuddingCrystals
         BCContent.register(modBus);
         CrystalTab.registerCreativeTab();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
+        modBus.addListener(NetworkHandler::onRegisterPayloads);
+        modBus.addListener(NetworkHandler::onCollectConfigTasks);
     }
 
     @SubscribeEvent
@@ -57,5 +59,10 @@ public final class BuddingCrystals
                 ));
             });
         }
+    }
+
+    public static ResourceLocation rl(String path)
+    {
+        return new ResourceLocation(MOD_ID, path);
     }
 }

@@ -65,7 +65,7 @@ dependencies {
     //runtimeOnly("curse.maven:jei-238222:4595492")
 
     // Dynamic Asset Generator
-    implementation("curse.maven:dag-577096:4900589")
+    implementation("curse.maven:dag-577096:4977482")
 
     // Compat mods
     //runtimeOnly("curse.maven:ae2-223794:4907420")

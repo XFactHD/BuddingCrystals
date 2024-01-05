@@ -17,7 +17,7 @@ license="LGPL v2.1"
     modId="neoforge"
     type="required"
     versionRange="${neo_version_range}"
-    ordering="NONE"
+    ordering="BEFORE" # See CrystalSetsConfigTask
     side="BOTH"
 
 [[dependencies.buddingcrystals]]

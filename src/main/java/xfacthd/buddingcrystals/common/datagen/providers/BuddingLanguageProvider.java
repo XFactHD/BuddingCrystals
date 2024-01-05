@@ -1,10 +1,14 @@
 package xfacthd.buddingcrystals.common.datagen.providers;
 
 import net.minecraft.data.PackOutput;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.client.util.ExportCommand;
 import xfacthd.buddingcrystals.common.BCContent;
+import xfacthd.buddingcrystals.common.network.task.CrystalSetsConfigTask;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
 import xfacthd.buddingcrystals.common.util.CrystalTab;
 
@@ -36,6 +40,10 @@ public final class BuddingLanguageProvider extends LanguageProvider
         add(ExportCommand.MSG_CRYSTAL_EXPORTED    , "Exported crystal definition named '%s'");
         add(ExportCommand.MSG_CRYSTAL_OVERWRITTEN , "Exported crystal definition named '%s', existing file was overwritten");
         add(ExportCommand.MSG_CRYSTAL_EXISTS      , "File for crystal definition named '%s' already exists");
+
+        add(CrystalSetsConfigTask.MSG_ADDITIONAL_SETS_SERVER, "Server has additional crystal sets: %s");
+        add(CrystalSetsConfigTask.MSG_ADDITIONAL_SETS_CLIENT, "Client has additional crystal sets: %s");
+        add(CrystalSetsConfigTask.MSG_CHECK_FILES_MATCH, "Make sure your server and client have the same files in the crystal configuration directory.");
     }
 
     private void translate(CrystalSet set, String name)
@@ -45,5 +53,15 @@ public final class BuddingLanguageProvider extends LanguageProvider
         add(set.getLargeBud(), "Large " + name + " Bud");
         add(set.getCluster(), name + " Cluster");
         add(set.getBuddingBlock(), "Budding " + name);
+    }
+
+    private void add(Component key, String value)
+    {
+        ComponentContents contents = key.getContents();
+        if (!(contents instanceof TranslatableContents translatable))
+        {
+            throw new IllegalArgumentException("Component must be translatable");
+        }
+        add(translatable.getKey(), value);
     }
 }
