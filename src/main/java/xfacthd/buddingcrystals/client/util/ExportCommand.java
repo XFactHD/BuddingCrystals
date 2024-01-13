@@ -63,11 +63,11 @@ public final class ExportCommand
     {
         boolean overwrite = withOverwrite && BoolArgumentType.getBool(ctx, "overwrite_existing");
 
-        int total = BCContent.builtinNames().size();
+        int total = BCContent.activeNames().size();
         int count = 0;
         int overwritten = 0;
 
-        for (String name : BCContent.builtinNames())
+        for (String name : BCContent.activeNames())
         {
             Result res = exportCrystalDefinition(name, overwrite);
             if (res != Result.EXISTS)
@@ -98,7 +98,7 @@ public final class ExportCommand
         boolean overwrite = withOverwrite && BoolArgumentType.getBool(ctx, "overwrite_existing");
         String crystal = StringArgumentType.getString(ctx, "crystal");
 
-        if (!BCContent.isBuiltin(crystal))
+        if (BCContent.isNotBuiltin(crystal))
         {
             throw NO_SUCH_CRYSTAL.create(crystal);
         }
@@ -122,7 +122,7 @@ public final class ExportCommand
 
     private static CompletableFuture<Suggestions> getCrystalSuggestions(CommandContext<CommandSourceStack> ctx, SuggestionsBuilder builder)
     {
-        return SharedSuggestionProvider.suggest(BCContent.builtinNames(), builder);
+        return SharedSuggestionProvider.suggest(BCContent.activeNames(), builder);
     }
 
     private static Result exportCrystalDefinition(String name, boolean overwrite) throws CommandSyntaxException

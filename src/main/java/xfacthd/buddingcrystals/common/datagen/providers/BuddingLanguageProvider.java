@@ -9,7 +9,6 @@ import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.client.util.ExportCommand;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.network.task.CrystalSetsConfigTask;
-import xfacthd.buddingcrystals.common.util.CrystalSet;
 import xfacthd.buddingcrystals.common.util.CrystalTab;
 
 public final class BuddingLanguageProvider extends LanguageProvider
@@ -22,14 +21,12 @@ public final class BuddingLanguageProvider extends LanguageProvider
     @Override
     protected void addTranslations()
     {
-        add(CrystalTab.TAB_TITLE.getString(), "BuddingCrystals");
+        add(CrystalTab.TAB_TITLE, "BuddingCrystals");
 
         add(BCContent.AMETHYST.getConfigTranslation(), "Allow crafting of budding Amethyst block");
         BCContent.builtinSets().forEach(set ->
-        {
-            translate(set, set.getTranslation());
-            add(set.getConfigTranslation(), "Allow crafting of budding " + set.getTranslation() + " block");
-        });
+                add(set.getConfigTranslation(), "Allow crafting of budding " + set.getTranslation() + " block")
+        );
 
         add(BCContent.CRYSTAL_CATALYST.value(), "Crystal Catalyst");
 
@@ -44,15 +41,6 @@ public final class BuddingLanguageProvider extends LanguageProvider
         add(CrystalSetsConfigTask.MSG_ADDITIONAL_SETS_SERVER, "Server has additional crystal sets: %s");
         add(CrystalSetsConfigTask.MSG_ADDITIONAL_SETS_CLIENT, "Client has additional crystal sets: %s");
         add(CrystalSetsConfigTask.MSG_CHECK_FILES_MATCH, "Make sure your server and client have the same files in the crystal configuration directory.");
-    }
-
-    private void translate(CrystalSet set, String name)
-    {
-        add(set.getSmallBud(), "Small " + name + " Bud");
-        add(set.getMediumBud(), "Medium " + name + " Bud");
-        add(set.getLargeBud(), "Large " + name + " Bud");
-        add(set.getCluster(), name + " Cluster");
-        add(set.getBuddingBlock(), "Budding " + name);
     }
 
     private void add(Component key, String value)

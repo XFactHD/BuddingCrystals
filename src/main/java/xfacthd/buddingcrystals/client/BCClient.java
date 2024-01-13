@@ -58,7 +58,7 @@ public final class BCClient
 
     static
     {
-        BCContent.allSets().forEach(BuddingPalettePlanner::plan);
+        BCContent.allActiveSets().forEach(BuddingPalettePlanner::plan);
         BuddingPalettePlanner.planCatalyst();
     }
 

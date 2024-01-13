@@ -74,7 +74,7 @@ public final class CrystalSetsConfigTask implements ICustomConfigurationTask
 
     private static Set<SyncCrystalSetsPayload.Entry> getCrystalEntries()
     {
-        return BCContent.allSets()
+        return BCContent.allActiveSets()
                 .stream()
                 .map(set -> new SyncCrystalSetsPayload.Entry(set.getName(), set.getCompatMod(), set.isActive()))
                 .collect(Collectors.toCollection(HashSet::new));

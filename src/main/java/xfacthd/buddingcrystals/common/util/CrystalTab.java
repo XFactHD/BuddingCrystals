@@ -4,7 +4,7 @@ import com.google.common.base.Suppliers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
@@ -17,7 +17,7 @@ public final class CrystalTab extends CreativeModeTab
     public static final Component TAB_TITLE = Component.translatable("itemGroup.buddingcrystals");
     private static final int SWITCH_INTERVAL = 1500;
     private static final Supplier<List<ItemStack>> ICON_ITEMS = Suppliers.memoize(() ->
-            BCContent.allSets().stream()
+            BCContent.allActiveSets().stream()
                     .filter(CrystalSet::isActive)
                     .map(CrystalSet::getCluster)
                     .map(ItemStack::new)
@@ -42,9 +42,9 @@ public final class CrystalTab extends CreativeModeTab
 
 
 
-    public static void registerCreativeTab()
+    public static void registerCreativeTab(IEventBus modBus)
     {
-        CREATIVE_TABS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        CREATIVE_TABS.register(modBus);
 
         CREATIVE_TABS.register("main", () -> CreativeModeTab.builder()
                 .title(TAB_TITLE)
@@ -52,12 +52,9 @@ public final class CrystalTab extends CreativeModeTab
                 .withTabFactory(CrystalTab::new)
                 .displayItems((params, output) ->
                 {
-                    for (CrystalSet set : BCContent.allSets())
+                    for (CrystalSet set : BCContent.allActiveSets())
                     {
-                        if (set.isActive())
-                        {
-                            set.blocks().forEach(output::accept);
-                        }
+                        set.blocks().forEach(output::accept);
                     }
                     output.accept(BCContent.CRYSTAL_CATALYST.value());
                 })

@@ -27,9 +27,10 @@ public final class BCContent //TODO: balance growth chance and drop counts
     private static final DeferredRegister<LootPoolEntryType> POOL_ENTRY_TYPES = DeferredRegister.create(Registries.LOOT_POOL_ENTRY_TYPE, BuddingCrystals.MOD_ID);
     private static final DeferredRegister<Codec<? extends ICondition>> CONDITIONS = DeferredRegister.create(NeoForgeRegistries.CONDITION_SERIALIZERS, BuddingCrystals.MOD_ID);
 
-    public static final Map<String, CrystalSet> ALL_SETS = new HashMap<>();
-    public static final Map<String, CrystalSet> BUILTIN_SETS = new HashMap<>();
-    public static final Map<String, CrystalSet> LOADED_SETS = new HashMap<>();
+    private static final Map<String, CrystalSet> ALL_SETS = new HashMap<>();
+    private static final Map<String, CrystalSet> ACTIVE_SETS = new HashMap<>();
+    private static final Map<String, CrystalSet> BUILTIN_SETS = new HashMap<>();
+    private static final Map<String, CrystalSet> LOADED_SETS = new HashMap<>();
 
     public static final CrystalSet AMETHYST = CrystalSet.builtinAmethyst();
     public static final CrystalSet REDSTONE = CrystalSet.builder("redstone")
@@ -113,9 +114,31 @@ public final class BCContent //TODO: balance growth chance and drop counts
         CrystalLoader.loadUserSets();
     }
 
+    public static void captureSet(CrystalSet set, boolean loaded)
+    {
+        ALL_SETS.put(set.getName(), set);
+        if (set.isActive())
+        {
+            ACTIVE_SETS.put(set.getName(), set);
+        }
+        if (loaded)
+        {
+            LOADED_SETS.put(set.getName(), set);
+        }
+        else
+        {
+            BUILTIN_SETS.put(set.getName(), set);
+        }
+    }
+
     public static Collection<CrystalSet> allSets()
     {
         return ALL_SETS.values();
+    }
+
+    public static Collection<CrystalSet> allActiveSets()
+    {
+        return ACTIVE_SETS.values();
     }
 
     public static Collection<CrystalSet> builtinSets()
@@ -128,23 +151,19 @@ public final class BCContent //TODO: balance growth chance and drop counts
         return LOADED_SETS.values();
     }
 
-    public static Collection<String> builtinNames()
+    public static Collection<String> activeNames()
     {
-        return BUILTIN_SETS.keySet();
+        return ACTIVE_SETS.keySet();
     }
 
-    public static boolean isBuiltin(String name)
+    public static boolean isNotBuiltin(String name)
     {
-        return BUILTIN_SETS.containsKey(name);
+        return !BUILTIN_SETS.containsKey(name);
     }
 
-    public static Iterable<Block> allClusters()
+    public static CrystalSet getBuiltin(String name)
     {
-        return ALL_SETS.values().stream()
-                .map(CrystalSet::getBudSet)
-                .map(BudSet::blocks)
-                .flatMap(List::stream)
-                .toList();
+        return BUILTIN_SETS.get(name);
     }
 
 

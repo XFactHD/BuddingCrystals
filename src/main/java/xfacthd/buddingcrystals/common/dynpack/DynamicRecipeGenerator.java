@@ -31,7 +31,7 @@ final class DynamicRecipeGenerator extends RecipeProvider
     @Override
     protected void buildRecipes(RecipeOutput consumer)
     {
-        BCContent.loadedSets().forEach(set ->
+        BCContent.allActiveSets().forEach(set ->
                 BuddingRecipeProvider.addBuddingCrystalRecipe(set, false, consumer)
         );
     }

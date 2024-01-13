@@ -64,7 +64,7 @@ final class DynamicBlockLoot extends BlockLootSubProvider
     @Override
     protected Iterable<Block> getKnownBlocks()
     {
-        return BCContent.loadedSets()
+        return BCContent.allActiveSets()
                 .stream()
                 .map(CrystalSet::blocks)
                 .flatMap(List::stream)
@@ -74,7 +74,7 @@ final class DynamicBlockLoot extends BlockLootSubProvider
     @Override
     protected void generate()
     {
-        BCContent.loadedSets().forEach(set ->
+        BCContent.allActiveSets().forEach(set ->
         {
             add(set.getBuddingBlock(), noDrop());
 

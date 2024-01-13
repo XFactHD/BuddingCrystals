@@ -1,7 +1,0 @@
-{
-  "parent": "buddingcrystals:block/cross",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "cross": "buddingcrystals:block/small_bud/nether_quartz"
-  }
-}

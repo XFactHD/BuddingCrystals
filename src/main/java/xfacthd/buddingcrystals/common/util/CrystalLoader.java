@@ -142,7 +142,7 @@ public final class CrystalLoader
 
     public static void updateFromJson(Update type)
     {
-        BCContent.allSets().forEach(set ->
+        BCContent.allActiveSets().forEach(set ->
         {
             Path filePath = CRYSTAL_PATH.resolve(set.getName() + ".json");
             if (!Files.exists(filePath))
@@ -176,7 +176,7 @@ public final class CrystalLoader
 
     public static String export(String name)
     {
-        CrystalSet set = BCContent.BUILTIN_SETS.get(name);
+        CrystalSet set = BCContent.getBuiltin(name);
         CrystalDefinition def = CrystalDefinition.fromSet(set);
         JsonElement json = CODEC.encodeStart(JsonOps.INSTANCE, def).result().orElseThrow();
         return GSON.toJson(json);
@@ -244,8 +244,7 @@ public final class CrystalLoader
                 def.maxDrop
         );
 
-        BCContent.ALL_SETS.put(name, set);
-        BCContent.LOADED_SETS.put(name, set);
+        BCContent.captureSet(set, true);
     }
 
     private static CrystalDefinition parseJson(JsonObject json)
@@ -267,7 +266,7 @@ public final class CrystalLoader
     private static boolean filterBuiltins(Path path)
     {
         String name = getName(path);
-        return !name.equals("amethyst") && !BCContent.BUILTIN_SETS.containsKey(name);
+        return !name.equals("amethyst") && BCContent.isNotBuiltin(name);
     }
 
 

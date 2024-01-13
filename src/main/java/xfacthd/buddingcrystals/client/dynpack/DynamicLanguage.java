@@ -21,7 +21,7 @@ public final class DynamicLanguage
     {
         Map<String, String> translations = new TreeMap<>();
 
-        BCContent.loadedSets().forEach(set ->
+        BCContent.allActiveSets().forEach(set ->
                 translate(translations, set, set.getTranslation())
         );
 

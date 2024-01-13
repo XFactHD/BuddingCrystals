@@ -3,8 +3,6 @@ package xfacthd.buddingcrystals.common.util;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 
-import java.util.List;
-
 public final class BudSet
 {
     final Holder<Block> smallBud;
@@ -38,15 +36,5 @@ public final class BudSet
     public Block getCluster()
     {
         return cluster.value();
-    }
-
-    public List<Block> blocks()
-    {
-        return List.of(
-                smallBud.value(),
-                mediumBud.value(),
-                largeBud.value(),
-                cluster.value()
-        );
     }
 }

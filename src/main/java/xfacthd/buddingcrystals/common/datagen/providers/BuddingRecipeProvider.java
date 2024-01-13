@@ -23,7 +23,6 @@ public final class BuddingRecipeProvider extends RecipeProvider
     protected void buildRecipes(RecipeOutput consumer)
     {
         addBuddingCrystalRecipe(BCContent.AMETHYST, true, consumer);
-        BCContent.builtinSets().forEach(set -> addBuddingCrystalRecipe(set, true, consumer));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BCContent.CRYSTAL_CATALYST.value())
                 .pattern("RBR")

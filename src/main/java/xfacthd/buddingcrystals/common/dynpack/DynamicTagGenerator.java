@@ -36,7 +36,7 @@ public final class DynamicTagGenerator extends BlockTagsProvider
         IntrinsicTagAppender<Block> buddingBlocks = tag(BCContent.BUDDING_BLOCKS_TAG);
         IntrinsicTagAppender<Block> pickaxeMineable = tag(BlockTags.MINEABLE_WITH_PICKAXE);
 
-        BCContent.loadedSets().forEach(set ->
+        BCContent.allActiveSets().forEach(set ->
         {
             crystalSoundBlocks.add(set.getBuddingBlock());
             buddingBlocks.add(set.getBuddingBlock());

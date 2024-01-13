@@ -2,7 +2,9 @@ package xfacthd.buddingcrystals.common.util;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -23,6 +25,7 @@ import java.util.function.Supplier;
 public final class CrystalSet
 {
     private final String compatMod;
+    private final boolean active;
     private final String name;
     private String translation;
     private ResourceLocation crystalTexture;
@@ -38,6 +41,7 @@ public final class CrystalSet
     CrystalSet(String compatMod, String name, String translation, ResourceLocation crystalTexture, ResourceLocation buddingTexture, int growthChance, Holder<Block> buddingBlock, BudSet budSet, Holder<Item> drop, Holder<Item> ingredient, float normalDrop, float maxDrop)
     {
         this.compatMod = compatMod;
+        this.active = ModList.get().isLoaded(compatMod);
         this.name = name;
         this.translation = translation;
         this.crystalTexture = crystalTexture;
@@ -78,32 +82,47 @@ public final class CrystalSet
 
     public Block getBuddingBlock()
     {
-        return buddingBlock.value();
+        if (buddingBlock.isBound())
+        {
+            return buddingBlock.value();
+        }
+        return Blocks.AIR;
     }
 
     public Block getSmallBud()
     {
-        return budSet.smallBud.value();
+        if (budSet.smallBud.isBound())
+        {
+            return budSet.smallBud.value();
+        }
+        return Blocks.AIR;
     }
 
     public Block getMediumBud()
     {
-        return budSet.mediumBud.value();
+        if (budSet.mediumBud.isBound())
+        {
+            return budSet.mediumBud.value();
+        }
+        return Blocks.AIR;
     }
 
     public Block getLargeBud()
     {
-        return budSet.largeBud.value();
+        if (budSet.largeBud.isBound())
+        {
+            return budSet.largeBud.value();
+        }
+        return Blocks.AIR;
     }
 
     public Block getCluster()
     {
-        return budSet.cluster.value();
-    }
-
-    public BudSet getBudSet()
-    {
-        return budSet;
+        if (budSet.cluster.isBound())
+        {
+            return budSet.cluster.value();
+        }
+        return Blocks.AIR;
     }
 
     public Item getDroppedItem()
@@ -152,7 +171,7 @@ public final class CrystalSet
 
     public boolean isActive()
     {
-        return ModList.get().isLoaded(compatMod);
+        return active;
     }
 
     public String getConfigString()
@@ -412,8 +431,7 @@ public final class CrystalSet
                     normalDrop,
                     maxDrop
             );
-            BCContent.ALL_SETS.put(name, set);
-            BCContent.BUILTIN_SETS.put(name, set);
+            BCContent.captureSet(set, false);
             return set;
         }
 
@@ -457,6 +475,14 @@ public final class CrystalSet
 
         static Holder<Block> register(String name, Supplier<Block> blockFactory, String compatMod)
         {
+            if (!ModList.get().isLoaded(compatMod))
+            {
+                return Holder.Reference.createStandAlone(
+                        BuiltInRegistries.BLOCK.holderOwner(),
+                        ResourceKey.create(Registries.BLOCK, new ResourceLocation(BuddingCrystals.MOD_ID, name))
+                );
+            }
+
             Holder<Block> block = BCContent.BLOCKS.register(name, blockFactory);
             BCContent.ITEMS.register(name, () -> new CrystalBlockItem(block.value(), compatMod));
             return block;
