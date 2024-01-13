@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.WithConditions;
-import net.neoforged.neoforge.common.util.NeoForgeExtraCodecs;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.datagen.providers.BuddingRecipeProvider;
 
@@ -59,7 +58,7 @@ final class DynamicRecipeGenerator extends RecipeProvider
                     throw new IllegalStateException("Duplicate recipe " + id);
                 }
 
-                JsonElement serializedRecipe = Util.getOrThrow(NeoForgeExtraCodecs.CONDITIONAL_RECIPE_CODEC.encodeStart(
+                JsonElement serializedRecipe = Util.getOrThrow(Recipe.CONDITIONAL_CODEC.encodeStart(
                         JsonOps.INSTANCE, Optional.of(new WithConditions<>(recipe, conditions))
                 ), IllegalStateException::new);
                 DynamicRecipeGenerator.this.cache.put(
@@ -69,7 +68,7 @@ final class DynamicRecipeGenerator extends RecipeProvider
 
                 if (advancement != null)
                 {
-                    JsonElement serializedAdvancement = Util.getOrThrow(NeoForgeExtraCodecs.CONDITIONAL_ADVANCEMENT_CODEC.encodeStart(
+                    JsonElement serializedAdvancement = Util.getOrThrow(Advancement.CONDITIONAL_CODEC.encodeStart(
                             JsonOps.INSTANCE, Optional.of(new WithConditions<>(advancement.value(), conditions))
                     ), IllegalStateException::new);
                     DynamicRecipeGenerator.this.cache.put(
