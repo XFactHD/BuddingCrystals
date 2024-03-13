@@ -5,7 +5,6 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.Util;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -22,9 +21,9 @@ final class DynamicRecipeGenerator extends RecipeProvider
 {
     private final Map<ResourceLocation, String> cache;
 
-    public DynamicRecipeGenerator(Map<ResourceLocation, String> cache, CompletableFuture<HolderLookup.Provider> holderProvider)
+    public DynamicRecipeGenerator(Map<ResourceLocation, String> cache)
     {
-        super(DummyPackOutput.INSTANCE, holderProvider);
+        super(DummyPackOutput.INSTANCE);
         this.cache = cache;
     }
 
@@ -41,7 +40,7 @@ final class DynamicRecipeGenerator extends RecipeProvider
     {
         Set<ResourceLocation> built = new HashSet<>();
 
-        lookupProvider.thenAccept(provider -> buildRecipes(new RecipeOutput()
+        buildRecipes(new RecipeOutput()
         {
             @Override
             @SuppressWarnings("removal")
@@ -77,7 +76,7 @@ final class DynamicRecipeGenerator extends RecipeProvider
                     );
                 }
             }
-        })).join();
+        });
         return CompletableFuture.completedFuture(null);
     }
 }

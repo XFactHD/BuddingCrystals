@@ -1,6 +1,5 @@
 package xfacthd.buddingcrystals.common.datagen.providers;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Items;
@@ -10,13 +9,11 @@ import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.util.ConfigCondition;
 import xfacthd.buddingcrystals.common.util.CrystalSet;
 
-import java.util.concurrent.CompletableFuture;
-
 public final class BuddingRecipeProvider extends RecipeProvider
 {
-    public BuddingRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
+    public BuddingRecipeProvider(PackOutput output)
     {
-        super(output, lookupProvider);
+        super(output);
     }
 
     @Override

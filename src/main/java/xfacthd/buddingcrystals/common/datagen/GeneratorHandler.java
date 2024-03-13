@@ -1,6 +1,5 @@
 package xfacthd.buddingcrystals.common.datagen;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -12,8 +11,6 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.datagen.providers.*;
 
-import java.util.concurrent.CompletableFuture;
-
 @Mod.EventBusSubscriber(modid = BuddingCrystals.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class GeneratorHandler
 {
@@ -22,7 +19,6 @@ public final class GeneratorHandler
     {
         DataGenerator gen = event.getGenerator();
         PackOutput output = gen.getPackOutput();
-        CompletableFuture<HolderLookup.Provider> holderProvider = event.getLookupProvider();
         ExistingFileHelper fileHelper = event.getExistingFileHelper();
 
         // Trick the generators into thinking the texture exists
@@ -30,7 +26,7 @@ public final class GeneratorHandler
 
         gen.addProvider(event.includeClient(), new BuddingItemModelProvider(output, fileHelper));
         gen.addProvider(event.includeClient(), new BuddingLanguageProvider(output));
-        gen.addProvider(event.includeServer(), new BuddingRecipeProvider(output, holderProvider));
+        gen.addProvider(event.includeServer(), new BuddingRecipeProvider(output));
     }
 
 

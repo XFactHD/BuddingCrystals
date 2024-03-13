@@ -28,6 +28,7 @@ public final class BuddingCrystals
         BCContent.register(modBus);
         CrystalTab.registerCreativeTab(modBus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
+        modBus.register(CommonConfig.INSTANCE);
         modBus.addListener(NetworkHandler::onRegisterPayloads);
         modBus.addListener(NetworkHandler::onCollectConfigTasks);
     }

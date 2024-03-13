@@ -29,7 +29,7 @@ public final class BuddingServerPack extends BuddingPackResources
         //noinspection ConstantConditions
         new DynamicTagGenerator(cache, holderProvider).run(null);
         //noinspection ConstantConditions
-        new DynamicRecipeGenerator(cache, holderProvider).run(null);
+        new DynamicRecipeGenerator(cache).run(null);
         new DynamicBlockLoot().run(cache);
     }
 

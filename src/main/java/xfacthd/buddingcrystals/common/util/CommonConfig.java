@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 import xfacthd.buddingcrystals.BuddingCrystals;
@@ -30,12 +29,11 @@ public final class CommonConfig
         final Pair<CommonConfig, ModConfigSpec> configSpecPair = new ModConfigSpec.Builder().configure(CommonConfig::new);
         SPEC = configSpecPair.getRight();
         INSTANCE = configSpecPair.getLeft();
+        crystalEnabled.defaultReturnValue(true);
     }
 
     public CommonConfig(ModConfigSpec.Builder builder)
     {
-        FMLJavaModLoadingContext.get().getModEventBus().register(this);
-
         builder.push("crystals");
         Streams.concat(Stream.of(BCContent.AMETHYST), BCContent.builtinSets().stream()).forEach(set ->
         {
