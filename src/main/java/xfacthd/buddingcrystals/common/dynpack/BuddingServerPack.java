@@ -1,8 +1,7 @@
 package xfacthd.buddingcrystals.common.dynpack;
 
-import net.minecraft.Util;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import xfacthd.buddingcrystals.BuddingCrystals;
@@ -20,10 +19,7 @@ public final class BuddingServerPack extends BuddingPackResources
     @Override
     protected void buildResources(Map<ResourceLocation, String> cache)
     {
-        CompletableFuture<HolderLookup.Provider> holderProvider = CompletableFuture.supplyAsync(
-                VanillaRegistries::createLookup,
-                Util.backgroundExecutor()
-        );
+        CompletableFuture<HolderLookup.Provider> holderProvider = CompletableFuture.completedFuture(RegistryAccess.EMPTY);
 
         //noinspection ConstantConditions
         new DynamicTagGenerator(cache, holderProvider).run(null);
