@@ -14,6 +14,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.block.BuddingCrystalBlock;
@@ -80,6 +81,11 @@ public final class CrystalSet
         return growthChance;
     }
 
+    public Holder<Block> getBuddingBlockHolder()
+    {
+        return buddingBlock;
+    }
+
     public Block getBuddingBlock()
     {
         if (buddingBlock.isBound())
@@ -89,31 +95,24 @@ public final class CrystalSet
         return Blocks.AIR;
     }
 
-    public Block getSmallBud()
+    public Holder<Block> getSmallBudHolder()
     {
-        if (budSet.smallBud.isBound())
-        {
-            return budSet.smallBud.value();
-        }
-        return Blocks.AIR;
+        return budSet.smallBud;
     }
 
-    public Block getMediumBud()
+    public Holder<Block> getMediumBudHolder()
     {
-        if (budSet.mediumBud.isBound())
-        {
-            return budSet.mediumBud.value();
-        }
-        return Blocks.AIR;
+        return budSet.mediumBud;
     }
 
-    public Block getLargeBud()
+    public Holder<Block> getLargeBudHolder()
     {
-        if (budSet.largeBud.isBound())
-        {
-            return budSet.largeBud.value();
-        }
-        return Blocks.AIR;
+        return budSet.largeBud;
+    }
+
+    public Holder<Block> getClusterHolder()
+    {
+        return budSet.cluster;
     }
 
     public Block getCluster()
@@ -125,6 +124,11 @@ public final class CrystalSet
         return Blocks.AIR;
     }
 
+    public Holder<Item> getDroppedItemHolder()
+    {
+        return drop;
+    }
+
     public Item getDroppedItem()
     {
         if (drop.isBound())
@@ -132,6 +136,11 @@ public final class CrystalSet
             return drop.value();
         }
         return Items.AIR;
+    }
+
+    public Holder<Item> getIngredientHolder()
+    {
+        return ingredient;
     }
 
     public Item getIngredient()
@@ -219,26 +228,29 @@ public final class CrystalSet
 
 
 
-    public static CrystalSet.Builder builder(String name) { return new Builder(name); }
+    public static CrystalSet.Builder builder(String name)
+    {
+        return new Builder(name);
+    }
 
     public static CrystalSet builtinAmethyst()
     {
         BudSet budSet = new BudSet(
-                DeferredHolder.create(Registries.BLOCK, new ResourceLocation("small_amethyst_bud")),
-                DeferredHolder.create(Registries.BLOCK, new ResourceLocation("medium_amethyst_bud")),
-                DeferredHolder.create(Registries.BLOCK, new ResourceLocation("large_amethyst_bud")),
-                DeferredHolder.create(Registries.BLOCK, new ResourceLocation("amethyst_cluster"))
+                DeferredHolder.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("small_amethyst_bud")),
+                DeferredHolder.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("medium_amethyst_bud")),
+                DeferredHolder.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("large_amethyst_bud")),
+                DeferredHolder.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("amethyst_cluster"))
         );
 
-        Holder<Item> drop = DeferredHolder.create(Registries.ITEM, new ResourceLocation("amethyst_shard"));
+        Holder<Item> drop = DeferredHolder.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("amethyst_shard"));
         return new CrystalSet(
                 "minecraft",
                 "amethyst",
                 "Amethyst",
-                new ResourceLocation("minecraft:item/amethyst_shard"),
-                new ResourceLocation("minecraft:item/amethyst_shard"),
+                ResourceLocation.withDefaultNamespace("item/amethyst_shard"),
+                ResourceLocation.withDefaultNamespace("item/amethyst_shard"),
                 5,
-                DeferredHolder.create(Registries.BLOCK, new ResourceLocation("budding_amethyst")),
+                DeferredHolder.create(Registries.BLOCK, ResourceLocation.withDefaultNamespace("budding_amethyst")),
                 budSet,
                 drop,
                 drop,
@@ -247,20 +259,51 @@ public final class CrystalSet
         );
     }
 
+    public static String smallBudId(String name)
+    {
+        return "small_" + name + "_bud";
+    }
+
+    public static String mediumBudId(String name)
+    {
+        return "medium_" + name + "_bud";
+    }
+    public static String largeBudId(String name)
+    {
+        return "large_" + name + "_bud";
+    }
+
+    public static String clusterId(String name)
+    {
+        return name + "_cluster";
+    }
+
+    public static String buddingBlockId(String name)
+    {
+        return "budding_" + name;
+    }
+
 
 
     @SuppressWarnings({ "unused", "UnusedReturnValue" })
     public static final class Builder
     {
         private final String name;
+        @Nullable
         private String translation;
         private String compatMod = "minecraft";
+        @Nullable
         private String crystalTexPath;
+        @Nullable
         private String buddingTexPath;
+        @Nullable
         private ResourceLocation crystalTexture;
+        @Nullable
         private ResourceLocation buddingTexture;
         private int growthChance = 5;
+        @Nullable
         private Holder<Item> drop;
+        @Nullable
         private Holder<Item> ingredient;
         private float normalDrop = 2;
         private float maxDrop = 4;
@@ -339,7 +382,7 @@ public final class CrystalSet
         public Builder drop(String drop)
         {
             Preconditions.checkArgument(drop != null && !drop.isEmpty(), "Dropped item must not be empty");
-            return drop(new ResourceLocation(drop));
+            return drop(ResourceLocation.parse(drop));
         }
 
         public Builder drop(ResourceLocation drop)
@@ -352,7 +395,7 @@ public final class CrystalSet
         public Builder ingredient(String ingredient)
         {
             Preconditions.checkArgument(ingredient != null && !ingredient.isEmpty(), "Ingredient item must not be empty");
-            return ingredient(new ResourceLocation(ingredient));
+            return ingredient(ResourceLocation.parse(ingredient));
         }
 
         public Builder ingredient(ResourceLocation ingredient)
@@ -386,14 +429,14 @@ public final class CrystalSet
             Preconditions.checkState(drop != null, "No dropped item specified");
             Preconditions.checkState(maxDrop >= normalDrop, "Max drop must be higher or equal to normal drop");
 
-            Holder<Block> smallBud = register("small_" + name + "_bud", Builder::smallBud, compatMod);
-            Holder<Block> mediumBud = register("medium_" + name + "_bud", Builder::mediumBud, compatMod);
-            Holder<Block> largeBud = register("large_" + name + "_bud", Builder::largeBud, compatMod);
-            Holder<Block> cluster = register(name + "_cluster", Builder::cluster, compatMod);
+            Holder<Block> smallBud = register(smallBudId(name), Builder::smallBud, compatMod);
+            Holder<Block> mediumBud = register(mediumBudId(name), Builder::mediumBud, compatMod);
+            Holder<Block> largeBud = register(largeBudId(name), Builder::largeBud, compatMod);
+            Holder<Block> cluster = register(clusterId(name), Builder::cluster, compatMod);
             BudSet budSet = new BudSet(smallBud, mediumBud, largeBud, cluster);
 
             Holder<Block> buddingBlock = register(
-                    "budding_" + name,
+                    buddingBlockId(name),
                     () -> new BuddingCrystalBlock(
                             budSet,
                             growthChance,
@@ -410,11 +453,11 @@ public final class CrystalSet
 
             if (crystalTexture == null)
             {
-                crystalTexture = new ResourceLocation(compatMod, crystalTexPath);
+                crystalTexture = ResourceLocation.fromNamespaceAndPath(compatMod, crystalTexPath);
             }
             if (buddingTexture == null)
             {
-                buddingTexture = new ResourceLocation(compatMod, buddingTexPath);
+                buddingTexture = ResourceLocation.fromNamespaceAndPath(compatMod, buddingTexPath);
             }
 
             CrystalSet set = new CrystalSet(
@@ -479,7 +522,7 @@ public final class CrystalSet
             {
                 return Holder.Reference.createStandAlone(
                         BuiltInRegistries.BLOCK.holderOwner(),
-                        ResourceKey.create(Registries.BLOCK, new ResourceLocation(BuddingCrystals.MOD_ID, name))
+                        ResourceKey.create(Registries.BLOCK, BuddingCrystals.rl(name))
                 );
             }
 

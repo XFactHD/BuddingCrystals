@@ -1,28 +1,29 @@
 package xfacthd.buddingcrystals.common.network.payload;
 
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.handling.ConfigurationPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.network.task.CrystalSetsConfigTask;
 
-public record AckCrystalSetsPayload() implements CustomPacketPayload
+public final class AckCrystalSetsPayload implements CustomPacketPayload
 {
-    public static final ResourceLocation ID = BuddingCrystals.rl("ack_crystal_sets");
+    public static final Type<AckCrystalSetsPayload> TYPE = new Type<>(BuddingCrystals.rl("ack_crystal_sets"));
+    public static final AckCrystalSetsPayload INSTANCE = new AckCrystalSetsPayload();
+    public static final StreamCodec<ByteBuf, AckCrystalSetsPayload> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+
+    private AckCrystalSetsPayload() { }
 
     @Override
-    public void write(FriendlyByteBuf buffer) { }
-
-    @Override
-    public ResourceLocation id()
+    public Type<? extends CustomPacketPayload> type()
     {
-        return ID;
+        return TYPE;
     }
 
     @SuppressWarnings("MethodMayBeStatic")
-    public void handle(ConfigurationPayloadContext ctx)
+    public void handle(IPayloadContext ctx)
     {
-        ctx.taskCompletedHandler().onTaskCompleted(CrystalSetsConfigTask.TYPE);
+        ctx.finishCurrentTask(CrystalSetsConfigTask.TYPE);
     }
 }

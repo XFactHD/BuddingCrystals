@@ -1,0 +1,38 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+issueTrackerURL="https://www.github.com/xfacthd/buddingcrystals"
+license="LGPL v2.1"
+
+[[mods]]
+    modId="buddingcrystals"
+    version="${mod_version}"
+    displayName="BuddingCrystals"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/buddingcrystals"
+    logoFile="logo.png"
+    authors="XFactHD"
+    description='''
+    '''
+
+[[mixins]]
+    config="buddingcrystals.mixin.json"
+
+[[dependencies.buddingcrystals]]
+    modId="neoforge"
+    type="required"
+    versionRange="${neo_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.buddingcrystals]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.buddingcrystals]]
+    modId="dynamic_asset_generator"
+    type="required"
+    versionRange="[${dynassetgen_version},)"
+    ordering="AFTER"
+    side="CLIENT"

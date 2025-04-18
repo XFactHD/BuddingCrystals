@@ -1,21 +1,26 @@
 package xfacthd.buddingcrystals.common.network.task;
 
 import com.google.common.collect.Sets;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.configuration.ICustomConfigurationTask;
-import net.neoforged.neoforge.network.handling.ConfigurationPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import xfacthd.buddingcrystals.BuddingCrystals;
 import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.network.payload.AckCrystalSetsPayload;
 import xfacthd.buddingcrystals.common.network.payload.SyncCrystalSetsPayload;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 // This task MUST run before NeoForge syncs registries, so we can disconnect on mismatch and prevent unnecessary sync
-// of unmatched registries. This is achieved via dependency ordering
+// of unmatched registries. This is achieved by adding the task in a mixin before NeoForge adds its tasks
 public final class CrystalSetsConfigTask implements ICustomConfigurationTask
 {
     public static final Type TYPE = new Type(BuddingCrystals.rl("crystal_sets"));
@@ -35,7 +40,9 @@ public final class CrystalSetsConfigTask implements ICustomConfigurationTask
         return TYPE;
     }
 
-    public static void handleSync(SyncCrystalSetsPayload payload, ConfigurationPayloadContext ctx)
+
+
+    public static void handleSync(SyncCrystalSetsPayload payload, IPayloadContext ctx)
     {
         Set<SyncCrystalSetsPayload.Entry> remoteSet = payload.crystalEntries();
         Set<SyncCrystalSetsPayload.Entry> localSet = getCrystalEntries();
@@ -59,11 +66,11 @@ public final class CrystalSetsConfigTask implements ICustomConfigurationTask
             MutableComponent message = Component.literal("[BuddingCrystals]\n\n");
             messages.forEach(msg -> message.append(msg).append(CommonComponents.NEW_LINE));
             message.append(CommonComponents.NEW_LINE).append(MSG_CHECK_FILES_MATCH);
-            ctx.packetHandler().disconnect(message);
+            ctx.disconnect(message);
             return;
         }
 
-        ctx.replyHandler().send(new AckCrystalSetsPayload());
+        ctx.reply(AckCrystalSetsPayload.INSTANCE);
     }
 
     private static Component formatDisconnectMessage(String langKey, Set<SyncCrystalSetsPayload.Entry> diff)

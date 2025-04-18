@@ -4,11 +4,15 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.*;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.logging.LogUtils;
-import net.minecraft.commands.*;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 import xfacthd.buddingcrystals.BuddingCrystals;
@@ -16,7 +20,9 @@ import xfacthd.buddingcrystals.common.BCContent;
 import xfacthd.buddingcrystals.common.util.CrystalLoader;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.concurrent.CompletableFuture;
 
 public final class ExportCommand
@@ -142,7 +148,7 @@ public final class ExportCommand
         }
         catch (IOException e)
         {
-            LOGGER.error("Encountered an error while exporting builtin crystal definition '" + name + "'", e);
+            LOGGER.error("Encountered an error while exporting builtin crystal definition '{}'", name, e);
             throw EXPORT_ERROR.create(name, e.getMessage());
         }
 

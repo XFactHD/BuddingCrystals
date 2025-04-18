@@ -1,11 +1,18 @@
 package xfacthd.buddingcrystals.common.util;
 
 import com.google.common.base.Stopwatch;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
-import com.mojang.serialization.*;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -169,7 +176,7 @@ public final class CrystalLoader
             }
             catch (JsonParseException e)
             {
-                LOGGER.error("Encountered an error while updating crystal definition for '" + set.getName() + "'", e);
+                LOGGER.error("Encountered an error while updating crystal definition for '{}'", set.getName(), e);
             }
         });
     }

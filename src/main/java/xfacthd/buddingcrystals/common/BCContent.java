@@ -1,23 +1,22 @@
 package xfacthd.buddingcrystals.common;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import xfacthd.buddingcrystals.BuddingCrystals;
-import xfacthd.buddingcrystals.common.data.OptionalLootItem;
-import xfacthd.buddingcrystals.common.util.*;
+import xfacthd.buddingcrystals.common.util.ConfigCondition;
+import xfacthd.buddingcrystals.common.util.CrystalLoader;
+import xfacthd.buddingcrystals.common.util.CrystalSet;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public final class BCContent //TODO: balance growth chance and drop counts
@@ -25,7 +24,7 @@ public final class BCContent //TODO: balance growth chance and drop counts
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(BuddingCrystals.MOD_ID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(BuddingCrystals.MOD_ID);
     private static final DeferredRegister<LootPoolEntryType> POOL_ENTRY_TYPES = DeferredRegister.create(Registries.LOOT_POOL_ENTRY_TYPE, BuddingCrystals.MOD_ID);
-    private static final DeferredRegister<Codec<? extends ICondition>> CONDITIONS = DeferredRegister.create(NeoForgeRegistries.CONDITION_SERIALIZERS, BuddingCrystals.MOD_ID);
+    private static final DeferredRegister<MapCodec<? extends ICondition>> CONDITIONS = DeferredRegister.create(NeoForgeRegistries.CONDITION_SERIALIZERS, BuddingCrystals.MOD_ID);
 
     private static final Map<String, CrystalSet> ALL_SETS = new HashMap<>();
     private static final Map<String, CrystalSet> ACTIVE_SETS = new HashMap<>();
@@ -94,15 +93,9 @@ public final class BCContent //TODO: balance growth chance and drop counts
             () -> new Item(new Item.Properties())
     );
 
-    public static final Holder<LootPoolEntryType> OPTIONAL_LOOT_ITEM = POOL_ENTRY_TYPES.register(
-            "optional_item", () -> new LootPoolEntryType(OptionalLootItem.CODEC)
-    );
-
-    public static final Holder<Codec<? extends ICondition>> CONFIG_CONDITION = CONDITIONS.register(
+    public static final Holder<MapCodec<? extends ICondition>> CONFIG_CONDITION = CONDITIONS.register(
             "config", () -> ConfigCondition.CODEC
     );
-
-    public static final TagKey<Block> BUDDING_BLOCKS_TAG = BlockTags.create(new ResourceLocation("neoforge", "budding_blocks"));
 
     public static void register(IEventBus bus)
     {
